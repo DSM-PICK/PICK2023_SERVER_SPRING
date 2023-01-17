@@ -5,6 +5,12 @@ plugins {
     kotlin("plugin.jpa") version "1.6.21"
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2021.0.5")
+    }
+}
+
 dependencies {
     // Web
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -22,7 +28,7 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
 
     // Open Feign
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.0.0")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
