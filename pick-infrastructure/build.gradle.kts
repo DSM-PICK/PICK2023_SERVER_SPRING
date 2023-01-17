@@ -22,7 +22,7 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
 
     // Open Feign
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.0.0")
 
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
