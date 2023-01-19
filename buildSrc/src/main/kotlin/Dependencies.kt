@@ -5,7 +5,6 @@ object Dependencies {
     // validation
     const val VALIDATION = "org.springframework.boot:spring-boot-starter-validation"
 
-
     // kotlin
     const val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect"
     const val KOTLIN_STDLIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -13,7 +12,6 @@ object Dependencies {
 
     // time base uuid
     const val UUID_V7 = "com.github.f4b6a3:uuid-creator:${DependencyVersions.UUID_V7_VERSION}"
-
 
     // security
     const val SPRING_SECURITY = "org.springframework.boot:spring-boot-starter-security"
@@ -26,7 +24,6 @@ object Dependencies {
 
     // cloud config
     const val CLOUD_CONFIG = "org.springframework.cloud:spring-cloud-config-client"
-
 
     // web
     const val WEB = "org.springframework.boot:spring-boot-starter-web"
