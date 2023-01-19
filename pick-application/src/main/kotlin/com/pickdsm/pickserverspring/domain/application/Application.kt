@@ -22,9 +22,7 @@ class Application (
 
     isPermission: Boolean
 ) {
-    var isStatus: Boolean = isStatus
-        private set
+    val isStatus: Boolean = isStatus
 
-    var isPermission: Boolean = isStatus
-        private set
+    val isPermission: Boolean = isStatus
 }
