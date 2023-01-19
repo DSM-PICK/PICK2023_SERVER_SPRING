@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull
 @Entity
 class ApplicationEntity(
 
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)")
     @Id
@@ -17,16 +18,13 @@ class ApplicationEntity(
 
     date: LocalDate,
 
-    @field:Column(columnDefinition = "TIME", nullable = false)
-    @field:NotNull
+    @Column(columnDefinition = "TIME", nullable = false)
     val startTime: LocalTime,
 
-    @field:Column(columnDefinition = "TIME", nullable = false)
-    @field:NotNull
+    @Column(columnDefinition = "TIME", nullable = false)
     val endTime: LocalTime,
 
-    @field:Column(columnDefinition = "VARCHAR(255) DEFAULT ''", nullable = false)
-    @field:NotNull
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT ''", nullable = false)
     val reason: String,
 
     isStatus: Boolean,
@@ -35,16 +33,14 @@ class ApplicationEntity(
 
 ) {
 
-    @field:Column(nullable = false)
+    @Column(nullable = false)
     val date: LocalDate = LocalDate.now()
 
-    @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
-    @field:NotNull
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     var isStatus = isStatus
         protected set
 
-    @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
-    @field:NotNull
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     var isPermission = isPermission
         protected set
 
