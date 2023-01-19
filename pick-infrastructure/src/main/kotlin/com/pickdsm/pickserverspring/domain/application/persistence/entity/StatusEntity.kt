@@ -1,12 +1,12 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
+import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
-import javax.validation.constraints.NotNull
 
 
 @Table(name = "tbl_status")
@@ -15,7 +15,8 @@ class StatusEntity (
 
     override val id: UUID,
 
-    @Column(columnDefinition = "VARCHAR(12) DEFAULT ''", nullable = false)
+    @Column(columnDefinition = "VARCHAR(12)", nullable = false)
+    @ColumnDefault("''")
     val type: String,
 
     date: LocalDate

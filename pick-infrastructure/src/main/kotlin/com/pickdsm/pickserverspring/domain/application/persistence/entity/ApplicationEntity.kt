@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
+import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
@@ -24,7 +25,8 @@ class ApplicationEntity(
     @Column(columnDefinition = "TIME", nullable = false)
     val endTime: LocalTime,
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT ''", nullable = false)
+    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    @ColumnDefault("''")
     val reason: String,
 
     isStatus: Boolean,
@@ -36,11 +38,13 @@ class ApplicationEntity(
     @Column(nullable = false)
     val date: LocalDate = LocalDate.now()
 
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @ColumnDefault("0")
     var isStatus = isStatus
         protected set
 
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @ColumnDefault("0")
     var isPermission = isPermission
         protected set
 

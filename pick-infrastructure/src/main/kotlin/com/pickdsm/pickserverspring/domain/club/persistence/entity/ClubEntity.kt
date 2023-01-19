@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.club.persistence.entity
 
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.ClassroomEntity
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
+import org.hibernate.annotations.ColumnDefault
 import java.util.UUID
 import javax.persistence.*
 import javax.validation.constraints.NotNull
@@ -12,7 +13,8 @@ class ClubEntity (
 
     override val id:UUID,
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT ''", nullable = false)
+    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    @ColumnDefault("''")
     val name: String,
 
     @OneToOne(fetch = FetchType.LAZY)

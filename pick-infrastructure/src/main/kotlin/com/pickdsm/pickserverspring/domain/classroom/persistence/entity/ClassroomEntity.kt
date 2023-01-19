@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.classroom.persistence.entity
 
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
+import org.hibernate.annotations.ColumnDefault
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.util.UUID
 import javax.persistence.Column
@@ -16,7 +17,8 @@ class ClassroomEntity (
 
     override val id: UUID,
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT ''", nullable = false)
+    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    @ColumnDefault("''")
     val name: String,
 
     @Column(columnDefinition = "INT")
