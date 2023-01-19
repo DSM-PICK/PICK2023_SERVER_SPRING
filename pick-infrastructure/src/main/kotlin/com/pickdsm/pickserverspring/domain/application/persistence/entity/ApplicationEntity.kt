@@ -17,15 +17,15 @@ class ApplicationEntity(
 
     date: LocalDate,
 
-    @field:Column(columnDefinition = "TIME")
+    @field:Column(columnDefinition = "TIME", nullable = false)
     @field:NotNull
     val startTime: LocalTime,
 
-    @field:Column(columnDefinition = "TIME")
+    @field:Column(columnDefinition = "TIME", nullable = false)
     @field:NotNull
     val endTime: LocalTime,
 
-    @field:Column(columnDefinition = "VARCHAR(255)")
+    @field:Column(columnDefinition = "VARCHAR(255)", nullable = false)
     @field:NotNull
     val reason: String = "",
 
@@ -35,15 +35,15 @@ class ApplicationEntity(
 
 ) {
 
-    @field:NotNull
+    @field:Column(nullable = false)
     val date: LocalDate = LocalDate.now()
 
-    @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     @field:NotNull
     var isStatus: Boolean = isStatus
         protected set
 
-    @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     @field:NotNull
     var isPermission: Boolean = isPermission
         protected set

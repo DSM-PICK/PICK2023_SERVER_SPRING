@@ -14,7 +14,7 @@ class StatusEntity (
 
     override val id: UUID,
 
-    @field:Column(columnDefinition = "VARCHAR(12)")
+    @field:Column(columnDefinition = "VARCHAR(12)", nullable = false)
     @field:NotNull
     val type: String = "",
 
