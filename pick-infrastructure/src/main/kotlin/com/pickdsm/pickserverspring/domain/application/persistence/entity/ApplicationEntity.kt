@@ -40,8 +40,7 @@ class ApplicationEntity(
 
     @CreatedDate
     @field:NotNull
-    var date: LocalDate = date
-        protected set
+    val date: LocalDate = LocalDate.now()
 
     @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     @field:NotNull
