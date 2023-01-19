@@ -9,8 +9,7 @@ enum class GlobalErrorCode(
 
     BAD_REQUEST(400, "Bad Request"),
 
-    INTERNAL_SERVER_ERROR(500, "Internal Server Error")
-    ;
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error");
 
     override fun status(): Int = status
     override fun message(): String = message
