@@ -1,6 +1,5 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
-import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDate
@@ -12,13 +11,12 @@ import javax.validation.constraints.NotNull
 @EntityListeners(value = [AuditingEntityListener::class])
 @Table(name = "tbl_application")
 @Entity
-class ApplicationEntity (
-
+class ApplicationEntity(
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn
     @Id
-    val id: StatusEntity,
+    val statusId: StatusEntity,
 
     date: LocalDate,
 
@@ -54,4 +52,8 @@ class ApplicationEntity (
     @field:NotNull
     var isPermission: Boolean = isPermission
         protected set
+
+    fun getStatusId(): UUID {
+        return statusId.id
+    }
 }
