@@ -1,0 +1,30 @@
+package com.pickdsm.pickserverspring.domain.application
+
+import com.pickdsm.pickserverspring.common.annotation.Aggregate
+import java.time.LocalDate
+import java.time.LocalTime
+import java.util.UUID
+
+@Aggregate
+class Application (
+
+    val id: UUID = UUID(0,0),
+
+    val date: LocalDate,
+
+    val startTime: LocalTime,
+
+    val endTime: LocalTime,
+
+    val reason: String,
+
+    isStatus: Boolean,
+
+    isPermission: Boolean
+) {
+    var isStatus: Boolean = isStatus
+        private set
+
+    var isPermission: Boolean = isStatus
+        private set
+}
