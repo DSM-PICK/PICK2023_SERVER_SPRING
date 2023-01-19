@@ -14,7 +14,7 @@ class ApplicationMapperImpl (
         val statusEntity = statusRepository.getReferenceById(application.id)
 
         return ApplicationEntity(
-            statusId = statusEntity,
+            statusEntity = statusEntity,
             date = application.date,
             startTime = application.startTime,
             endTime = application.endTime,

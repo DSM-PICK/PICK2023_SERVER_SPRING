@@ -16,7 +16,7 @@ class ApplicationEntity(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn
     @Id
-    val statusId: StatusEntity,
+    val statusEntity: StatusEntity,
 
     date: LocalDate,
 
@@ -44,15 +44,15 @@ class ApplicationEntity(
 
     @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     @field:NotNull
-    val isStatus: Boolean = isStatus
+    var isStatus: Boolean = isStatus
         protected set
 
     @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     @field:NotNull
-    val isPermission: Boolean = isPermission
+    var isPermission: Boolean = isPermission
         protected set
 
     fun getStatusId(): UUID {
-        return statusId.id
+        return statusEntity.id
     }
 }
