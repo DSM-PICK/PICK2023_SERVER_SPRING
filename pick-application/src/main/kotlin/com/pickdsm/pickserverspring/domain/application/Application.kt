@@ -8,7 +8,7 @@ import java.util.UUID
 @Aggregate
 class Application (
 
-    val id: UUID,
+    val statusEntity: UUID,
 
     val date: LocalDate,
 
@@ -22,7 +22,7 @@ class Application (
 
     isPermission: Boolean
 ) {
-    val isStatus: Boolean = isStatus
+    var isStatus: Boolean = isStatus
 
-    val isPermission: Boolean = isPermission
+    var isPermission: Boolean = isPermission
 }
