@@ -15,13 +15,12 @@ class StatusEntity (
 
     override val id: UUID,
 
-    @field:Column(columnDefinition = "VARCHAR(12) DEFAULT ''", nullable = false)
-    @field:NotNull
+    @Column(columnDefinition = "VARCHAR(12) DEFAULT ''", nullable = false)
     val type: String,
 
     date: LocalDate
 ) : BaseUUIDEntity(id) {
 
-    @field:NotNull
-    var date: LocalDate = LocalDate.now()
+    @Column(nullable = false)
+    val date: LocalDate = LocalDate.now()
 }
