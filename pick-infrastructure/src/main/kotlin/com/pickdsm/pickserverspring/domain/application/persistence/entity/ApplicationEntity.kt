@@ -25,9 +25,9 @@ class ApplicationEntity(
     @field:NotNull
     val endTime: LocalTime,
 
-    @field:Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    @field:Column(columnDefinition = "VARCHAR(255) DEFAULT ''", nullable = false)
     @field:NotNull
-    val reason: String = "",
+    val reason: String,
 
     isStatus: Boolean,
 
