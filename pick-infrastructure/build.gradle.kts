@@ -1,37 +1,25 @@
 plugins {
-    id("org.springframework.boot") version "2.7.7"
-    id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
+    id("org.springframework.boot") version PluginVersions.SPRING_BOOT_VERSION
+    id("io.spring.dependency-management") version PluginVersions.DEPENDENCY_MANAGER_VERSION
+    kotlin("plugin.spring") version PluginVersions.SPRING_PLUGIN_VERSION
+    kotlin("plugin.jpa") version PluginVersions.JPA_PLUGIN_VERSION
 }
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2021.0.5")
+        mavenBom(Dependencies.SPRING_CLOUD)
     }
 }
 
 dependencies {
-    // Web
-    implementation("org.springframework.boot:spring-boot-starter-web")
-
-    // Validation
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    // Security
-    implementation("org.springframework.boot:spring-boot-starter-security")
-
-    // JPA
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
-    // MySQL
-    runtimeOnly("mysql:mysql-connector-java")
-
-    // Open Feign
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-
-    // Jackson
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation(Dependencies.WEB)
+    implementation(Dependencies.VALIDATION)
+    implementation(Dependencies.SPRING_SECURITY)
+    implementation(Dependencies.JPA)
+    implementation(Dependencies.MYSQL)
+    implementation(Dependencies.OPENFEIGN)
+    implementation(Dependencies.OPENFEIGN)
+    implementation(Dependencies.JACKSON)
 
     implementation(project(":pick-application"))
 }
