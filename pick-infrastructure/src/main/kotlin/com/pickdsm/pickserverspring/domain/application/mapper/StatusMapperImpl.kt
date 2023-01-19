@@ -5,9 +5,9 @@ import com.pickdsm.pickserverspring.domain.application.persistence.entity.Status
 import org.springframework.stereotype.Component
 
 @Component
-class StatusMapper {
+class StatusMapperImpl : StatusMapper {
 
-    fun domainToEntity(status: Status): StatusEntity {
+    override fun domainToEntity(status: Status): StatusEntity {
         return StatusEntity(
             id = status.id,
             type = status.type,
@@ -15,7 +15,7 @@ class StatusMapper {
         )
     }
 
-    fun entityToDomain(statusEntity: StatusEntity): Status {
+    override fun entityToDomain(statusEntity: StatusEntity): Status {
         return Status(
             id = statusEntity.id,
             type = statusEntity.type,
