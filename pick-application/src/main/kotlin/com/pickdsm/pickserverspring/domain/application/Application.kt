@@ -21,8 +21,4 @@ class Application (
     isStatus: Boolean,
 
     isPermission: Boolean
-) {
-    var isStatus: Boolean = isStatus
-
-    var isPermission: Boolean = isPermission
-}
+)
