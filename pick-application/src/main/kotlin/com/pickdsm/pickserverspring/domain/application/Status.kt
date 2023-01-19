@@ -7,7 +7,7 @@ import java.util.UUID
 @Aggregate
 class Status (
 
-    val id: UUID = UUID(0,0),
+    val id: UUID,
 
     val type: String,
 
