@@ -1,7 +1,8 @@
 package com.pickdsm.pickserverspring.global.error
 
 import com.pickdsm.pickserverspring.common.error.ErrorProperty
-import org.springframework.validation.BindException
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 
 data class ErrorResponse(
@@ -15,22 +16,34 @@ data class ErrorResponse(
             errorProperty.message()
         )
 
-        fun of(e: BindException): BindErrorResponse {
+        fun of(e: BindingResult): ValidationErrorResponse {
             val errorMap = HashMap<String, String?>()
 
             for (error: FieldError in e.fieldErrors) {
                 errorMap[error.field] = error.defaultMessage
             }
 
-            return BindErrorResponse(
+            return ValidationErrorResponse(
                 status = GlobalErrorCode.BAD_REQUEST.status(),
                 fieldError = errorMap
+            )
+        }
+
+        fun of(e: DataIntegrityViolationException): DataErrorResponse {
+            return DataErrorResponse(
+                message = e.message.toString(),
+                cause = e.cause.toString()
             )
         }
     }
 }
 
-data class BindErrorResponse(
+data class ValidationErrorResponse(
     val status: Int,
     val fieldError: Map<String, String?>
+)
+
+data class DataErrorResponse(
+    val message: String,
+    val cause: String
 )
