@@ -8,7 +8,6 @@ import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
-@EntityListeners(value = [AuditingEntityListener::class])
 @Table(name = "tbl_application")
 @Entity
 class ApplicationEntity(
@@ -38,7 +37,6 @@ class ApplicationEntity(
 
 ) {
 
-    @CreatedDate
     @field:NotNull
     val date: LocalDate = LocalDate.now()
 

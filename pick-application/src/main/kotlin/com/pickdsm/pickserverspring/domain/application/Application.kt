@@ -24,5 +24,5 @@ class Application (
 ) {
     val isStatus: Boolean = isStatus
 
-    val isPermission: Boolean = isStatus
+    val isPermission: Boolean = isPermission
 }

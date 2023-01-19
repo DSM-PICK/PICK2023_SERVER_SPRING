@@ -11,7 +11,6 @@ import javax.persistence.EntityListeners
 import javax.persistence.Table
 import javax.validation.constraints.NotNull
 
-@EntityListeners(value = [AuditingEntityListener::class])
 @Table(name = "tbl_status")
 @Entity
 class StatusEntity (
@@ -27,6 +26,5 @@ class StatusEntity (
 
     @CreatedDate
     @field:NotNull
-    var date: LocalDate = date
-        protected set
+    var date: LocalDate = LocalDate.now()
 }
