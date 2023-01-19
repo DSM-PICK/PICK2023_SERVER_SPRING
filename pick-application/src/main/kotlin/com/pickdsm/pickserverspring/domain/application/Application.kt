@@ -18,7 +18,7 @@ class Application (
 
     val reason: String,
 
-    isStatus: Boolean,
+    val isStatus: Boolean,
 
-    isPermission: Boolean
+    val isPermission: Boolean
 )
