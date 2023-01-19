@@ -40,12 +40,12 @@ class ApplicationEntity(
 
     @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     @field:NotNull
-    var isStatus: Boolean = isStatus
+    var isStatus = isStatus
         protected set
 
     @field:Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     @field:NotNull
-    var isPermission: Boolean = isPermission
+    var isPermission = isPermission
         protected set
 
     fun getStatusId(): UUID = statusEntity.id
