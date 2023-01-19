@@ -11,7 +11,7 @@ class ApplicationMapperImpl (
 ) : ApplicationMapper {
 
     override fun domainToEntity(application: Application): ApplicationEntity {
-        val statusEntity = statusRepository.getReferenceById(application.id)
+        val statusEntity = statusRepository.getReferenceById(application.statusEntity)
 
         return ApplicationEntity(
             statusEntity = statusEntity,
@@ -26,7 +26,7 @@ class ApplicationMapperImpl (
 
     override fun entityToDomain(applicationEntity: ApplicationEntity): Application {
         return Application(
-            id = applicationEntity.getStatusId(),
+            statusEntity = applicationEntity.getStatusId(),
             date = applicationEntity.date,
             startTime = applicationEntity.startTime,
             endTime = applicationEntity.endTime,
