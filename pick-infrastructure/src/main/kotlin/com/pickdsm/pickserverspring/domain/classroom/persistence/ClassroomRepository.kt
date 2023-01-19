@@ -7,3 +7,4 @@ import java.util.UUID
 
 @Repository
 interface ClassroomRepository: JpaRepository<ClassroomEntity, UUID>
+

@@ -7,4 +7,3 @@ import java.util.UUID
 
 @Repository
 interface ClubRepository: JpaRepository<ClubEntity, UUID>
-

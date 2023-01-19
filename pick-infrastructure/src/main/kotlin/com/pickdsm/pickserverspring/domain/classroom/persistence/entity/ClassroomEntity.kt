@@ -8,8 +8,6 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EntityListeners
 import javax.persistence.Table
-import javax.validation.constraints.NotNull
-
 @EntityListeners(value = [AuditingEntityListener::class])
 @Table(name = "tbl_classroom")
 @Entity

@@ -5,7 +5,6 @@ import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.util.UUID
 import javax.persistence.*
-import javax.validation.constraints.NotNull
 
 @Table(name = "tbl_club")
 @Entity

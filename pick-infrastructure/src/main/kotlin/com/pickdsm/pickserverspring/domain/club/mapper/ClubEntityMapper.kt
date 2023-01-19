@@ -1,7 +1,6 @@
 package com.pickdsm.pickserverspring.domain.club.mapper
 
 import com.pickdsm.pickserverspring.domain.club.Club
-import com.pickdsm.pickserverspring.domain.club.persistence.ClubRepository
 import com.pickdsm.pickserverspring.domain.club.persistence.entity.ClubEntity
 
 interface ClubEntityMapper {

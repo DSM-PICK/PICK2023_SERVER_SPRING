@@ -24,4 +24,3 @@ class ClassroomMovementEntity (
 
     fun getClassroomId(): UUID = classroomEntity.id
 }
-

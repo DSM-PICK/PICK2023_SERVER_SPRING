@@ -5,7 +5,6 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
 import javax.persistence.*
-import javax.validation.constraints.NotNull
 
 @Table(name = "tbl_application")
 @Entity
