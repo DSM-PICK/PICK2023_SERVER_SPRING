@@ -3,15 +3,10 @@ package com.pickdsm.pickserverspring.domain.application.persistence.entity
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.sql.Time
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EntityListeners
-import javax.persistence.Table
+import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @EntityListeners(value = [AuditingEntityListener::class])
@@ -19,7 +14,11 @@ import javax.validation.constraints.NotNull
 @Entity
 class ApplicationEntity (
 
-    override val id: UUID,
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    @Id
+    val id: StatusEntity,
 
     date: LocalDate,
 
@@ -39,7 +38,7 @@ class ApplicationEntity (
 
     isPermission: Boolean
 
-) : BaseUUIDEntity(id) {
+) {
 
     @CreatedDate
     @field:NotNull
