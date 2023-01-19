@@ -42,5 +42,4 @@ class ExceptionFilter(
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.writer.write(objectMapper.writeValueAsString(ErrorResponse.of(errorProperty)))
     }
-
 }
