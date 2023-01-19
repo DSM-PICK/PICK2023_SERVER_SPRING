@@ -31,8 +31,8 @@ data class ErrorResponse(
 
         fun of(e: DataIntegrityViolationException): DataErrorResponse {
             return DataErrorResponse(
-                message = e.message.toString(),
-                cause = e.cause.toString()
+                status = GlobalErrorCode.BAD_REQUEST.status(),
+                message = e.message.toString()
             )
         }
     }
@@ -44,6 +44,6 @@ data class ValidationErrorResponse(
 )
 
 data class DataErrorResponse(
-    val message: String,
-    val cause: String
+    val status: Int,
+    val message: String
 )
