@@ -12,7 +12,10 @@ import org.springframework.context.annotation.FilterType
     includeFilters = [
         ComponentScan.Filter(
             type = FilterType.ANNOTATION,
-            value = [UseCase::class, ReadOnlyUseCase::class]
+            value = [
+                UseCase::class,
+                ReadOnlyUseCase::class
+            ]
         )
     ]
 )
