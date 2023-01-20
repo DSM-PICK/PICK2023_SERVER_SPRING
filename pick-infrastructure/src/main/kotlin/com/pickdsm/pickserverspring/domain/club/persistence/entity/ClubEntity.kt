@@ -1,6 +1,5 @@
 package com.pickdsm.pickserverspring.domain.club.persistence.entity
 
-import com.github.f4b6a3.uuid.UuidCreator
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.ClassroomEntity
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
