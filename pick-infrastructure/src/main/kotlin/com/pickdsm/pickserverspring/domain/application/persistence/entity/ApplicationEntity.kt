@@ -44,9 +44,7 @@ class ApplicationEntity(
     isPermission: Boolean,
 
     val studentId: UUID = UuidCreator.getTimeOrderedEpoch(),
-
-    ) : Serializable {
-
+) : Serializable {
     @Column(nullable = false)
     val date: LocalDate = LocalDate.now()
 
