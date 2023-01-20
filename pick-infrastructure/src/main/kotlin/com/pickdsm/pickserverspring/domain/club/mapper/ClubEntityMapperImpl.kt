@@ -6,9 +6,9 @@ import com.pickdsm.pickserverspring.domain.club.persistence.entity.ClubEntity
 import org.springframework.stereotype.Component
 
 @Component
-class ClubEntityMapperImpl (
+class ClubEntityMapperImpl(
     private val classroomRepository: ClassroomRepository
-): ClubEntityMapper {
+) : ClubEntityMapper {
 
     override fun domainToEntity(club: Club): ClubEntity {
         val classroomEntity = classroomRepository.getReferenceById(club.id)

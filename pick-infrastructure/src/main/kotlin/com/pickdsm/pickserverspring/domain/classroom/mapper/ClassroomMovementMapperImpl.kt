@@ -7,7 +7,7 @@ import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.Classroo
 import org.springframework.stereotype.Component
 
 @Component
-class ClassroomMovementMapperImpl (
+class ClassroomMovementMapperImpl(
     private val statusRepository: StatusRepository,
     private val classroomRepository: ClassroomRepository
 ) : ClassroomMovementMapper {

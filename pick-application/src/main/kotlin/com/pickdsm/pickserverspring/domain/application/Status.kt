@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Aggregate
-class Status (
+class Status(
 
     val id: UUID,
 

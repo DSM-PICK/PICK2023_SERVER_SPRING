@@ -2,16 +2,13 @@ package com.pickdsm.pickserverspring.domain.classroom.persistence.entity
 
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.EntityListeners
 import javax.persistence.Table
-@EntityListeners(value = [AuditingEntityListener::class])
 @Table(name = "tbl_classroom")
 @Entity
-class ClassroomEntity (
+class ClassroomEntity(
 
     override val id: UUID,
 

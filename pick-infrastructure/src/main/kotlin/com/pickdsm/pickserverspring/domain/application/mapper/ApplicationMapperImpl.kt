@@ -6,7 +6,7 @@ import com.pickdsm.pickserverspring.domain.application.persistence.entity.Applic
 import org.springframework.stereotype.Component
 
 @Component
-class ApplicationMapperImpl (
+class ApplicationMapperImpl(
     private val statusRepository: StatusRepository
 ) : ApplicationMapper {
 

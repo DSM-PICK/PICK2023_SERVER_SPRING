@@ -6,7 +6,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 @Aggregate
-class Application (
+class Application(
 
     val statusEntity: UUID,
 

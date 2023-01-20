@@ -5,7 +5,7 @@ import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.Classroo
 import org.springframework.stereotype.Component
 
 @Component
-class ClassroomMapperImpl : ClassroomMapper{
+class ClassroomMapperImpl : ClassroomMapper {
 
     override fun domainToEntity(classroom: Classroom): ClassroomEntity {
         return ClassroomEntity(

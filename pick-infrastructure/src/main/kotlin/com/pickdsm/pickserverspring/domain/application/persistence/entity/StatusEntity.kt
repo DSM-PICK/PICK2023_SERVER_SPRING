@@ -8,10 +8,9 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
 
-
 @Table(name = "tbl_status")
 @Entity
-class StatusEntity (
+class StatusEntity(
 
     override val id: UUID,
 
