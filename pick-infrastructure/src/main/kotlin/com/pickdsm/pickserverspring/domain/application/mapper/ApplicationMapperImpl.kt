@@ -1,8 +1,10 @@
 package com.pickdsm.pickserverspring.domain.application.mapper
 
 import com.pickdsm.pickserverspring.domain.application.Application
+import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.ApplicationEntity
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
@@ -11,7 +13,7 @@ class ApplicationMapperImpl(
 ) : ApplicationMapper {
 
     override fun domainToEntity(application: Application): ApplicationEntity {
-        val statusEntity = statusRepository.getReferenceById(application.id)
+        val statusEntity = statusRepository.findByIdOrNull(application.id) ?: throw StatusNotFoundException
 
         return ApplicationEntity(
             id = statusEntity.id,

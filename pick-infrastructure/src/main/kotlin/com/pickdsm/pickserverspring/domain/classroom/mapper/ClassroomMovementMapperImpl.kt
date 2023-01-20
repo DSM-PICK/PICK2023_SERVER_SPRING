@@ -1,9 +1,12 @@
 package com.pickdsm.pickserverspring.domain.classroom.mapper
 
+import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
+import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomRepository
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.ClassroomMovementEntity
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,8 +16,8 @@ class ClassroomMovementMapperImpl(
 ) : ClassroomMovementMapper {
 
     override fun domainToEntity(classroomMovement: ClassroomMovement): ClassroomMovementEntity {
-        val statusEntity = statusRepository.getReferenceById(classroomMovement.id)
-        val classroomEntity = classroomRepository.getReferenceById(classroomMovement.classroomId)
+        val statusEntity = statusRepository.findByIdOrNull(classroomMovement.id) ?: throw StatusNotFoundException
+        val classroomEntity = classroomRepository.findByIdOrNull(classroomMovement.classroomId) ?: throw ClassroomNotFoundException
 
         return ClassroomMovementEntity(
             id = statusEntity.id,
