@@ -16,7 +16,7 @@ import javax.persistence.Table
 @Entity
 class ClubEntity(
 
-    override val id: UUID = UuidCreator.getTimeOrderedEpoch(),
+    override val id: UUID,
 
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     @ColumnDefault("''")

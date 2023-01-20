@@ -17,7 +17,7 @@ import javax.persistence.Table
 class ClassroomMovementEntity(
 
     @Id
-    val id: UUID,
+    val id: UUID = UuidCreator.getTimeOrderedEpoch(),
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
