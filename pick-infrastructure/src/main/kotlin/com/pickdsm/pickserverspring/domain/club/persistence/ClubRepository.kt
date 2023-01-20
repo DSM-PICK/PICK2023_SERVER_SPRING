@@ -6,4 +6,4 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface ClubRepository: JpaRepository<ClubEntity, UUID>
+interface ClubRepository : JpaRepository<ClubEntity, UUID>

@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface ClassroomRepository: JpaRepository<ClassroomEntity, UUID>
-
+interface ClassroomRepository : JpaRepository<ClassroomEntity, UUID>
