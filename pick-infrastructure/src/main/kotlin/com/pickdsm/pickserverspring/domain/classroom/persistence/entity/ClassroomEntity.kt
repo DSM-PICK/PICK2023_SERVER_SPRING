@@ -6,6 +6,7 @@ import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
+
 @Table(name = "tbl_classroom")
 @Entity
 class ClassroomEntity(
