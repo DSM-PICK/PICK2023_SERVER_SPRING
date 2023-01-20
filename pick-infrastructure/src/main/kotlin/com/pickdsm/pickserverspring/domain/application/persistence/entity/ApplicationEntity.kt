@@ -27,7 +27,8 @@ class ApplicationEntity(
     @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)")
     val statusEntity: StatusEntity,
 
-    date: LocalDate,
+    @Column(nullable = false)
+    val date: LocalDate  = LocalDate.now(),
 
     @Column(columnDefinition = "TIME", nullable = false)
     val startTime: LocalTime,
@@ -45,8 +46,6 @@ class ApplicationEntity(
 
     val studentId: UUID,
 ) : Serializable {
-    @Column(nullable = false)
-    val date: LocalDate = LocalDate.now()
 
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     @ColumnDefault("0")
