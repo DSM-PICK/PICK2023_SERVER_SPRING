@@ -20,7 +20,7 @@ import javax.persistence.Table
 class ApplicationEntity(
 
     @Id
-    val id: UUID = UuidCreator.getTimeOrderedEpoch(),
+    val id: UUID,
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
