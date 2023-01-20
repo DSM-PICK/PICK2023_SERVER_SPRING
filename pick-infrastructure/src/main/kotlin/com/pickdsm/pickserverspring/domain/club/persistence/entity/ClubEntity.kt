@@ -26,7 +26,7 @@ class ClubEntity(
     @JoinColumn(name = "classroom_id", columnDefinition = "BINARY(16)", nullable = false)
     val classroomEntity: ClassroomEntity,
 
-    val headId: UUID = UuidCreator.getTimeOrderedEpoch(),
+    val headId: UUID,
 ) : BaseUUIDEntity(id) {
 
     fun getClassroomId(): UUID = classroomEntity.id

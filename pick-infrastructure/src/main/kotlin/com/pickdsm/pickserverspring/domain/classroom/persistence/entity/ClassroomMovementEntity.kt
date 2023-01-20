@@ -28,7 +28,7 @@ class ClassroomMovementEntity(
     @JoinColumn(name = "classroom_id", columnDefinition = "BINARY(16)", nullable = false)
     val classroomEntity: ClassroomEntity,
 
-    val studentId: UUID = UuidCreator.getTimeOrderedEpoch(),
+    val studentId: UUID,
 ) : Serializable {
 
     fun getClassroomId(): UUID = classroomEntity.id

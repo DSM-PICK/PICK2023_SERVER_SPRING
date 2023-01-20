@@ -22,5 +22,5 @@ class StatusEntity(
     @Column(nullable = false)
     val date: LocalDate = LocalDate.now(),
 
-    val studentId: UUID = UuidCreator.getTimeOrderedEpoch(),
+    val studentId: UUID,
 ) : BaseUUIDEntity(id)
