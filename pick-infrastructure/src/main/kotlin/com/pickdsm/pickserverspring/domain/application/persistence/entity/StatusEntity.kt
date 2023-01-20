@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
+import com.github.f4b6a3.uuid.UuidCreator
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
@@ -19,6 +20,8 @@ class StatusEntity(
     val type: String,
 
     date: LocalDate,
+
+    val studentId: UUID = UuidCreator.getTimeOrderedEpoch(),
 ) : BaseUUIDEntity(id) {
 
     @Column(nullable = false)

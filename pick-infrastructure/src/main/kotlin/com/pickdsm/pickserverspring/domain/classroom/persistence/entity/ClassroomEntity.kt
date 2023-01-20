@@ -17,6 +17,6 @@ class ClassroomEntity(
     @ColumnDefault("''")
     val name: String,
 
-    @Column(columnDefinition = "INT")
+    @Column(columnDefinition = "INT", nullable = false)
     val floor: Int,
 ) : BaseUUIDEntity(id)

@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
+import com.github.f4b6a3.uuid.UuidCreator
 import org.hibernate.annotations.ColumnDefault
 import java.io.Serializable
 import java.time.LocalDate
@@ -42,7 +43,9 @@ class ApplicationEntity(
 
     isPermission: Boolean,
 
-) : Serializable {
+    val studentId: UUID = UuidCreator.getTimeOrderedEpoch(),
+
+    ) : Serializable {
 
     @Column(nullable = false)
     val date: LocalDate = LocalDate.now()
