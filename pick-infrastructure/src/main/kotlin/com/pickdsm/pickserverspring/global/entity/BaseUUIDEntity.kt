@@ -6,9 +6,8 @@ import javax.persistence.Column
 import javax.persistence.Id
 import javax.persistence.MappedSuperclass
 
-
 @MappedSuperclass
-abstract class BaseUUIDEntity (
+abstract class BaseUUIDEntity(
 
     @Id
     @Column(columnDefinition = "BINARY(16)", nullable = false)
