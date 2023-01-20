@@ -2,10 +2,10 @@ package com.pickdsm.pickserverspring.domain.classroom.error
 
 import com.pickdsm.pickserverspring.common.error.ErrorProperty
 
-enum class ClassroomErrorCode (
+enum class ClassroomErrorCode(
     private val status: Int,
     private val message: String,
-): ErrorProperty {
+) : ErrorProperty {
 
     CLASS_NOT_FOUND(404, "Class not found");
 
