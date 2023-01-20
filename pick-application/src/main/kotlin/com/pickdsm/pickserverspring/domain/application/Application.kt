@@ -20,4 +20,5 @@ class Application(
 
     val isStatus: Boolean,
 
-    val isPermission: Boolean )
+    val isPermission: Boolean
+)
