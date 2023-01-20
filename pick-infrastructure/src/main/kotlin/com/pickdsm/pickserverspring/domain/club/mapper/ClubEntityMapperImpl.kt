@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ClubEntityMapperImpl(
-    private val classroomRepository: ClassroomRepository
+    private val classroomRepository: ClassroomRepository,
 ) : ClubEntityMapper {
 
     override fun domainToEntity(club: Club): ClubEntity {
@@ -24,7 +24,7 @@ class ClubEntityMapperImpl(
         return Club(
             id = clubEntity.id,
             name = clubEntity.name,
-            classroomEntity = clubEntity.getClassroomId()
+            classroomEntity = clubEntity.getClassroomId(),
         )
     }
 }

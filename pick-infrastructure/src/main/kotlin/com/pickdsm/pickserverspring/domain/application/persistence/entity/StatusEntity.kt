@@ -18,7 +18,7 @@ class StatusEntity(
     @ColumnDefault("''")
     val type: String,
 
-    date: LocalDate
+    date: LocalDate,
 ) : BaseUUIDEntity(id) {
 
     @Column(nullable = false)

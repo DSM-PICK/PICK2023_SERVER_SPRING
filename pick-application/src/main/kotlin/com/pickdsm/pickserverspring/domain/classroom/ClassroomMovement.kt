@@ -6,7 +6,7 @@ import java.util.UUID
 @Aggregate
 class ClassroomMovement(
 
-    val statusEntity: UUID,
+    val id: UUID,
 
-    val classroomEntity: UUID
+    val classroomId: UUID,
 )

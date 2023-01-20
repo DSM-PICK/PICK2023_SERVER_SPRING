@@ -9,21 +9,21 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.Id
-import javax.persistence.IdClass
 import javax.persistence.JoinColumn
 import javax.persistence.MapsId
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
-@IdClass(ApplicationEntity::class)
 @Table(name = "tbl_application")
 @Entity
 class ApplicationEntity(
 
-    @MapsId(value = "tbl_status_id")
     @Id
+    val id: UUID,
+
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tbl_status_id", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)")
     val statusEntity: StatusEntity,
 
     date: LocalDate,
@@ -40,7 +40,7 @@ class ApplicationEntity(
 
     isStatus: Boolean,
 
-    isPermission: Boolean
+    isPermission: Boolean,
 
 ) : Serializable {
 
@@ -56,6 +56,4 @@ class ApplicationEntity(
     @ColumnDefault("0")
     var isPermission = isPermission
         protected set
-
-    fun getStatusId(): UUID = statusEntity.id
 }

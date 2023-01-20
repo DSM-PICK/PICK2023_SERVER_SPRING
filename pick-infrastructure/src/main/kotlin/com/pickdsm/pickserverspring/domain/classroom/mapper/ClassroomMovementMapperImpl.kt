@@ -9,24 +9,24 @@ import org.springframework.stereotype.Component
 @Component
 class ClassroomMovementMapperImpl(
     private val statusRepository: StatusRepository,
-    private val classroomRepository: ClassroomRepository
+    private val classroomRepository: ClassroomRepository,
 ) : ClassroomMovementMapper {
 
     override fun domainToEntity(classroomMovement: ClassroomMovement): ClassroomMovementEntity {
-        val statusEntity = statusRepository.getReferenceById(classroomMovement.statusEntity)
-        val classroomEntity = classroomRepository.getReferenceById(classroomMovement.classroomEntity)
+        val statusEntity = statusRepository.getReferenceById(classroomMovement.id)
+        val classroomEntity = classroomRepository.getReferenceById(classroomMovement.classroomId)
 
         return ClassroomMovementEntity(
+            id = statusEntity.id,
             statusEntity = statusEntity,
-            classroomEntity = classroomEntity
+            classroomEntity = classroomEntity,
         )
     }
 
     override fun entityToDomain(classroomMovementEntity: ClassroomMovementEntity): ClassroomMovement {
         return ClassroomMovement(
-
-            statusEntity = classroomMovementEntity.getStatusId(),
-            classroomEntity = classroomMovementEntity.getClassroomId()
+            id = classroomMovementEntity.id,
+            classroomId = classroomMovementEntity.getClassroomId(),
         )
     }
 }

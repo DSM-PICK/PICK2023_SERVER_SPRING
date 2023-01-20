@@ -10,5 +10,5 @@ class Club(
 
     val name: String,
 
-    val classroomEntity: UUID
+    val classroomEntity: UUID,
 )

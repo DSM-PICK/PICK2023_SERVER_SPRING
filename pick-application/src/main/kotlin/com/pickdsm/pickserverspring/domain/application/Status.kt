@@ -11,5 +11,5 @@ class Status(
 
     val type: String,
 
-    val date: LocalDate
+    val date: LocalDate,
 )

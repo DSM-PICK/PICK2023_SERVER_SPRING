@@ -11,7 +11,7 @@ class ClassroomMapperImpl : ClassroomMapper {
         return ClassroomEntity(
             id = classroom.id,
             name = classroom.name,
-            floor = classroom.floor
+            floor = classroom.floor,
         )
     }
 
@@ -19,7 +19,7 @@ class ClassroomMapperImpl : ClassroomMapper {
         return Classroom(
             id = classroomEntity.id,
             name = classroomEntity.name,
-            floor = classroomEntity.floor
+            floor = classroomEntity.floor,
         )
     }
 }

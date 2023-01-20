@@ -11,7 +11,7 @@ class StatusMapperImpl : StatusMapper {
         return StatusEntity(
             id = status.id,
             type = status.type,
-            date = status.date
+            date = status.date,
         )
     }
 
@@ -19,7 +19,7 @@ class StatusMapperImpl : StatusMapper {
         return Status(
             id = statusEntity.id,
             type = statusEntity.type,
-            date = statusEntity.date
+            date = statusEntity.date,
         )
     }
 }
