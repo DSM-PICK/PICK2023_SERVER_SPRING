@@ -15,7 +15,7 @@ class AuthenticationFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val userId: String? = request.getHeader("Request-User-Id")
         val userRole: UserRole? = request.getHeader("Request-User-Role")?.run { UserRole.valueOf(this) }
