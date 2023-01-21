@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
+import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
@@ -22,7 +23,7 @@ class StatusEntity(
 
     @Column(columnDefinition = "VARCHAR(12)", nullable = false)
     @ColumnDefault("''")
-    val type: String,
+    val type: StatusType,
 
     @Column(columnDefinition = "DATE", nullable = false)
     val date: LocalDate = LocalDate.now(),
