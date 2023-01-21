@@ -23,12 +23,13 @@ class ApplicationEntity(
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)", nullable = false)
     val statusEntity: StatusEntity,
 
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     val studentId: UUID,
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "DATE", nullable = false)
     val date: LocalDate = LocalDate.now(),
 
     @Column(columnDefinition = "TIME", nullable = false)

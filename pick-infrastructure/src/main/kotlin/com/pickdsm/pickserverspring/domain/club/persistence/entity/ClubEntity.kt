@@ -21,8 +21,10 @@ class ClubEntity(
     @ColumnDefault("''")
     val name: String,
 
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     val headId: UUID,
 
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     val teacherId: UUID,
 
     @OneToOne(fetch = FetchType.LAZY)
