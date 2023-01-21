@@ -13,7 +13,7 @@ class Status(
 
     val teacherId: UUID,
 
-    val type: String,
+    val type: StatusType,
 
     val date: LocalDate,
 )
