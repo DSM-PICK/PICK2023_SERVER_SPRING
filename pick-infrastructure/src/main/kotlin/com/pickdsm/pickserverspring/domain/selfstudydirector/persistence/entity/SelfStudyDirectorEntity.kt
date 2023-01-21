@@ -27,4 +27,4 @@ class SelfStudyDirectorEntity(
     @Column(columnDefinition = "VARCHAR(12)", nullable = false)
     @ColumnDefault("''")
     val type: DirectorType,
-) : BaseUUIDEntity()
+) : BaseUUIDEntity(id)
