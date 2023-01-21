@@ -20,6 +20,7 @@ dependencies {
     implementation(Dependencies.OPENFEIGN)
     implementation(Dependencies.OPENFEIGN)
     implementation(Dependencies.JACKSON)
+    implementation(Dependencies.UUID_V7)
 
     implementation(project(":pick-application"))
 }
