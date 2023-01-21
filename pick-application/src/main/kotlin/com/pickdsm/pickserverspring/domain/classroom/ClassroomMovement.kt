@@ -8,5 +8,7 @@ class ClassroomMovement(
 
     val id: UUID,
 
+    val studentId: UUID,
+
     val classroomId: UUID,
 )

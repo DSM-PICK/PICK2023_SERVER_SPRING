@@ -18,6 +18,8 @@ class ClubEntityMapperImpl(
         return ClubEntity(
             id = club.id,
             name = club.name,
+            headId = club.headId,
+            teacherId = club.teacherId,
             classroomEntity = classroomEntity,
         )
     }
@@ -26,6 +28,8 @@ class ClubEntityMapperImpl(
         return Club(
             id = clubEntity.id,
             name = clubEntity.name,
+            headId = clubEntity.headId,
+            teacherId = clubEntity.teacherId,
             classroomEntity = clubEntity.getClassroomId(),
         )
     }

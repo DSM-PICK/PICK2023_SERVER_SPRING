@@ -10,6 +10,8 @@ class StatusMapperImpl : StatusMapper {
     override fun domainToEntity(status: Status): StatusEntity {
         return StatusEntity(
             id = status.id,
+            studentId = status.studentId,
+            teacherId = status.teacherId,
             type = status.type,
             date = status.date,
         )
@@ -18,6 +20,8 @@ class StatusMapperImpl : StatusMapper {
     override fun entityToDomain(statusEntity: StatusEntity): Status {
         return Status(
             id = statusEntity.id,
+            studentId = statusEntity.studentId,
+            teacherId = statusEntity.teacherId,
             type = statusEntity.type,
             date = statusEntity.date,
         )

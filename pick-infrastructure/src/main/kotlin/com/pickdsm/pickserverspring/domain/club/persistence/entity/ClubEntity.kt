@@ -21,11 +21,13 @@ class ClubEntity(
     @ColumnDefault("''")
     val name: String,
 
+    val headId: UUID,
+
+    val teacherId: UUID,
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classroom_id", columnDefinition = "BINARY(16)", nullable = false)
     val classroomEntity: ClassroomEntity,
-
-    val headId: UUID,
 ) : BaseUUIDEntity(id) {
 
     fun getClassroomId(): UUID = classroomEntity.id

@@ -23,11 +23,11 @@ class ClassroomMovementEntity(
     @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)", nullable = false)
     val statusEntity: StatusEntity,
 
+    val studentId: UUID,
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classroom_id", columnDefinition = "BINARY(16)", nullable = false)
     val classroomEntity: ClassroomEntity,
-
-    val studentId: UUID,
 ) : Serializable {
 
     fun getClassroomId(): UUID = classroomEntity.id

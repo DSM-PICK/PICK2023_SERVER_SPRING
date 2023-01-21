@@ -9,6 +9,10 @@ class Status(
 
     val id: UUID,
 
+    val studentId: UUID,
+
+    val teacherId: UUID,
+
     val type: String,
 
     val date: LocalDate,

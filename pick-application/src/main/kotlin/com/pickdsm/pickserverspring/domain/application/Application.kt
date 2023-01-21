@@ -10,6 +10,8 @@ class Application(
 
     val id: UUID,
 
+    val studentId: UUID,
+
     val date: LocalDate,
 
     val startTime: LocalTime,

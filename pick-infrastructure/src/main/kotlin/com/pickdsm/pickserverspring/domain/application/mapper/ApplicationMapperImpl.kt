@@ -18,6 +18,7 @@ class ApplicationMapperImpl(
         return ApplicationEntity(
             id = statusEntity.id,
             statusEntity = statusEntity,
+            studentId = statusEntity.studentId,
             date = application.date,
             startTime = application.startTime,
             endTime = application.endTime,
@@ -30,6 +31,7 @@ class ApplicationMapperImpl(
     override fun entityToDomain(applicationEntity: ApplicationEntity): Application {
         return Application(
             id = applicationEntity.id,
+            studentId = applicationEntity.studentId,
             date = applicationEntity.date,
             startTime = applicationEntity.startTime,
             endTime = applicationEntity.endTime,

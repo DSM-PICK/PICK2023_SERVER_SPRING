@@ -22,6 +22,7 @@ class ClassroomMovementMapperImpl(
         return ClassroomMovementEntity(
             id = statusEntity.id,
             statusEntity = statusEntity,
+            studentId = statusEntity.studentId,
             classroomEntity = classroomEntity,
         )
     }
@@ -29,6 +30,7 @@ class ClassroomMovementMapperImpl(
     override fun entityToDomain(classroomMovementEntity: ClassroomMovementEntity): ClassroomMovement {
         return ClassroomMovement(
             id = classroomMovementEntity.id,
+            studentId = classroomMovementEntity.studentId,
             classroomId = classroomMovementEntity.getClassroomId(),
         )
     }

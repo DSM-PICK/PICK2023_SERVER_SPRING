@@ -14,12 +14,14 @@ class StatusEntity(
 
     override val id: UUID,
 
+    val studentId: UUID,
+
+    val teacherId: UUID,
+
     @Column(columnDefinition = "VARCHAR(12)", nullable = false)
     @ColumnDefault("''")
     val type: String,
 
     @Column(nullable = false)
     val date: LocalDate = LocalDate.now(),
-
-    val studentId: UUID,
 ) : BaseUUIDEntity(id)
