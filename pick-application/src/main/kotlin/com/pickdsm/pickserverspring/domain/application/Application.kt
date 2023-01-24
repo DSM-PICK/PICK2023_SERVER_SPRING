@@ -3,7 +3,7 @@ package com.pickdsm.pickserverspring.domain.application
 import com.pickdsm.pickserverspring.common.annotation.Aggregate
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.UUID
+import java.util.*
 
 @Aggregate
 class Application(
@@ -12,7 +12,7 @@ class Application(
 
     val studentId: UUID,
 
-    val date: LocalTime,
+    val date: LocalDate,
 
     val startTime: LocalTime,
 
