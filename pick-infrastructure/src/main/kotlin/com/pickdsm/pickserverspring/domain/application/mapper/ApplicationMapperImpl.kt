@@ -17,7 +17,6 @@ class ApplicationMapperImpl(
 
         return ApplicationEntity(
             id = statusEntity.id,
-            statusEntity = statusEntity,
             studentId = statusEntity.studentId,
             date = application.date,
             startTime = application.startTime,
