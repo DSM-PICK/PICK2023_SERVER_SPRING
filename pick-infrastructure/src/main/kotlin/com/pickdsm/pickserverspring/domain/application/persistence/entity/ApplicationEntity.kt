@@ -2,7 +2,6 @@ package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
 import org.hibernate.annotations.ColumnDefault
 import java.io.Serializable
-import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
 import javax.persistence.Column
@@ -30,7 +29,7 @@ class ApplicationEntity(
     val studentId: UUID,
 
     @Column(columnDefinition = "DATE", nullable = false)
-    val date: LocalDate = LocalDate.now(),
+    val date: LocalTime = LocalTime.now(),
 
     @Column(columnDefinition = "TIME", nullable = false)
     val startTime: LocalTime,
