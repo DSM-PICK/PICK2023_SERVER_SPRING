@@ -1,11 +1,10 @@
 package com.pickdsm.pickserverspring.domain.classroom.persistence.entity
 
-import java.io.Serializable
+import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
-import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.OneToOne
 import javax.persistence.Table
@@ -14,8 +13,7 @@ import javax.persistence.Table
 @Entity
 class ClassroomMovementEntity(
 
-    @Id
-    val id: UUID,
+    override val id: UUID,
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     val studentId: UUID,
@@ -23,7 +21,7 @@ class ClassroomMovementEntity(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classroom_id", columnDefinition = "BINARY(16)", nullable = false)
     val classroomEntity: ClassroomEntity,
-) : Serializable {
+) : BaseUUIDEntity(id) {
 
     fun getClassroomId(): UUID = classroomEntity.id
 }
