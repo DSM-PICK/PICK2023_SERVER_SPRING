@@ -4,7 +4,7 @@ import com.pickdsm.pickserverspring.common.error.ErrorProperty
 
 enum class FeignErrorCode(
     private val status: Int,
-    private val message: String
+    private val message: String,
 ) : ErrorProperty {
 
     FEIGN_BAD_REQUEST(400, "Feign Bad Request"),
