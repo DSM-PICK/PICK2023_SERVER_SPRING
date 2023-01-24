@@ -12,7 +12,7 @@ class Application(
 
     val studentId: UUID,
 
-    val date: LocalDate,
+    val date: LocalTime,
 
     val startTime: LocalTime,
 
