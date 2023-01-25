@@ -8,5 +8,6 @@ import java.util.UUID
 @Adapter
 class UserPersistenceAdapter : UserSpi {
 
-    override fun getCurrentUserId(): UUID = UUID.fromString(SecurityContextHolder.getContext().authentication.name)
+    override fun getCurrentUserId(): UUID =
+        UUID.fromString(SecurityContextHolder.getContext().authentication.name)
 }
