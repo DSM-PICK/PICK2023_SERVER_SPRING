@@ -8,5 +8,5 @@ import java.util.UUID
 
 @Repository
 interface ClassroomRepository : CrudRepository<ClassroomEntity, UUID> {
-    fun findClassroomEntityById(classroomId: UUID) : Classroom?
+    fun findClassroomEntityById(classroomId: UUID): Classroom?
 }

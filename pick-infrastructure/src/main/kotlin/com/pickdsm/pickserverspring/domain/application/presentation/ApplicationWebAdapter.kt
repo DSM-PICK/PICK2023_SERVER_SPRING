@@ -12,7 +12,7 @@ import java.util.UUID
 @RequestMapping("/applications")
 @RestController
 class ApplicationWebAdapter(
-    private val classroomMovementApi: ClassroomMovementApi
+    private val classroomMovementApi: ClassroomMovementApi,
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -20,5 +20,4 @@ class ApplicationWebAdapter(
     fun saveClassMovement(@PathVariable("classroom-id") classRoomId: UUID) {
         classroomMovementApi.saveClassroomMovement(classRoomId)
     }
-
 }

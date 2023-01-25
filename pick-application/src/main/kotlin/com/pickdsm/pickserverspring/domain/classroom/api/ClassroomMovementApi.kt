@@ -4,5 +4,5 @@ import java.util.*
 
 interface ClassroomMovementApi {
 
-    fun saveClassroomMovement(classroomId: UUID);
+    fun saveClassroomMovement(classroomId: UUID)
 }
