@@ -1,30 +1,20 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
+import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.UUID
+import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.MapsId
-import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Table(name = "tbl_application")
 @Entity
 class ApplicationEntity(
 
-    @Id
-    val id: UUID,
-
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)", nullable = false)
-    val statusEntity: StatusEntity,
+    override val id: UUID,
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     val studentId: UUID,
@@ -45,7 +35,7 @@ class ApplicationEntity(
     isStatus: Boolean,
 
     isPermission: Boolean,
-) : Serializable {
+) : Serializable, BaseUUIDEntity(id) {
 
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     @ColumnDefault("0")
