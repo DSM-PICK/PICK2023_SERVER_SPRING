@@ -1,11 +1,11 @@
 package com.pickdsm.pickserverspring.domain.user.persistence
 
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
+import com.pickdsm.pickserverspring.global.annotation.Adapter
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.stereotype.Component
 import java.util.UUID
 
-@Component
+@Adapter
 class UserPersistenceAdapter : UserSpi {
 
     override fun getCurrentUserId(): UUID {

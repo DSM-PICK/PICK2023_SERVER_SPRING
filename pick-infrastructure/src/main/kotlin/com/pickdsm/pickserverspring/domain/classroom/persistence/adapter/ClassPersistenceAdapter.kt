@@ -4,13 +4,13 @@ import com.pickdsm.pickserverspring.domain.classroom.Classroom
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomRepository
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomSpi
-import org.springframework.stereotype.Component
+import com.pickdsm.pickserverspring.global.annotation.Adapter
 import java.util.UUID
 
-@Component
+@Adapter
 class ClassPersistenceAdapter(
     private val classroomRepository: ClassroomRepository,
-): ClassroomSpi {
+) : ClassroomSpi {
 
     override fun queryClassroomById(classroomId: UUID): Classroom {
         return classroomRepository.findClassroomEntityById(classroomId) ?: throw ClassroomNotFoundException
