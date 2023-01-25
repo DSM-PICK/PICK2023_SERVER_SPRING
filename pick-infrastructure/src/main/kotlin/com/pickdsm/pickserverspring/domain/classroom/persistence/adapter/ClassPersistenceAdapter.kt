@@ -12,7 +12,5 @@ class ClassPersistenceAdapter(
     private val classroomRepository: ClassroomRepository,
 ) : ClassroomSpi {
 
-    override fun queryClassroomById(classroomId: UUID): Classroom {
-        return classroomRepository.findClassroomEntityById(classroomId) ?: throw ClassroomNotFoundException
-    }
+    override fun queryClassroomById(classroomId: UUID): Classroom = classroomRepository.findClassroomEntityById(classroomId) ?: throw ClassroomNotFoundException
 }
