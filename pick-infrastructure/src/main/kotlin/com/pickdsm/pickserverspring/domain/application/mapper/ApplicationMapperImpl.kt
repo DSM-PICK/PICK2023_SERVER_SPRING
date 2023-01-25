@@ -16,7 +16,7 @@ class ApplicationMapperImpl(
         val statusEntity = statusRepository.findByIdOrNull(application.id) ?: throw StatusNotFoundException
 
         return ApplicationEntity(
-            id = statusEntity.id,
+            id = application.id,
             studentId = statusEntity.studentId,
             date = application.date,
             startTime = application.startTime,
