@@ -9,5 +9,5 @@ ENV CLOUD_CONFIG_PASSWORD ${CLOUD_CONFIG_PASSWORD}
 ARG PROFILE
 ENV PROFILE ${PROFILE}
 
-ADD /point-infrastructure/build/libs/*.jar app.jar
+ADD /pick-infrastructure/build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
