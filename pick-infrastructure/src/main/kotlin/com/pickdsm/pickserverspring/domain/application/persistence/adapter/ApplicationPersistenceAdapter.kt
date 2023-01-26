@@ -13,8 +13,6 @@ class ApplicationPersistenceAdapter(
 ) : ApplicationSpi {
 
     override fun saveApplication(application: Application) {
-        applicationRepository.save(
-            applicationMapper.domainToEntity(application)
-        )
+        applicationRepository.save(applicationMapper.domainToEntity(application))
     }
 }
