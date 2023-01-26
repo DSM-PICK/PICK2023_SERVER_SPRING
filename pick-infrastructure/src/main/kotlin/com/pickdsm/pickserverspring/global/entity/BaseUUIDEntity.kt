@@ -15,5 +15,5 @@ abstract class BaseUUIDEntity(
     @GeneratedValue(generator = "UUIDv7")
     @GenericGenerator(name = "UUIDv7", strategy = "com.pickdsm.pickserverspring.common.uuid.UUIDv7Generator")
     @Type(type = "uuid-char")
-    val id: UUID?,
+    val id: UUID,
 )
