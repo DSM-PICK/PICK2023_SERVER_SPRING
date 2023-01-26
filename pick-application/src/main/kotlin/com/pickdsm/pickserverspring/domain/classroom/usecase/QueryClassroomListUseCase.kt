@@ -16,13 +16,12 @@ class QueryClassroomListUseCase(
 
         return QueryClassroomList(
             classroomList = classroomList
-                .map {
-                    classroom -> ClassroomElement(
+                .map { classroom ->
+                    ClassroomElement(
                         id = classroom.id,
                         name = classroom.name,
                     )
-                }
+                },
         )
     }
-
 }
