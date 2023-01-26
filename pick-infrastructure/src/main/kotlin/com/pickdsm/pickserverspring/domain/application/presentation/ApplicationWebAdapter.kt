@@ -29,7 +29,11 @@ class ApplicationWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun saveApplicationToGoOut(@RequestBody @Valid request: ApplicationGoOutRequest) {
+    fun saveApplicationToGoOut(
+        @RequestBody
+        @Valid
+        request: ApplicationGoOutRequest
+    ) {
         val domainRequest = DomainApplicationGoOutRequest(
             startTime = request.startTime,
             endTime = request.endTime,
