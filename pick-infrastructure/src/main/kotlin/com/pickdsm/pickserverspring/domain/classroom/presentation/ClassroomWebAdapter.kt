@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/applications")
 @RestController
-class ClassroomWebAdapter (
+class ClassroomWebAdapter(
     private val classroomApi: QueryClassroomListApi,
 ) {
 

@@ -18,6 +18,8 @@ class ClassroomMovementUseCase(
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
         val studentId = userSpi.getCurrentUserId()
 
+
+
         commandClassroomMovementSpi.saveClassroom(studentId, classroom)
     }
 }

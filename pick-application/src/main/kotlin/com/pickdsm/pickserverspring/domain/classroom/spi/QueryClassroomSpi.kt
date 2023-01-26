@@ -2,7 +2,6 @@ package com.pickdsm.pickserverspring.domain.classroom.spi
 
 import com.pickdsm.pickserverspring.domain.classroom.Classroom
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.ClassroomElement
-import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
 import java.util.UUID
 
 interface QueryClassroomSpi {
