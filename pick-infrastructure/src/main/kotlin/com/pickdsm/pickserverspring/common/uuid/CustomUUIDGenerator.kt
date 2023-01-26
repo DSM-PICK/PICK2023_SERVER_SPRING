@@ -7,8 +7,6 @@ import java.io.Serializable
 
 class CustomUUIDGenerator : IdentifierGenerator {
 
-    override fun generate(
-        session: SharedSessionContractImplementor,
-        entity: Any
-    ) : Serializable = UuidCreator.getTimeOrderedEpoch()
+    override fun generate(session: SharedSessionContractImplementor, entity: Any): Serializable =
+        UuidCreator.getTimeOrderedEpoch()
 }
