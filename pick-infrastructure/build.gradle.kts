@@ -27,13 +27,6 @@ dependencies {
     implementation(project(":pick-application"))
 }
 
-kapt {
-    arguments {
-        arg("mapstruct.defaultComponentModel", "spring")
-        arg("mapstruct.unmappedTargetPolicy", "ignore")
-    }
-}
-
 tasks.getByName<Jar>("jar") {
     enabled = false
 }
