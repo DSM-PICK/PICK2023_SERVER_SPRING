@@ -19,12 +19,11 @@ class ClassPersistenceAdapter(
     override fun queryClassroomListByFloor(floor: Int): List<ClassroomElement> {
         val classroomList = classroomRepository.findClassroomEntityByFloor(floor)
 
-        return classroomList
-            .map { classroom ->
-                ClassroomElement(
-                    id = classroom.id,
-                    name = classroom.name,
-                )
-            }
+        return classroomList.map { classroom ->
+            ClassroomElement(
+                id = classroom.id,
+                name = classroom.name,
+            )
+        }
     }
 }

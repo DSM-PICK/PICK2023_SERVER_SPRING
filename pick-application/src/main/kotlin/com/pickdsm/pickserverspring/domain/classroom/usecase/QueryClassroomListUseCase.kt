@@ -15,13 +15,12 @@ class QueryClassroomListUseCase(
         val classroomList = queryClassroomSpi.queryClassroomListByFloor(floor)
 
         return QueryClassroomList(
-            classroomList = classroomList
-                .map { classroom ->
-                    ClassroomElement(
-                        id = classroom.id,
-                        name = classroom.name,
-                    )
-                },
+            classroomList = classroomList.map { classroom ->
+                ClassroomElement(
+                    id = classroom.id,
+                    name = classroom.name,
+                )
+            },
         )
     }
 }
