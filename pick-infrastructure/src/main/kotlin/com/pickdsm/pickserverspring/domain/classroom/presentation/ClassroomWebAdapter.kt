@@ -13,7 +13,7 @@ class ClassroomWebAdapter(
     private val classroomApi: QueryClassroomListApi,
 ) {
 
-    @GetMapping("/")
+    @GetMapping
     fun getClassroomList(@RequestParam floor: Int): QueryClassroomList {
         return classroomApi.queryClassroomList(floor)
     }
