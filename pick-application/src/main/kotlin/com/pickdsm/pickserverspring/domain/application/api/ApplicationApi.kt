@@ -7,5 +7,5 @@ interface ApplicationApi {
 
     fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest)
 
-    fun getPicnicApplicationListByGradeAndClassNum(grade: Int?, classNum: Int?): QueryPicnicApplicationList
+    fun queryPicnicApplicationListByGradeAndClassNum(grade: Int?, classNum: Int?): QueryPicnicApplicationList
 }

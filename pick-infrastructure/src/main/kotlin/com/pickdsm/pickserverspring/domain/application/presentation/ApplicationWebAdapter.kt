@@ -31,11 +31,11 @@ class ApplicationWebAdapter(
     }
 
     @GetMapping
-    fun getPicnicApplicationList(
+    fun queryPicnicApplicationList(
         @RequestParam grade: Int?,
         @RequestParam classNum: Int?,
     ): QueryPicnicApplicationList {
-        return applicationApi.getPicnicApplicationListByGradeAndClassNum(grade, classNum)
+        return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum)
     }
 
     @ResponseStatus(HttpStatus.CREATED)

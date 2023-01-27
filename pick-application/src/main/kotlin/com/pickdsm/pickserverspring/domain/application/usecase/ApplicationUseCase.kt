@@ -34,7 +34,7 @@ class ApplicationUseCase(
         commandApplicationSpi.saveApplication(application)
     }
 
-    override fun getPicnicApplicationListByGradeAndClassNum(grade: Int?, classNum: Int?): QueryPicnicApplicationList {
+    override fun queryPicnicApplicationListByGradeAndClassNum(grade: Int?, classNum: Int?): QueryPicnicApplicationList {
         val currentUserIdList = queryApplicationSpi.queryAllStudentId()
 
         val userMap = applicationUserSpi.queryUserInfo(currentUserIdList).associateBy { it.id }
