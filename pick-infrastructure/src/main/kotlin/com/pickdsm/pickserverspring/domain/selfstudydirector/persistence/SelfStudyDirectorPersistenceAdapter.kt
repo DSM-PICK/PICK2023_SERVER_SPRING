@@ -15,16 +15,13 @@ class SelfStudyDirectorPersistenceAdapter(
     private val jpaQueryFactory: JPAQueryFactory,
 ) : SelfStudyDirectorSpi {
 
-    override fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector> {
-        val selfStudyDirectorList = jpaQueryFactory
+    override fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector> =
+        jpaQueryFactory
             .select(selfStudyDirectorEntity)
             .from(selfStudyDirectorEntity)
             .where(selfStudyDirectorEntity.date.between(date, date.plusMonths(1)))
             .fetch()
-
-        return selfStudyDirectorList
             .map { selfStudyDirectorMapper.entityToDomain(it) }
-    }
 
     override fun querySelfStudyDirectorTeacherIdByDate(date: LocalDate): List<UUID> =
         jpaQueryFactory
