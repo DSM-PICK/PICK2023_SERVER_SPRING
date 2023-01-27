@@ -8,5 +8,5 @@ interface QueryApplicationSpi {
 
     fun queryPicnicApplicationListByToday(date: LocalDate): List<Application>
 
-    fun queryAllStudentId(): List<UUID>
+    fun queryAllStudentIdByToday(date: LocalDate): List<UUID>
 }
