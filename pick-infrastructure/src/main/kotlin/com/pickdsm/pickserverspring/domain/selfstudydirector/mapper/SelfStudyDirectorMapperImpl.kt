@@ -2,7 +2,9 @@ package com.pickdsm.pickserverspring.domain.selfstudydirector.mapper
 
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.SelfStudyDirectorEntity
+import org.springframework.stereotype.Component
 
+@Component
 class SelfStudyDirectorMapperImpl : SelfStudyDirectorMapper {
 
     override fun domainToEntity(selfStudyDirector: SelfStudyDirector): SelfStudyDirectorEntity {
