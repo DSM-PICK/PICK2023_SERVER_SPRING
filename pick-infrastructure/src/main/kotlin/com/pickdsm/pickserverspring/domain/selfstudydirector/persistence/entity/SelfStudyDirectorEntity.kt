@@ -7,6 +7,8 @@ import java.time.LocalDate
 import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.Table
 
 @Table(name = "tbl_selfstudy_director")
@@ -24,6 +26,7 @@ class SelfStudyDirectorEntity(
     @Column(columnDefinition = "DATE", nullable = false)
     val date: LocalDate,
 
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(12)", nullable = false)
     @ColumnDefault("''")
     val type: DirectorType,

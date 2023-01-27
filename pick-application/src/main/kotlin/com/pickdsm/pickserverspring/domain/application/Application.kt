@@ -8,7 +8,7 @@ import java.util.*
 @Aggregate
 class Application(
 
-    val id: UUID,
+    val id: UUID = UUID(0, 0),
 
     val studentId: UUID,
 
@@ -20,7 +20,7 @@ class Application(
 
     val reason: String,
 
-    val isStatus: Boolean,
+    val isStatus: Boolean = false,
 
-    val isPermission: Boolean,
+    val isPermission: Boolean = false,
 )

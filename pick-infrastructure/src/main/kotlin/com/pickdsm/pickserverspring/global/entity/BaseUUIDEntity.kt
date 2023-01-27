@@ -1,8 +1,9 @@
 package com.pickdsm.pickserverspring.global.entity
 
-import com.github.f4b6a3.uuid.UuidCreator
-import java.util.UUID
+import org.hibernate.annotations.GenericGenerator
+import java.util.*
 import javax.persistence.Column
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.MappedSuperclass
 
@@ -10,6 +11,8 @@ import javax.persistence.MappedSuperclass
 abstract class BaseUUIDEntity(
 
     @Id
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    val id: UUID = UuidCreator.getTimeOrderedEpoch(),
+    @GeneratedValue(generator = "UUIDv7")
+    @GenericGenerator(name = "UUIDv7", strategy = "com.pickdsm.pickserverspring.common.uuid.CustomUUIDGenerator")
+    @Column(columnDefinition = "BINARY(16)")
+    val id: UUID,
 )

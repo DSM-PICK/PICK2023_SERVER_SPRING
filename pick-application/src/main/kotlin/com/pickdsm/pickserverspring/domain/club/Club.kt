@@ -1,12 +1,12 @@
 package com.pickdsm.pickserverspring.domain.club
 
 import com.pickdsm.pickserverspring.common.annotation.Aggregate
-import java.util.UUID
+import java.util.*
 
 @Aggregate
 class Club(
 
-    val id: UUID,
+    val id: UUID = UUID(0, 0),
 
     val name: String,
 
