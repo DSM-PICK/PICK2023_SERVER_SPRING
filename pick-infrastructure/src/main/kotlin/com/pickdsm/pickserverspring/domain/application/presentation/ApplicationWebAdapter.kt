@@ -39,7 +39,7 @@ class ApplicationWebAdapter(
     ): QueryPicnicApplicationList {
         return queryPicnicApplicationListApi.getPicnicApplicationListByGradeAndClassNum(grade, classNum)
     }
-    
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun saveApplicationToGoOut(
