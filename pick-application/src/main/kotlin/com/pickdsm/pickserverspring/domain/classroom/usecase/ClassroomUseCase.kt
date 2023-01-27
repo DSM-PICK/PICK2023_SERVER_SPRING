@@ -14,13 +14,6 @@ class ClassroomUseCase(
     override fun queryClassroomList(floor: Int): QueryClassroomList {
         val classroomList = queryClassroomSpi.queryClassroomListByFloor(floor)
 
-        return QueryClassroomList(
-            classroomList = classroomList.map { classroom ->
-                ClassroomElement(
-                    id = classroom.id,
-                    name = classroom.name,
-                )
-            },
-        )
+        return QueryClassroomList(classroomList)
     }
 }
