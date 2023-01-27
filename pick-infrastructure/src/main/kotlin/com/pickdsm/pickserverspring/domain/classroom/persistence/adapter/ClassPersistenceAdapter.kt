@@ -15,14 +15,13 @@ import java.util.*
 @Adapter
 class ClassPersistenceAdapter(
     private val classroomRepository: ClassroomRepository,
-    private val jpaQueryFactory: JPAQueryFactory
+    private val jpaQueryFactory: JPAQueryFactory,
 ) : ClassroomSpi {
 
     override fun queryClassroomById(classroomId: UUID): Classroom =
         classroomRepository.findClassroomEntityById(classroomId) ?: throw ClassroomNotFoundException
 
     override fun queryClassroomListByFloor(floor: Int): List<ClassroomElement> {
-
         return jpaQueryFactory
             .selectFrom(classroomEntity)
             .where(floorEq(floor))
