@@ -8,7 +8,8 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.user.dto.UserInfo
 import com.pickdsm.pickserverspring.domain.user.spi.ApplicationUserSpi
-import java.util.*
+import java.time.LocalDate
+import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryPicnicApplicationListUseCase(
@@ -16,23 +17,23 @@ class QueryPicnicApplicationListUseCase(
     private val applicationUserSpi: ApplicationUserSpi,
 ) : QueryPicnicApplicationListApi {
 
-    override fun getPicnicApplicationList(grade: Int?, classNum: Int?): QueryPicnicApplicationList {
-        val userIdList = queryApplicationSpi.queryAllStudentId()
+    override fun getPicnicApplicationListByGradeAndClassNum(grade: Int?, classNum: Int?): QueryPicnicApplicationList {
+        val currentUserIdList = queryApplicationSpi.queryAllStudentId()
 
-        val userMap = applicationUserSpi.queryUserInfo(userIdList).associateBy { it.id }
+        val userMap = applicationUserSpi.queryUserInfo(currentUserIdList).associateBy { it.id }
 
-        val outingList = queryApplicationSpi.queryPicnicApplicationList()
+        val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday(LocalDate.now())
 
         if (grade != null && classNum == null) {
-            getFilteringByGrade(userMap, outingList, grade)
+            filteringByGrade(userMap, todayOutingList, grade)
         } else if (grade == null && classNum != null) {
-            getFilteringByClassNum(userMap, outingList, classNum)
+            filteringByClassNum(userMap, todayOutingList, classNum)
         } else if (grade != null && classNum != null) {
-            getFilteringByGradeAndClassNum(userMap, outingList, grade, classNum)
+            filteringByGradeAndClassNum(userMap, todayOutingList, grade, classNum)
         }
 
         return QueryPicnicApplicationList(
-            outing = outingList
+            outing = todayOutingList
                 .map { application ->
                     QueryPicnicApplicationElement(
                         startTime = application.startTime,
@@ -45,45 +46,50 @@ class QueryPicnicApplicationListUseCase(
         )
     }
 
-    private fun getFilteringByGrade(
+    private fun filteringByGrade(
         userMap: Map<UUID, UserInfo>,
-        outingList: List<Application>,
+        todayOutingList: List<Application>,
         grade: Int,
     ) {
-        val userInfoList = getUserInfo(userMap)
-        userInfoList.filter { it.grade == grade }
-        filteringByUserMap(userInfoList, outingList)
+        val checkedUserList = userMap.values.filter { it.grade == grade }
+        val userInfoList = filteringUserList(checkedUserList)
+        filteringByUserMap(userInfoList, todayOutingList)
     }
 
-    private fun getFilteringByClassNum(
+    private fun filteringByClassNum(
         userMap: Map<UUID, UserInfo>,
-        outingList: List<Application>,
+        todayOutingList: List<Application>,
         classNum: Int,
     ) {
-        val userInfoList = getUserInfo(userMap)
-        userInfoList.filter { it.classNum == classNum }
-        filteringByUserMap(userInfoList, outingList)
+        val checkedUserList = userMap.values.filter { it.classNum == classNum }
+        val userInfoList = filteringUserList(checkedUserList)
+        filteringByUserMap(userInfoList, todayOutingList)
     }
 
-    private fun getFilteringByGradeAndClassNum(
+    private fun filteringByGradeAndClassNum(
         userMap: Map<UUID, UserInfo>,
-        outingList: List<Application>,
+        toadyOutingList: List<Application>,
         grade: Int,
         classNum: Int,
     ) {
-        val userInfoList = getUserInfo(userMap)
-        userInfoList.filter { it.grade == grade && it.classNum == classNum }
-        filteringByUserMap(userInfoList, outingList)
-    }
-
-    private fun filteringByUserMap(
-        userInfoList: List<UserInfo>,
-        outingList: List<Application>,
-    ) {
-        val userHashMap = userInfoList.associateBy { it.id }
-        outingList.filter { it.studentId.equals(userHashMap.keys) }
+        val checkedUserList = userMap.values.filter { it.grade == grade && it.classNum == classNum }
+        val userInfoList = filteringUserList(checkedUserList)
+        filteringByUserMap(userInfoList, toadyOutingList)
     }
 
     private fun getUserInfo(userMap: Map<UUID, UserInfo>): List<UserInfo> =
         applicationUserSpi.queryUserInfo(userMap.keys.toList())
+
+    private fun filteringUserList(checkedUserList: List<UserInfo>): List<UserInfo> {
+        val checkedUserMap = checkedUserList.associateBy { it.id }
+        return getUserInfo(checkedUserMap)
+    }
+
+    private fun filteringByUserMap(
+        userInfoList: List<UserInfo>,
+        todayOutingList: List<Application>,
+    ) {
+        val userHashMap = userInfoList.associateBy { it.id }
+        todayOutingList.filter { it.studentId.equals(userHashMap.keys) }
+    }
 }
