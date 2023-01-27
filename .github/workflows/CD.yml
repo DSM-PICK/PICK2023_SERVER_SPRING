@@ -36,7 +36,7 @@ jobs:
             --no-daemon
       - name: Login to ECR
         id: ecr
-        uses: elgohr/ecr-login-action@master
+        uses: elgohr/ecr-login-action@v3
         with:
           access_key: ${{ secrets.AWS_ACCESS_KEY }}
           secret_access_key: ${{ secrets.AWS_SECRET_KEY }}
