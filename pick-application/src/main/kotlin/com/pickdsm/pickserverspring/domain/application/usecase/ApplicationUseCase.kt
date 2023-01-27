@@ -59,7 +59,6 @@ class ApplicationUseCase(
                     else -> (studentGrade == user.grade && studentClassNum == user.classNum)
                 }
             }
-                
             .map { application ->
                 val user = userList.find { user -> user.id == application.studentId }
 
