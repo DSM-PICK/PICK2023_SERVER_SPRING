@@ -1,6 +1,5 @@
 package com.pickdsm.pickserverspring.domain.application.presentation
 
-import com.pickdsm.pickserverspring.domain.application.api.QueryPicnicApplicationListApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
@@ -22,7 +21,6 @@ import javax.validation.Valid
 @RestController
 class ApplicationWebAdapter(
     private val classroomMovementApi: ClassroomMovementApi,
-    private val queryPicnicApplicationListApi: QueryPicnicApplicationListApi,
     private val applicationApi: ApplicationApi,
 ) {
 
@@ -37,7 +35,7 @@ class ApplicationWebAdapter(
         @RequestParam grade: Int?,
         @RequestParam classNum: Int?,
     ): QueryPicnicApplicationList {
-        return queryPicnicApplicationListApi.getPicnicApplicationListByGradeAndClassNum(grade, classNum)
+        return applicationApi.getPicnicApplicationListByGradeAndClassNum(grade, classNum)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
