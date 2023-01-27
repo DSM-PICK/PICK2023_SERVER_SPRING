@@ -54,7 +54,6 @@ class ApplicationUseCase(
 
                 when {
                     studentGrade != 0 && studentClassNum == 0 -> studentGrade == user.grade
-                    studentGrade == 0 && studentClassNum != 0 -> studentClassNum == user.classNum
                     studentGrade == 0 -> false
                     else -> (studentGrade == user.grade && studentClassNum == user.classNum)
                 }
