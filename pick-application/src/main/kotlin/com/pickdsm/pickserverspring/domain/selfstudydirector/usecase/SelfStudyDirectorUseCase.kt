@@ -12,7 +12,7 @@ import java.time.LocalDate
 @ReadOnlyUseCase
 class SelfStudyDirectorUseCase(
     private val querySelfStudyDirectorSpi: QuerySelfStudyDirectorSpi,
-    private val userQuerySelfStudyDirectorSpi: UserQuerySelfStudyDirectorSpi
+    private val userQuerySelfStudyDirectorSpi: UserQuerySelfStudyDirectorSpi,
 ) : SelfStudyDirectorApi {
 
     override fun getSelfStudyTeacher(month: String): SelfStudyListResponse {
