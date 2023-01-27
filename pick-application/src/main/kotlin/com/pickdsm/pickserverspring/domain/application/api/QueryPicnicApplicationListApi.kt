@@ -4,5 +4,5 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 
 interface QueryPicnicApplicationListApi {
 
-    fun getPicnicApplicationList(grade: Int?, classNum: Int?): QueryPicnicApplicationList
+    fun getPicnicApplicationListByGradeAndClassNum(grade: Int?, classNum: Int?): QueryPicnicApplicationList
 }
