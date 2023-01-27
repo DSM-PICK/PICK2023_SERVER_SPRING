@@ -31,6 +31,6 @@ class ApplicationWebAdapter(
         @RequestParam grade: Int?,
         @RequestParam classNum: Int?,
     ): QueryPicnicApplicationList {
-        return queryPicnicApplicationListApi.getPicnicApplicationList(grade, classNum)
+        return queryPicnicApplicationListApi.getPicnicApplicationListByGradeAndClassNum(grade, classNum)
     }
 }
