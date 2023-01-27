@@ -1,13 +1,12 @@
 package com.pickdsm.pickserverspring.domain.application.persistence
 
 import com.pickdsm.pickserverspring.domain.application.Application
-import com.pickdsm.pickserverspring.domain.application.mapper.ApplicationMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QApplicationEntity.applicationEntity
 import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class ApplicationPersistenceAdapter(
