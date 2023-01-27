@@ -6,18 +6,17 @@ import com.pickdsm.pickserverspring.domain.application.persistence.entity.QAppli
 import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.time.LocalDate
 import java.util.*
 
 @Adapter
 class ApplicationPersistenceAdapter(
     private val jpaQueryFactory: JPAQueryFactory,
     private val applicationRepository: ApplicationRepository,
-    private val applicationMapper: ApplicationMapper,
 ) : ApplicationSpi {
 
-    override fun queryPicnicApplicationList(): List<Application> {
-        return applicationRepository.findAll()
-            .map(applicationMapper::entityToDomain)
+    override fun queryPicnicApplicationListByToday(date: LocalDate): List<Application> {
+        return applicationRepository.findAllByDate(date)
     }
 
     override fun queryAllStudentId(): List<UUID> {
