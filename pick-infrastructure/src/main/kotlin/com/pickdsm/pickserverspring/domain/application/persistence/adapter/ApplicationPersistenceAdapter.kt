@@ -22,13 +22,18 @@ class ApplicationPersistenceAdapter(
     }
 
     override fun queryPicnicApplicationListByToday(date: LocalDate): List<Application> {
-        return applicationRepository.findAllByDate(date)
+        return jpaQueryFactory
+            .selectFrom(applicationEntity)
+            .where(applicationEntity.date.eq(date))
+            .fetch()
+            .map(applicationMapper::entityToDomain)
     }
 
-    override fun queryAllStudentId(): List<UUID> {
+    override fun queryAllStudentIdByToday(date: LocalDate): List<UUID> {
         return jpaQueryFactory
             .select(applicationEntity.studentId)
             .from(applicationEntity)
+            .where(applicationEntity.date.eq(date))
             .fetch()
     }
 }
