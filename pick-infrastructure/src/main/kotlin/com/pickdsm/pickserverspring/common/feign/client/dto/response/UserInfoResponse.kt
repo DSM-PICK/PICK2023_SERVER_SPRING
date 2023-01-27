@@ -1,5 +1,8 @@
 package com.pickdsm.pickserverspring.common.feign.client.dto.response
 
-data class UserInfoResponse(
+import com.pickdsm.pickserverspring.global.annotation.NoArg
+
+@NoArg
+class UserInfoResponse(
     val users: List<UserInfoElement>,
 )

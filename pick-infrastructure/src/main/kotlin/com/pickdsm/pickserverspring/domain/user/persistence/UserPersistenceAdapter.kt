@@ -1,34 +1,34 @@
 package com.pickdsm.pickserverspring.domain.user.persistence
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.pickdsm.pickserverspring.common.feign.client.UserClient
-import com.pickdsm.pickserverspring.common.feign.client.dto.response.UserInfoResponse
-import com.pickdsm.pickserverspring.domain.user.dto.UserInfo
-import com.pickdsm.pickserverspring.domain.user.spi.ApplicationUserSpi
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import org.springframework.security.core.context.SecurityContextHolder
-import java.util.UUID
+import java.util.*
 
 @Adapter
 class UserPersistenceAdapter(
     private val userClient: UserClient,
-) : UserSpi, ApplicationUserSpi {
+) : UserSpi {
 
     override fun getCurrentUserId(): UUID =
         UUID.fromString(SecurityContextHolder.getContext().authentication.name)
 
-    override fun queryUserInfo(ids: List<UUID>): List<UserInfo> =
-        jacksonObjectMapper().readValue<UserInfoResponse>(userClient.getUserInfo(ids))
+    override fun queryUserInfo(ids: List<UUID>): List<User> =
+        userClient.getUserInfo(ids)
             .users
             .map {
-                UserInfo(
+                User(
                     id = it.id,
+                    accountId = it.accountId,
+                    password = it.password,
+                    name = it.name,
                     grade = it.grade,
                     classNum = it.classNum,
                     num = it.num,
-                    studentName = it.name,
+                    birthDay = it.birthDay,
+                    profileFileName = it.profileFileName,
                 )
             }
 }
