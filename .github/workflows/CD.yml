@@ -34,9 +34,10 @@ jobs:
           arguments: |
             build
             --no-daemon
+
       - name: Login to ECR
         id: ecr
-        uses: elgohr/ecr-login-action@master
+        uses: elgohr/ecr-login-action@v3
         with:
           access_key: ${{ secrets.AWS_ACCESS_KEY }}
           secret_access_key: ${{ secrets.AWS_SECRET_KEY }}
@@ -51,9 +52,9 @@ jobs:
           registry: ${{ steps.ecr.outputs.registry }}
           tags: ${{ github.sha }}
           buildargs: |
+            PROFILE=stag
             CLOUD_CONFIG_USERNAME=${{secrets.CLOUD_CONFIG_USERNAME}}
             CLOUD_CONFIG_PASSWORD=${{secrets.CLOUD_CONFIG_PASSWORD}}
-            PROFILE=stag
 
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
