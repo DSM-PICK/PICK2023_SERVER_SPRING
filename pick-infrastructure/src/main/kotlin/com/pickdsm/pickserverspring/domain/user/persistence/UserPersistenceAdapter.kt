@@ -21,7 +21,7 @@ class UserPersistenceAdapter(
 
     override fun queryUserInfo(ids: List<UUID>): List<UserInfo> =
         jacksonObjectMapper().readValue<UserInfoResponse>(userClient.getUserInfo(ids))
-            .userList
+            .users
             .map {
                 UserInfo(
                     id = it.id,
