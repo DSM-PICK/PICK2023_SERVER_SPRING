@@ -46,7 +46,7 @@ class ApplicationUseCase(
         val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday(today)
 
         val outing: List<QueryPicnicApplicationElement> = todayOutingList
-
+                
             .filter { application ->
                 val user = userList.find { user -> user.id == application.studentId } ?: return@filter false
 
