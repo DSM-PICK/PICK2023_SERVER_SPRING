@@ -1,15 +1,15 @@
 package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
-import com.pickdsm.pickserverspring.domain.classroom.api.QueryClassroomListApi
+import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.ClassroomElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 
 @ReadOnlyUseCase
-class QueryClassroomListUseCase(
+class ClassroomUseCase(
     private val queryClassroomSpi: QueryClassroomSpi,
-) : QueryClassroomListApi {
+) : ClassroomApi {
 
     override fun queryClassroomList(floor: Int): QueryClassroomList {
         val classroomList = queryClassroomSpi.queryClassroomListByFloor(floor)
