@@ -31,9 +31,9 @@ class ApplicationWebAdapter(
     }
 
     @GetMapping
-    fun queryPicnicApplicationList(
-        @RequestParam grade: Int?,
-        @RequestParam classNum: Int?,
+    fun queryPicnicApplicationListByGradeAndClassNum(
+        @RequestParam grade: String,
+        @RequestParam classNum: String,
     ): QueryPicnicApplicationList {
         return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum)
     }
