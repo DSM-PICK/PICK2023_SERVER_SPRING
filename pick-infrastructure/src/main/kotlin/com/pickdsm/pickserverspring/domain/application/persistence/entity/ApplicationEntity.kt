@@ -2,7 +2,6 @@ package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
-import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
@@ -35,7 +34,7 @@ class ApplicationEntity(
     isStatus: Boolean,
 
     isPermission: Boolean,
-) : Serializable, BaseUUIDEntity(id) {
+) : BaseUUIDEntity(id) {
 
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     @ColumnDefault("0")
