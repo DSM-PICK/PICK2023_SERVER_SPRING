@@ -1,7 +1,6 @@
 package com.pickdsm.pickserverspring.global.entity
 
 import org.hibernate.annotations.GenericGenerator
-import org.hibernate.annotations.Type
 import java.util.*
 import javax.persistence.Column
 import javax.persistence.GeneratedValue
@@ -14,6 +13,6 @@ abstract class BaseUUIDEntity(
     @Id
     @GeneratedValue(generator = "UUIDv7")
     @GenericGenerator(name = "UUIDv7", strategy = "com.pickdsm.pickserverspring.common.uuid.CustomUUIDGenerator")
-    @Type(type = "uuid-char")
+    @Column(columnDefinition = "BINARY(16)")
     val id: UUID,
 )
