@@ -8,7 +8,7 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
-import com.pickdsm.pickserverspring.domain.user.spi.ApplicationUserSpi
+import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 import java.util.*
@@ -17,7 +17,7 @@ import java.util.*
 class ApplicationUseCase(
     private val commandApplicationSpi: CommandApplicationSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
-    private val applicationUserSpi: ApplicationUserSpi,
+    private val userQueryApplicationSpi: UserQueryApplicationSpi,
     private val userSpi: UserSpi,
 ) : ApplicationApi {
 
@@ -41,7 +41,7 @@ class ApplicationUseCase(
 
         val currentUserIdList = queryApplicationSpi.queryAllStudentIdByToday(today)
 
-        val userList = applicationUserSpi.queryUserInfo(currentUserIdList)
+        val userList = userQueryApplicationSpi.queryUserInfo(currentUserIdList)
 
         val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday(today)
 
@@ -63,7 +63,7 @@ class ApplicationUseCase(
 
                 val studentNumber = "${user?.grade ?: 0}${user?.classNum ?: 0}${user?.num ?: 0}"
 
-                val studentName = user?.studentName ?: ""
+                val studentName = user?.name ?: ""
 
                 QueryPicnicApplicationElement(
                     studentId = application.studentId,
