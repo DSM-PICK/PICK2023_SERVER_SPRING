@@ -5,10 +5,8 @@ import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Table
+import java.util.UUID
+import javax.persistence.*
 
 @Table(name = "tbl_status")
 @Entity
@@ -22,10 +20,6 @@ class StatusEntity(
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     val teacherId: UUID,
 
-    @Column(columnDefinition = "VARCHAR(12)", nullable = false)
-    @ColumnDefault("''")
-    val type: StatusType,
-
     @Column(columnDefinition = "DATE", nullable = false)
     val date: LocalDate,
 
@@ -34,4 +28,18 @@ class StatusEntity(
 
     @Column(columnDefinition = "TIME", nullable = false)
     val endTime: LocalTime,
-) : BaseUUIDEntity(id)
+
+    type: StatusType,
+) : BaseUUIDEntity(id) {
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(12)", nullable = false)
+    @ColumnDefault("''")
+    var type = type
+        protected set
+
+    fun changeStatusToPicnic(): StatusEntity {
+        this.type = StatusType.PICNIC
+        return this
+    }
+}
