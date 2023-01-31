@@ -3,8 +3,10 @@ package com.pickdsm.pickserverspring.domain.time
 import com.pickdsm.pickserverspring.common.feign.client.TimeClient
 import com.pickdsm.pickserverspring.domain.time.Time.DomainTimeElement
 import com.pickdsm.pickserverspring.domain.time.spi.TimeSpi
+import com.pickdsm.pickserverspring.global.annotation.Adapter
 import java.time.LocalDate
 
+@Adapter
 class TimeFeignAdapter(
     private val timeClient: TimeClient,
 ) : TimeSpi {
