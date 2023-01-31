@@ -4,11 +4,10 @@ import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Application
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
-import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
-import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
-import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
+import com.pickdsm.pickserverspring.domain.application.spi.*
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 import java.util.*
@@ -17,6 +16,8 @@ import java.util.*
 class ApplicationUseCase(
     private val commandApplicationSpi: CommandApplicationSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
+    private val commandStatusSpi: CommandStatusSpi,
+    private val queryStatusSpi: QueryStatusSpi,
     private val userQueryApplicationSpi: UserQueryApplicationSpi,
     private val userSpi: UserSpi,
 ) : ApplicationApi {
@@ -76,5 +77,21 @@ class ApplicationUseCase(
             }
 
         return QueryPicnicApplicationList(outing)
+    }
+
+    override fun permitPicnicApplication(request: DomainApplicationUserIdsRequest) {
+        val userIdList = request.userIdList
+
+        val applicationIdList = queryApplicationSpi.queryApplicationIdList()
+
+        val statusIdList = queryStatusSpi.queryStatusIdList()
+
+        applicationIdList.filter { applicationIdList.containsAll(userIdList) }
+
+        statusIdList.filter { statusIdList.containsAll(userIdList) }
+
+        commandApplicationSpi.changePermission(applicationIdList)
+
+        commandStatusSpi.changeStatusToPicnic(statusIdList)
     }
 }
