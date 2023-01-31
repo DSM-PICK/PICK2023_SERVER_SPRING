@@ -9,4 +9,6 @@ interface QueryApplicationSpi {
     fun queryPicnicApplicationListByToday(date: LocalDate): List<Application>
 
     fun queryAllStudentIdByToday(date: LocalDate): List<UUID>
+
+    fun queryApplicationIdList(): List<UUID>
 }
