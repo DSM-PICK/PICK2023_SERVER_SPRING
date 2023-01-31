@@ -16,7 +16,8 @@ class UserPersistenceAdapter(
         UUID.fromString(SecurityContextHolder.getContext().authentication.name)
 
     override fun queryUserInfo(ids: List<UUID>): List<User> =
-        userClient.getUserInfo(ids)
+        if (ids.isEmpty()) emptyList()
+        else userClient.getUserInfo(ids)
             .users
             .map {
                 User(
