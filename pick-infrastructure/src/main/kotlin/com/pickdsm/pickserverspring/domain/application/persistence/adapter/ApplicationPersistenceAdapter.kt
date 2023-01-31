@@ -3,6 +3,7 @@ package com.pickdsm.pickserverspring.domain.application.persistence.adapter
 import com.pickdsm.pickserverspring.domain.application.Application
 import com.pickdsm.pickserverspring.domain.application.mapper.ApplicationMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.ApplicationRepository
+import com.pickdsm.pickserverspring.domain.application.persistence.entity.ApplicationEntity
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QApplicationEntity.applicationEntity
 import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
@@ -34,6 +35,20 @@ class ApplicationPersistenceAdapter(
             .select(applicationEntity.studentId)
             .from(applicationEntity)
             .where(applicationEntity.date.eq(date))
+            .fetch()
+    }
+
+    override fun changePermission(applicationIdList: List<UUID>) {
+        val applicationList = applicationRepository.findAllById(applicationIdList)
+            .map(ApplicationEntity::changePermission)
+
+        applicationRepository.saveAll(applicationList)
+    }
+
+    override fun queryApplicationIdList(): List<UUID> {
+        return jpaQueryFactory
+            .select(applicationEntity.id)
+            .from(applicationEntity)
             .fetch()
     }
 }
