@@ -4,7 +4,8 @@ import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
-import java.util.UUID
+import java.time.LocalTime
+import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
@@ -26,5 +27,11 @@ class StatusEntity(
     val type: StatusType,
 
     @Column(columnDefinition = "DATE", nullable = false)
-    val date: LocalDate = LocalDate.now(),
+    val date: LocalDate,
+
+    @Column(columnDefinition = "TIME", nullable = false)
+    val startTime: LocalTime,
+
+    @Column(columnDefinition = "TIME", nullable = false)
+    val endTime: LocalTime,
 ) : BaseUUIDEntity(id)
