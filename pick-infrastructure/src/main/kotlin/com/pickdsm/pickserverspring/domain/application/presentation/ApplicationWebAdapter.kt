@@ -63,7 +63,7 @@ class ApplicationWebAdapter(
         request: ApplicationUserIdsRequest,
     ) {
         val domainRequest = DomainApplicationUserIdsRequest(
-            userIdList = request.userIdList
+            userIdList = request.userIdList,
         )
         applicationApi.permitPicnicApplication(domainRequest)
     }
