@@ -20,7 +20,7 @@ class TeacherWebAdapter(
     fun updateStudentStatus(
         @RequestBody
         @Valid
-        request: UpdateStudentStatusRequest
+        request: UpdateStudentStatusRequest,
     ) {
         val domainRequest = request.userList.map {
             DomainUpdateStudentStatusElement(userId = it.userId, status = it.status)
