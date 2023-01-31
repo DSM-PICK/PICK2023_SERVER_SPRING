@@ -7,7 +7,7 @@ import java.time.LocalTime
 @NoArg
 data class TimeResponse(
     val date: LocalDate,
-    val times: List<TimeElement>
+    val times: List<TimeElement>,
 ) {
 
     @NoArg

@@ -2,7 +2,7 @@ package com.pickdsm.pickserverspring.domain.teacher.presentation
 
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
-import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest.*
+import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest.DomainUpdateStudentStatusElement
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.UpdateStudentStatusRequest
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -17,15 +17,19 @@ class TeacherWebAdapter(
 ) {
 
     @PostMapping("/status")
-    fun updateStudentStatus(@RequestBody @Valid request: UpdateStudentStatusRequest) {
+    fun updateStudentStatus(
+        @RequestBody
+        @Valid
+        request: UpdateStudentStatusRequest
+    ) {
         val domainRequest = request.userList.map {
             DomainUpdateStudentStatusElement(userId = it.userId, status = it.status)
         }
         teacherApi.updateStudentStatus(
             DomainUpdateStudentStatusRequest(
                 period = request.period,
-                userList = domainRequest
-            )
+                userList = domainRequest,
+            ),
         )
     }
 }

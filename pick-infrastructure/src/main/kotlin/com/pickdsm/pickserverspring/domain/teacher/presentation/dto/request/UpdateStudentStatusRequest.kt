@@ -6,13 +6,13 @@ import javax.validation.constraints.NotNull
 
 data class UpdateStudentStatusRequest(
     val period: Int,
-    val userList: List<UpdateStudentStatusElement>
+    val userList: List<UpdateStudentStatusElement>,
 ) {
     data class UpdateStudentStatusElement(
         @field:NotNull
         val userId: UUID,
 
         @field:NotNull
-        val status: StatusType
+        val status: StatusType,
     )
 }
