@@ -30,7 +30,8 @@ class TeacherWebAdapter(
         }
         teacherApi.updateStudentStatus(
             DomainUpdateStudentStatusRequest(
-                period = request.period, userList = domainRequest,
+                period = request.period,
+                userList = domainRequest,
             ),
         )
     }
