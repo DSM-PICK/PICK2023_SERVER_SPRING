@@ -2,26 +2,30 @@ package com.pickdsm.pickserverspring.domain.application.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Application
+import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
+import com.pickdsm.pickserverspring.domain.application.exception.ApplicationNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
-import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
-import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
+import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
+import com.pickdsm.pickserverspring.domain.teacher.spi.UserQueryTeacherSpi
+import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @UseCase
 class ApplicationUseCase(
+    private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val commandApplicationSpi: CommandApplicationSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
-    private val commandStatusSpi: CommandStatusSpi,
-    private val queryStatusSpi: QueryStatusSpi,
+    private val userQueryTeacherSpi: UserQueryTeacherSpi,
     private val userQueryApplicationSpi: UserQueryApplicationSpi,
     private val userSpi: UserSpi,
 ) : ApplicationApi {
@@ -86,16 +90,33 @@ class ApplicationUseCase(
     override fun permitPicnicApplication(request: DomainApplicationUserIdsRequest) {
         val userIdList = request.userIdList
 
+        val teacherId = userSpi.getCurrentUserId()
+
         val applicationIdList = queryApplicationSpi.queryApplicationIdList()
 
-        val statusIdList = queryStatusSpi.queryStatusIdList()
+        val userList = userQueryTeacherSpi.queryUserInfo(userIdList)
 
-        applicationIdList.filter { applicationIdList.containsAll(userIdList) }
+        val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
 
-        statusIdList.filter { statusIdList.containsAll(userIdList) }
+        val statusList = userIdList.map {
+            val user = userList.find { user -> user.id == it }
+                ?: throw UserNotFoundException
+
+            val application = todayApplicationList.find { application -> application.studentId == it }
+                ?: throw ApplicationNotFoundException
+
+            Status(
+                studentId = user.id,
+                teacherId = teacherId,
+                type = StatusType.PICNIC,
+                date = LocalDate.now(),
+                startTime = application.startTime,
+                endTime = application.endTime,
+            )
+        }
 
         commandApplicationSpi.changePermission(applicationIdList)
 
-        commandStatusSpi.changeStatusToPicnic(statusIdList)
+        statusCommandTeacherSpi.saveAllStatus(statusList)
     }
 }
