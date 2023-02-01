@@ -12,12 +12,12 @@ class TimeFeignAdapter(
 ) : TimeSpi {
 
     override fun queryTime(date: LocalDate): Time {
-        val timeList = timeClient.getTime(date)
+        val timeList = timeClient.getTime(date.toString())
         val timeElementList = timeList.times.map {
             DomainTimeElement(
                 id = it.id,
                 period = it.period,
-                startTime = it.startTime,
+                startTime = it.beginTime,
                 endTime = it.endTime,
             )
         }
