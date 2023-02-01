@@ -8,12 +8,12 @@ import java.time.LocalDate
 import java.util.*
 
 @NoArg
-class UserInfoResponse(
+data class UserInfoResponse(
     val users: List<UserInfoElement>,
 ) {
 
     @NoArg
-    class UserInfoElement(
+    data class UserInfoElement(
         val id: UUID,
         @JsonProperty("account_id")
         val accountId: String,
