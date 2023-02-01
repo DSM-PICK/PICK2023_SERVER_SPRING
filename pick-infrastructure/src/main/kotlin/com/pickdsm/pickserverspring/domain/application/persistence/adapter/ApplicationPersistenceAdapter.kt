@@ -9,7 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class ApplicationPersistenceAdapter(
@@ -39,10 +39,8 @@ class ApplicationPersistenceAdapter(
     }
 
     override fun changePermission(applicationIdList: List<UUID>) {
-        val applicationList = applicationRepository.findAllById(applicationIdList)
+        applicationRepository.findAllById(applicationIdList)
             .map(ApplicationEntity::changePermission)
-
-        applicationRepository.saveAll(applicationList)
     }
 
     override fun queryApplicationIdList(): List<UUID> {
@@ -50,5 +48,13 @@ class ApplicationPersistenceAdapter(
             .select(applicationEntity.id)
             .from(applicationEntity)
             .fetch()
+    }
+
+    override fun queryApplicationListByToday(date: LocalDate): List<Application> {
+        return jpaQueryFactory
+            .selectFrom(applicationEntity)
+            .where(applicationEntity.date.eq(date))
+            .fetch()
+            .map(applicationMapper::entityToDomain)
     }
 }
