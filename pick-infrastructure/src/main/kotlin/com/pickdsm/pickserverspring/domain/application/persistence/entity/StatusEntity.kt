@@ -41,9 +41,4 @@ class StatusEntity(
     @ColumnDefault("''")
     var type = type
         protected set
-
-    fun changeStatusToPicnic(): StatusEntity {
-        this.type = StatusType.PICNIC
-        return this
-    }
 }
