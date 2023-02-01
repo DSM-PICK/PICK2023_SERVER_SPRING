@@ -8,6 +8,8 @@ import java.time.LocalTime
 import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.Table
 
 @Table(name = "tbl_status")
@@ -22,6 +24,7 @@ class StatusEntity(
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     val teacherId: UUID,
 
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(12)", nullable = false)
     @ColumnDefault("''")
     val type: StatusType,
