@@ -9,9 +9,12 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApp
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentElement
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.exception.ApplicationNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
+import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.UserQueryTeacherSpi
@@ -25,6 +28,7 @@ class ApplicationUseCase(
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val commandApplicationSpi: CommandApplicationSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
+    private val queryStatusSpi: QueryStatusSpi,
     private val userQueryTeacherSpi: UserQueryTeacherSpi,
     private val userQueryApplicationSpi: UserQueryApplicationSpi,
     private val userSpi: UserSpi,
@@ -85,6 +89,36 @@ class ApplicationUseCase(
             }
 
         return QueryPicnicApplicationList(outing)
+    }
+
+    override fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
+        val today = LocalDate.now()
+
+        val todayPicnicStudentIdList = queryStatusSpi.queryPicnicStudentIdListByToday(today)
+
+        val todayPicnicStudentInfoList = queryStatusSpi.queryPicnicStudentInfoListByToday(today)
+
+        val userList = userQueryApplicationSpi.queryUserInfo(todayPicnicStudentIdList)
+
+        val outing: List<QueryPicnicStudentElement> = todayPicnicStudentInfoList
+            .filter { status -> status.type == StatusType.PICNIC }
+            .map { status ->
+                val user = userList.find { user -> user.id == status.studentId }
+                    ?: throw UserNotFoundException
+
+                val studentNumber = "${user.grade}${user.classNum}${user.num}"
+
+                val studentName = user.name
+
+                QueryPicnicStudentElement(
+                    studentId = user.id,
+                    studentNumber = studentNumber,
+                    studentName = studentName,
+                    endTime = status.endTime,
+                )
+            }
+
+        return QueryPicnicStudentList(outing)
     }
 
     override fun permitPicnicApplication(request: DomainApplicationUserIdsRequest) {
