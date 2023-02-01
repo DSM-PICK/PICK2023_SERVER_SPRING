@@ -45,4 +45,9 @@ class ApplicationEntity(
     @ColumnDefault("0")
     var isPermission = isPermission
         protected set
+
+    fun changePermission(): ApplicationEntity {
+        this.isPermission = true
+        return this
+    }
 }

@@ -1,13 +1,16 @@
 package com.pickdsm.pickserverspring.domain.application.presentation
 
-import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationUserIdsRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationGoOutRequest
+import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -51,5 +54,17 @@ class ApplicationWebAdapter(
             reason = request.reason,
         )
         applicationApi.saveApplicationToGoOut(domainRequest)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping
+    fun permitPicnicApplication(
+        @RequestBody
+        request: ApplicationUserIdsRequest,
+    ) {
+        val domainRequest = DomainApplicationUserIdsRequest(
+            userIdList = request.userIdList,
+        )
+        applicationApi.permitPicnicApplication(domainRequest)
     }
 }
