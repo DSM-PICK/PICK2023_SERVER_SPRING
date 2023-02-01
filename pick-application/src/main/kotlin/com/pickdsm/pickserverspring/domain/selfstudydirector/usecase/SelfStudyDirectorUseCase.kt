@@ -55,7 +55,7 @@ class SelfStudyDirectorUseCase(
                 "secondFloor" to selfStudyTeacherName[1],
                 "thirdFloor" to selfStudyTeacherName[2],
                 "fourthFloor" to selfStudyTeacherName[3],
-            )
+            ),
         )
 
         return TodaySelfStudyTeacherResponse(
