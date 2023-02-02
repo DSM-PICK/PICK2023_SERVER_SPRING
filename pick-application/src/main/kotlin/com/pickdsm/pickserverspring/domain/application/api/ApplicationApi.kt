@@ -14,4 +14,6 @@ interface ApplicationApi {
     fun queryPicnicStudentListByToday(): QueryPicnicStudentList
 
     fun permitPicnicApplication(request: DomainApplicationUserIdsRequest)
+
+    fun rejectPicnicApplication(request: DomainApplicationUserIdsRequest)
 }
