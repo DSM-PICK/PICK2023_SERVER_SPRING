@@ -100,7 +100,7 @@ class ApplicationUseCase(
 
         val todayPicnicStudentInfoList = queryStatusSpi.queryPicnicStudentInfoListByToday(today)
 
-        val todayPicnicStudentIdList = todayPicnicStudentInfoList.map { status ->  status.studentId }
+        val todayPicnicStudentIdList = todayPicnicStudentInfoList.map { status -> status.studentId }
 
         val userList = userQueryApplicationSpi.queryUserInfo(todayPicnicStudentIdList)
 
