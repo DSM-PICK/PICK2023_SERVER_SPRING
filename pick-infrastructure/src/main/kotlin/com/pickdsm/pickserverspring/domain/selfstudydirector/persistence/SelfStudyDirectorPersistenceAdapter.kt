@@ -5,7 +5,6 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.mapper.SelfStudyDirectorMapper
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QSelfStudyDirectorEntity.selfStudyDirectorEntity
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.SelfStudyDirectorSpi
-import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate

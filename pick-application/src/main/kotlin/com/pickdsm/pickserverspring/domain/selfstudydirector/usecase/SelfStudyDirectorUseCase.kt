@@ -53,7 +53,7 @@ class SelfStudyDirectorUseCase(
         return TodaySelfStudyTeacherResponse(
             secondFloor = secondFloorTeacher,
             thirdFloor = thirdFloorTeacher,
-            fourthFloor = fourFloorTeacher
+            fourthFloor = fourFloorTeacher,
         )
     }
 }
