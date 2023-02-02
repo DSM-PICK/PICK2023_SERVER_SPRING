@@ -7,7 +7,7 @@ import java.util.*
 @Aggregate
 class SelfStudyDirector(
 
-    val id: UUID = UUID(0, 0),
+    val id: UUID = UUID.randomUUID(),
 
     val floor: Int,
 

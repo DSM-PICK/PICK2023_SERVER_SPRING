@@ -8,7 +8,7 @@ import java.util.*
 @Aggregate
 class Application(
 
-    val id: UUID = UUID(0, 0),
+    val id: UUID = UUID.randomUUID(),
 
     val studentId: UUID,
 

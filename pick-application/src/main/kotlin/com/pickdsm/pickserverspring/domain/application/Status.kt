@@ -8,7 +8,7 @@ import java.util.*
 @Aggregate
 class Status(
 
-    val id: UUID = UUID(0, 0),
+    val id: UUID = UUID.randomUUID(),
 
     val studentId: UUID,
 

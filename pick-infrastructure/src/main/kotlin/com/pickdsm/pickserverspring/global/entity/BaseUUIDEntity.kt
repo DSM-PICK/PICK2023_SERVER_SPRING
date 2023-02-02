@@ -11,8 +11,8 @@ import javax.persistence.MappedSuperclass
 abstract class BaseUUIDEntity(
 
     @Id
-    @GeneratedValue(generator = "UUIDv7")
-    @GenericGenerator(name = "UUIDv7", strategy = "com.pickdsm.pickserverspring.common.uuid.CustomUUIDGenerator")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
-    val id: UUID,
+    val id: UUID = UUID.randomUUID()
 )
