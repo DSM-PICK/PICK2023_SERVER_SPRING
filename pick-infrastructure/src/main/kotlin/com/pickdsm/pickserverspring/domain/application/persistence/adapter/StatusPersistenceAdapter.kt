@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
@@ -27,6 +28,7 @@ class StatusPersistenceAdapter(
         return jpaQueryFactory
             .selectFrom(statusEntity)
             .where(statusEntity.date.eq(date))
+            .where(statusEntity.type.eq(StatusType.PICNIC))
             .fetch()
             .map(statusMapper::entityToDomain)
     }
