@@ -8,7 +8,6 @@ import com.pickdsm.pickserverspring.domain.application.spi.StatusSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.UUID
 
 @Adapter
 class StatusPersistenceAdapter(
@@ -22,14 +21,6 @@ class StatusPersistenceAdapter(
             statusMapper.domainToEntity(it)
         }
         statusRepository.saveAll(statusEntityList)
-    }
-
-    override fun queryPicnicStudentIdListByToday(date: LocalDate): List<UUID> {
-        return jpaQueryFactory
-            .select(statusEntity.studentId)
-            .from(statusEntity)
-            .where(statusEntity.date.eq(date))
-            .fetch()
     }
 
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> {
