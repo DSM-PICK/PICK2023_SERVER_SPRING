@@ -37,7 +37,7 @@ class StatusEntity(
 ) : BaseUUIDEntity(id) {
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(12)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(13)", nullable = false)
     @ColumnDefault("''")
     var type = type
         protected set

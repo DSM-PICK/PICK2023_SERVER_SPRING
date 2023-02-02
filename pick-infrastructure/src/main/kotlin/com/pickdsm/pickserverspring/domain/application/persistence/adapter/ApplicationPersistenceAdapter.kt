@@ -30,24 +30,9 @@ class ApplicationPersistenceAdapter(
             .map(applicationMapper::entityToDomain)
     }
 
-    override fun queryAllStudentIdByToday(date: LocalDate): List<UUID> {
-        return jpaQueryFactory
-            .select(applicationEntity.studentId)
-            .from(applicationEntity)
-            .where(applicationEntity.date.eq(date))
-            .fetch()
-    }
-
     override fun changePermission(applicationIdList: List<UUID>) {
         applicationRepository.findAllById(applicationIdList)
             .map(ApplicationEntity::changePermission)
-    }
-
-    override fun queryApplicationIdList(): List<UUID> {
-        return jpaQueryFactory
-            .select(applicationEntity.id)
-            .from(applicationEntity)
-            .fetch()
     }
 
     override fun queryApplicationListByToday(date: LocalDate): List<Application> {

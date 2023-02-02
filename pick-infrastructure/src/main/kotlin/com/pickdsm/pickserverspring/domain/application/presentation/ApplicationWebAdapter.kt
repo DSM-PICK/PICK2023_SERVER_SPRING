@@ -3,11 +3,12 @@ package com.pickdsm.pickserverspring.domain.application.presentation
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationUserIdsRequest
-import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -15,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.PathVariable
-import java.util.*
+import java.util.UUID
 import javax.validation.Valid
 
 @RequestMapping("/applications")
@@ -31,14 +31,6 @@ class ApplicationWebAdapter(
     @PostMapping("/{classroom-id}")
     fun saveClassMovement(@PathVariable("classroom-id") classRoomId: UUID) {
         classroomMovementApi.saveClassroomMovement(classRoomId)
-    }
-
-    @GetMapping
-    fun queryPicnicApplicationListByGradeAndClassNum(
-        @RequestParam grade: String,
-        @RequestParam classNum: String,
-    ): QueryPicnicApplicationList {
-        return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -56,6 +48,11 @@ class ApplicationWebAdapter(
         applicationApi.saveApplicationToGoOut(domainRequest)
     }
 
+    @GetMapping
+    fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
+        return applicationApi.queryPicnicStudentListByToday()
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping
     fun permitPicnicApplication(
@@ -66,5 +63,17 @@ class ApplicationWebAdapter(
             userIdList = request.userIdList,
         )
         applicationApi.permitPicnicApplication(domainRequest)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping
+    fun rejectPicnicApplication(
+        @RequestBody
+        request: ApplicationUserIdsRequest,
+    ) {
+        val domainRequest = DomainApplicationUserIdsRequest(
+            userIdList = request.userIdList,
+        )
+        applicationApi.rejectPicnicApplication(domainRequest)
     }
 }
