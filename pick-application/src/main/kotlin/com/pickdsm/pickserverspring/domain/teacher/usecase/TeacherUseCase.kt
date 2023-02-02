@@ -63,7 +63,7 @@ class TeacherUseCase(
         return QueryStudentStatusCountResponse(
             picnic = picnicCount,
             classroomMovement = classroomMovementCount,
-            application = applicationCount
+            application = applicationCount,
         )
     }
 }

@@ -42,4 +42,5 @@ class TeacherWebAdapter(
     fun getStudentStatusCount(): QueryStudentStatusCountResponse {
         return teacherApi.getStudentStatusCount()
     }
+    
 }
