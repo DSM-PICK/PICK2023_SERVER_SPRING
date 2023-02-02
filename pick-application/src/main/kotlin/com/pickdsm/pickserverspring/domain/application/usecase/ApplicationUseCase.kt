@@ -50,9 +50,7 @@ class ApplicationUseCase(
         grade: String,
         classNum: String,
     ): QueryPicnicApplicationList {
-        val today = LocalDate.now()
-
-        val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday(today)
+        val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday(LocalDate.now())
 
         val todayApplicationStudentIdList = todayOutingList.map { application -> application.studentId }
 
@@ -93,16 +91,13 @@ class ApplicationUseCase(
     }
 
     override fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
-        val today = LocalDate.now()
-
-        val todayPicnicStudentInfoList = queryStatusSpi.queryPicnicStudentInfoListByToday(today)
+        val todayPicnicStudentInfoList = queryStatusSpi.queryPicnicStudentInfoListByToday(LocalDate.now())
 
         val todayPicnicStudentIdList = todayPicnicStudentInfoList.map { status -> status.studentId }
 
         val userList = userQueryApplicationSpi.queryUserInfo(todayPicnicStudentIdList)
 
         val outing: List<QueryPicnicStudentElement> = todayPicnicStudentInfoList
-            .filter { status -> status.type == StatusType.PICNIC }
             .map { status ->
                 val user = userList.find { user -> user.id == status.studentId }
                     ?: throw UserNotFoundException
