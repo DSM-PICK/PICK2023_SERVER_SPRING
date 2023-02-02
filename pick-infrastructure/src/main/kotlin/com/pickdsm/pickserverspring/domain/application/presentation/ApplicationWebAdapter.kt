@@ -7,17 +7,19 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
+import com.pickdsm.pickserverspring.domain.classroom.presentation.dto.request.ClassroomMovementRequest
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.PathVariable
-import java.util.UUID
+import java.util.*
 import javax.validation.Valid
 
 @RequestMapping("/applications")
@@ -29,8 +31,13 @@ class ApplicationWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{classroom-id}")
-    fun saveClassMovement(@PathVariable("classroom-id") classRoomId: UUID) {
-        classroomMovementApi.saveClassroomMovement(classRoomId)
+    fun saveClassMovement(
+        @PathVariable("classroom-id") classRoomId: UUID, @Valid @RequestBody request: ClassroomMovementRequest
+    ) {
+        val domainRequest = DomainClassroomMovementRequest(
+            period = request.period,
+        )
+        classroomMovementApi.saveClassroomMovement(classRoomId, domainRequest)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
