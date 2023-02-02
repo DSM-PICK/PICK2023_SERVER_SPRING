@@ -157,7 +157,7 @@ class ApplicationUseCase(
 
     private fun checkUserNumLessThanTen(userNum: Int) =
         if (userNum < 10) {
-            "${0}${userNum}"
+            "0$userNum"
         } else {
             userNum.toString()
         }
