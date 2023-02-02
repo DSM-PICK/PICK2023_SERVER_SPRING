@@ -11,8 +11,6 @@ import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.Table
-import javax.persistence.Enumerated
-import javax.persistence.EnumType
 
 @Table(name = "tbl_status")
 @Entity
