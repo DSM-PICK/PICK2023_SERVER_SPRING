@@ -17,7 +17,6 @@ import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
-import com.pickdsm.pickserverspring.domain.teacher.spi.UserQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
@@ -29,7 +28,6 @@ class ApplicationUseCase(
     private val commandApplicationSpi: CommandApplicationSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
     private val queryStatusSpi: QueryStatusSpi,
-    private val userQueryTeacherSpi: UserQueryTeacherSpi,
     private val userQueryApplicationSpi: UserQueryApplicationSpi,
     private val userSpi: UserSpi,
 ) : ApplicationApi {
@@ -126,7 +124,7 @@ class ApplicationUseCase(
 
         val applicationIdList = todayApplicationList.map { application -> application.id }
 
-        val userList = userQueryTeacherSpi.queryUserInfo(userIdList)
+        val userList = userQueryApplicationSpi.queryUserInfo(userIdList)
 
         val statusList = userIdList.map {
             val user = userList.find { user -> user.id == it }
@@ -146,6 +144,35 @@ class ApplicationUseCase(
         }
 
         commandApplicationSpi.changePermission(applicationIdList)
+
+        statusCommandTeacherSpi.saveAllStatus(statusList)
+    }
+
+    override fun rejectPicnicApplication(request: DomainApplicationUserIdsRequest) {
+        val userIdList = request.userIdList
+
+        val teacherId = userSpi.getCurrentUserId()
+
+        val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
+
+        val userList = userQueryApplicationSpi.queryUserInfo(userIdList)
+
+        val statusList = userIdList.map {
+            val user = userList.find { user -> user.id == it }
+                ?: throw UserNotFoundException
+
+            val application = todayApplicationList.find { application -> application.studentId == it }
+                ?: throw ApplicationNotFoundException
+
+            Status(
+                studentId = user.id,
+                teacherId = teacherId,
+                type = StatusType.PICNIC_REJECT,
+                date = LocalDate.now(),
+                startTime = application.startTime,
+                endTime = application.endTime,
+            )
+        }
 
         statusCommandTeacherSpi.saveAllStatus(statusList)
     }
