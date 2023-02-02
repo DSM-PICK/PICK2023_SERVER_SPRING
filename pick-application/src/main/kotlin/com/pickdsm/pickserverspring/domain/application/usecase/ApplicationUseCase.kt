@@ -18,6 +18,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.UserQueryTeacherSpi
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
@@ -52,11 +53,11 @@ class ApplicationUseCase(
     ): QueryPicnicApplicationList {
         val today = LocalDate.now()
 
-        val currentUserIdList = queryApplicationSpi.queryAllStudentIdByToday(today)
-
-        val userList = userQueryApplicationSpi.queryUserInfo(currentUserIdList)
-
         val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday(today)
+
+        val todayApplicationStudentIdList = todayOutingList.map { application -> application.studentId }
+
+        val userList = userQueryApplicationSpi.queryUserInfo(todayApplicationStudentIdList)
 
         val outing: List<QueryPicnicApplicationElement> = todayOutingList
             .filter { application ->
@@ -73,10 +74,13 @@ class ApplicationUseCase(
             }
             .map { application ->
                 val user = userList.find { user -> user.id == application.studentId }
+                    ?: throw UserNotFoundException
 
-                val studentNumber = "${user?.grade ?: 0}${user?.classNum ?: 0}${user?.num ?: 0}"
+                checkNumLessThanTen(user)
 
-                val studentName = user?.name ?: ""
+                val studentNumber = "${user.grade}${user.classNum}${user.num}"
+
+                val studentName = user.name
 
                 QueryPicnicApplicationElement(
                     studentId = application.studentId,
@@ -94,9 +98,9 @@ class ApplicationUseCase(
     override fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
         val today = LocalDate.now()
 
-        val todayPicnicStudentIdList = queryStatusSpi.queryPicnicStudentIdListByToday(today)
-
         val todayPicnicStudentInfoList = queryStatusSpi.queryPicnicStudentInfoListByToday(today)
+
+        val todayPicnicStudentIdList = todayPicnicStudentInfoList.map { status ->  status.studentId }
 
         val userList = userQueryApplicationSpi.queryUserInfo(todayPicnicStudentIdList)
 
@@ -105,6 +109,8 @@ class ApplicationUseCase(
             .map { status ->
                 val user = userList.find { user -> user.id == status.studentId }
                     ?: throw UserNotFoundException
+
+                checkNumLessThanTen(user)
 
                 val studentNumber = "${user.grade}${user.classNum}${user.num}"
 
@@ -126,11 +132,11 @@ class ApplicationUseCase(
 
         val teacherId = userSpi.getCurrentUserId()
 
-        val applicationIdList = queryApplicationSpi.queryApplicationIdList()
+        val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
+
+        val applicationIdList = todayApplicationList.map { application -> application.id }
 
         val userList = userQueryTeacherSpi.queryUserInfo(userIdList)
-
-        val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
 
         val statusList = userIdList.map {
             val user = userList.find { user -> user.id == it }
@@ -153,4 +159,12 @@ class ApplicationUseCase(
 
         statusCommandTeacherSpi.saveAllStatus(statusList)
     }
+
+    private fun checkNumLessThanTen(user: User) =
+        if (user.num < 10) {
+            val newNum = "${0}${user.num}"
+            newNum.toInt()
+        } else {
+            user.num
+        }
 }
