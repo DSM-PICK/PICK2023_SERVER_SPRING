@@ -16,19 +16,23 @@ class UserPersistenceAdapter(
         UUID.fromString(SecurityContextHolder.getContext().authentication.name)
 
     override fun queryUserInfo(ids: List<UUID>): List<User> =
-        userClient.getUserInfo(ids)
-            .users
-            .map {
-                User(
-                    id = it.id,
-                    accountId = it.accountId,
-                    password = it.password,
-                    name = it.name,
-                    grade = it.grade,
-                    classNum = it.classNum,
-                    num = it.num,
-                    birthDay = it.birthDay,
-                    profileFileName = it.profileFileName,
-                )
-            }
+        if (ids.isEmpty()) {
+            emptyList()
+        } else {
+            userClient.getUserInfo(ids)
+                .users
+                .map {
+                    User(
+                        id = it.id,
+                        accountId = it.accountId,
+                        password = it.password,
+                        name = it.name,
+                        grade = it.grade,
+                        classNum = it.classNum,
+                        num = it.num,
+                        birthDay = it.birthDay,
+                        profileFileName = it.profileFileName,
+                    )
+                }
+        }
 }
