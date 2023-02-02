@@ -22,7 +22,7 @@ import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @UseCase
 class ApplicationUseCase(
@@ -76,9 +76,7 @@ class ApplicationUseCase(
                 val user = userList.find { user -> user.id == application.studentId }
                     ?: throw UserNotFoundException
 
-                checkNumLessThanTen(user)
-
-                val studentNumber = "${user.grade}${user.classNum}${user.num}"
+                val studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}"
 
                 val studentName = user.name
 
@@ -110,9 +108,7 @@ class ApplicationUseCase(
                 val user = userList.find { user -> user.id == status.studentId }
                     ?: throw UserNotFoundException
 
-                checkNumLessThanTen(user)
-
-                val studentNumber = "${user.grade}${user.classNum}${user.num}"
+                val studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}"
 
                 val studentName = user.name
 
@@ -160,11 +156,7 @@ class ApplicationUseCase(
         statusCommandTeacherSpi.saveAllStatus(statusList)
     }
 
-    private fun checkNumLessThanTen(user: User) =
-        if (user.num < 10) {
-            val newNum = "${0}${user.num}"
-            newNum.toInt()
-        } else {
-            user.num
-        }
+    private fun checkUserNumLessThanTen(userNum: Int) =
+        if (userNum < 10) "0${userNum}"
+        else userNum.toString()
 }
