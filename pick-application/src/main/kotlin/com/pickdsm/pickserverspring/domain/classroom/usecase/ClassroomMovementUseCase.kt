@@ -10,10 +10,9 @@ import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
-import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @UseCase
 class ClassroomMovementUseCase(
@@ -21,7 +20,7 @@ class ClassroomMovementUseCase(
     private val userSpi: UserSpi,
     private val commandClassroomMovementSpi: CommandClassroomMovementSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
-    private val statusCommandTeacherSpi: StatusCommandTeacherSpi
+    private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     ) : ClassroomMovementApi {
 
     override fun saveClassroomMovement(classroomId: UUID, request: DomainClassroomMovementRequest) {
@@ -33,7 +32,7 @@ class ClassroomMovementUseCase(
 
         val status = Status(
             studentId = studentId,
-            teacherId = studentId, //이동은 선생님 허락 없이 가능
+            teacherId = studentId, // 이동은 선생님 허락 없이 가능
             type = StatusType.MOVEMENT,
             startTime = time.startTime,
             endTime = time.endTime,

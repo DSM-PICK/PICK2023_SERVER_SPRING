@@ -32,7 +32,11 @@ class ApplicationWebAdapter(
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{classroom-id}")
     fun saveClassMovement(
-        @PathVariable("classroom-id") classRoomId: UUID, @Valid @RequestBody request: ClassroomMovementRequest
+        @PathVariable("classroom-id")
+        classRoomId: UUID,
+        @Valid
+        @RequestBody
+        request: ClassroomMovementRequest,
     ) {
         val domainRequest = DomainClassroomMovementRequest(
             period = request.period,
@@ -64,6 +68,7 @@ class ApplicationWebAdapter(
     @PatchMapping
     fun permitPicnicApplication(
         @RequestBody
+        @Valid
         request: ApplicationUserIdsRequest,
     ) {
         val domainRequest = DomainApplicationUserIdsRequest(
@@ -76,6 +81,7 @@ class ApplicationWebAdapter(
     @DeleteMapping
     fun rejectPicnicApplication(
         @RequestBody
+        @Valid
         request: ApplicationUserIdsRequest,
     ) {
         val domainRequest = DomainApplicationUserIdsRequest(

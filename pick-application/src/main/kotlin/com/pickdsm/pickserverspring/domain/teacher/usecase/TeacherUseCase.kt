@@ -4,7 +4,6 @@ import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
-import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
