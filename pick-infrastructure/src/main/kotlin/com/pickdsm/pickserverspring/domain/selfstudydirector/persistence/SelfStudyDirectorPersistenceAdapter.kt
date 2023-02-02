@@ -32,16 +32,4 @@ class SelfStudyDirectorPersistenceAdapter(
             .where(selfStudyDirectorEntity.date.between(date, date.plusMonths(1)))
             .fetch()
 
-    override fun queryTeacherNameByDateAndFloor(date: LocalDate, floor: Int): String {
-        val teacherId = jpaQueryFactory
-            .select(selfStudyDirectorEntity.teacherId)
-            .from(selfStudyDirectorEntity)
-            .where(selfStudyDirectorEntity.date.eq(date))
-            .where(selfStudyDirectorEntity.floor.eq(floor))
-            .fetchOne()!!
-        return userClient.getUserInfo(listOf(teacherId))
-            .users
-            .first()
-            .name
-    }
 }
