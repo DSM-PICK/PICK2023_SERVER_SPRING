@@ -3,7 +3,7 @@ package com.pickdsm.pickserverspring.domain.application.presentation
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationUserIdsRequest
-import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.PathVariable
 import java.util.*
 import javax.validation.Valid
 
@@ -33,14 +34,6 @@ class ApplicationWebAdapter(
         classroomMovementApi.saveClassroomMovement(classRoomId)
     }
 
-    @GetMapping
-    fun queryPicnicApplicationListByGradeAndClassNum(
-        @RequestParam grade: String,
-        @RequestParam classNum: String,
-    ): QueryPicnicApplicationList {
-        return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum)
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun saveApplicationToGoOut(
@@ -54,6 +47,11 @@ class ApplicationWebAdapter(
             reason = request.reason,
         )
         applicationApi.saveApplicationToGoOut(domainRequest)
+    }
+
+    @GetMapping
+    fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
+        return applicationApi.queryPicnicStudentListByToday()
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
