@@ -21,7 +21,7 @@ class ClassroomMovementUseCase(
     private val commandClassroomMovementSpi: CommandClassroomMovementSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
-    ) : ClassroomMovementApi {
+) : ClassroomMovementApi {
 
     override fun saveClassroomMovement(classroomId: UUID, request: DomainClassroomMovementRequest) {
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
