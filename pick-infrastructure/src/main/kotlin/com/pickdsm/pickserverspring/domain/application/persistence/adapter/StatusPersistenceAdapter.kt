@@ -27,8 +27,7 @@ class StatusPersistenceAdapter(
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> {
         return jpaQueryFactory
             .selectFrom(statusEntity)
-            .where(statusEntity.date.eq(date))
-            .where(statusEntity.type.eq(StatusType.PICNIC))
+            .where(statusEntity.date.eq(date),(statusEntity.type.eq(StatusType.PICNIC)))
             .fetch()
             .map(statusMapper::entityToDomain)
     }
