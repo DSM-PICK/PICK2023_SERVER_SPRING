@@ -8,6 +8,7 @@ import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.PathVariable
-import java.util.*
+import java.util.UUID
 import javax.validation.Valid
 
 @RequestMapping("/applications")
@@ -62,5 +63,17 @@ class ApplicationWebAdapter(
             userIdList = request.userIdList,
         )
         applicationApi.permitPicnicApplication(domainRequest)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping
+    fun rejectPicnicApplication(
+        @RequestBody
+        request: ApplicationUserIdsRequest,
+    ) {
+        val domainRequest = DomainApplicationUserIdsRequest(
+            userIdList = request.userIdList,
+        )
+        applicationApi.rejectPicnicApplication(domainRequest)
     }
 }
