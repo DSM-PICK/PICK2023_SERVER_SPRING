@@ -9,7 +9,6 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.To
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.UserQuerySelfStudyDirectorSpi
 import java.time.LocalDate
-import java.util.concurrent.ConcurrentHashMap
 
 @ReadOnlyUseCase
 class SelfStudyDirectorUseCase(
@@ -47,21 +46,14 @@ class SelfStudyDirectorUseCase(
 
     override fun getTodaySelfStudyTeacher(): TodaySelfStudyTeacherResponse {
         val todayDate = LocalDate.now()
-        val selfStudyTeacherName = querySelfStudyDirectorSpi.querySelfStudyDirectorTeacherIdByDate(todayDate)
-
-        selfStudyTeacherName.associateWith { it }
-        val selfStudyTeacherSortMap = ConcurrentHashMap(
-            mapOf(
-                "secondFloor" to selfStudyTeacherName[1],
-                "thirdFloor" to selfStudyTeacherName[2],
-                "fourthFloor" to selfStudyTeacherName[3],
-            ),
-        )
+        val secondFloorTeacher = querySelfStudyDirectorSpi.queryTeacherNameByDateAndFloor(todayDate, 2)
+        val thirdFloorTeacher = querySelfStudyDirectorSpi.queryTeacherNameByDateAndFloor(todayDate, 3)
+        val fourFloorTeacher = querySelfStudyDirectorSpi.queryTeacherNameByDateAndFloor(todayDate, 4)
 
         return TodaySelfStudyTeacherResponse(
-            secondFloor = selfStudyTeacherSortMap["secondFloor"].toString(),
-            thirdFloor = selfStudyTeacherSortMap["thirdFloor"].toString(),
-            fourthFloor = selfStudyTeacherSortMap["fourthFloor"].toString(),
+            secondFloor = secondFloorTeacher,
+            thirdFloor = thirdFloorTeacher,
+            fourthFloor = fourFloorTeacher
         )
     }
 }
