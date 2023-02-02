@@ -2,12 +2,14 @@ package com.pickdsm.pickserverspring.domain.selfstudydirector.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
+import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyElement
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.TodaySelfStudyTeacherResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.UserQuerySelfStudyDirectorSpi
+import com.pickdsm.pickserverspring.domain.user.User
 import java.time.LocalDate
 
 @ReadOnlyUseCase
@@ -45,15 +47,19 @@ class SelfStudyDirectorUseCase(
     }
 
     override fun getTodaySelfStudyTeacher(): TodaySelfStudyTeacherResponse {
-        val todayDate = LocalDate.now()
-        val secondFloorTeacher = querySelfStudyDirectorSpi.queryTeacherNameByDateAndFloor(todayDate, 2)
-        val thirdFloorTeacher = querySelfStudyDirectorSpi.queryTeacherNameByDateAndFloor(todayDate, 3)
-        val fourFloorTeacher = querySelfStudyDirectorSpi.queryTeacherNameByDateAndFloor(todayDate, 4)
+        val selfStudyList = querySelfStudyDirectorSpi.querySelfStudyDirectorByDate(LocalDate.now())
+        val teacherIdList = selfStudyList.map { it.teacherId }
+        val teacherList = userQuerySelfStudyDirectorSpi.queryUserInfo(teacherIdList)
 
         return TodaySelfStudyTeacherResponse(
-            secondFloor = secondFloorTeacher,
-            thirdFloor = thirdFloorTeacher,
-            fourthFloor = fourFloorTeacher,
+            secondFloor = getTeacherName(teacherList, selfStudyList, 2),
+            thirdFloor = getTeacherName(teacherList, selfStudyList, 3),
+            fourthFloor = getTeacherName(teacherList, selfStudyList, 4),
         )
+    }
+
+    private fun getTeacherName(teachers: List<User>, selfStudies: List<SelfStudyDirector>, floor: Int): String {
+        val teacherId = selfStudies.find { it.floor == floor }?.teacherId ?: return ""
+        return teachers.find { it.id == teacherId }?.name ?: ""
     }
 }
