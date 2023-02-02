@@ -24,7 +24,6 @@ class TeacherUseCase(
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
     private val queryStatusSpi: QueryStatusSpi,
-    private val queryClassroomMovementSpi: QueryClassroomMovementSpi,
 ) : TeacherApi {
 
     override fun updateStudentStatus(request: DomainUpdateStudentStatusRequest) {
@@ -51,13 +50,13 @@ class TeacherUseCase(
     }
 
     override fun getStudentStatusCount(): QueryStudentStatusCountResponse {
-        val status = queryStatusSpi.getAllPicnicStatus()
+        val status = queryStatusSpi.queryPicnicStudentInfoListByToday(LocalDate.now())
         val picnicCount = status.count()
 
-        val classroomMovement = queryClassroomMovementSpi.getAllClassroomMovement()
+        val classroomMovement = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
         val classroomMovementCount = classroomMovement.count()
 
-        val application = queryApplicationSpi.queryAllApplication()
+        val application = queryApplicationSpi.queryPicnicApplicationListByToday(LocalDate.now())
         val applicationCount = application.count()
 
         return QueryStudentStatusCountResponse(

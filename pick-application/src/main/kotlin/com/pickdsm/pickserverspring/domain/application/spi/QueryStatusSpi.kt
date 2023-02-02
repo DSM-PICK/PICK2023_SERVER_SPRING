@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 interface QueryStatusSpi {
 
-    fun getAllPicnicStatus(): List<Status>
-
     fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status>
+
+    fun queryMovementStudentInfoListByToday(date: LocalDate): List<Status>
 }

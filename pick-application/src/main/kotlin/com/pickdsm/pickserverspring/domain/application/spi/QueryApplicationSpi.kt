@@ -8,6 +8,4 @@ interface QueryApplicationSpi {
     fun queryPicnicApplicationListByToday(date: LocalDate): List<Application>
 
     fun queryApplicationListByToday(date: LocalDate): List<Application>
-
-    fun queryAllApplication(): List<Application>
 }

@@ -42,10 +42,4 @@ class ApplicationPersistenceAdapter(
             .fetch()
             .map(applicationMapper::entityToDomain)
     }
-
-    override fun queryAllApplication(): List<Application> {
-        return applicationRepository.findAll()
-            .map { applicationMapper.entityToDomain(it) }
-            .toList()
-    }
 }
