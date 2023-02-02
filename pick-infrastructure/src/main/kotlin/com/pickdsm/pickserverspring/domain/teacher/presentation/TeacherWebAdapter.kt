@@ -3,8 +3,10 @@ package com.pickdsm.pickserverspring.domain.teacher.presentation
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest.DomainUpdateStudentStatusElement
+import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.UpdateStudentStatusRequest
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -34,5 +36,10 @@ class TeacherWebAdapter(
                 userList = domainRequest,
             ),
         )
+    }
+
+    @GetMapping("/students/count")
+    fun getStudentStatusCount(): QueryStudentStatusCountResponse {
+        return teacherApi.getStudentStatusCount()
     }
 }
