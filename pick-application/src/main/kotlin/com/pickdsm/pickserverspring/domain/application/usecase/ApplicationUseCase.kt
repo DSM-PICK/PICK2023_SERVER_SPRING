@@ -22,6 +22,7 @@ import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 import java.util.UUID
+import kotlin.reflect.jvm.internal.impl.builtins.UnsignedType
 
 @UseCase
 class ApplicationUseCase(
@@ -157,7 +158,7 @@ class ApplicationUseCase(
 
     private fun checkUserNumLessThanTen(userNum: Int) =
         if (userNum < 10) {
-            "0${userNum}"
+            "${0}${userNum}"
         } else {
             userNum.toString()
         }
