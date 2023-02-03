@@ -10,9 +10,6 @@ object Dependencies {
     const val KOTLIN_STDLIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     const val JACKSON = "com.fasterxml.jackson.module:jackson-module-kotlin"
 
-    // time base uuid
-    const val UUID_V7 = "com.github.f4b6a3:uuid-creator:${DependencyVersions.UUID_V7_VERSION}"
-
     // security
     const val SPRING_SECURITY = "org.springframework.boot:spring-boot-starter-security"
 

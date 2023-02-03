@@ -1,7 +1,7 @@
 package com.pickdsm.pickserverspring.domain.application.spi
 
 import com.pickdsm.pickserverspring.domain.user.User
-import java.util.*
+import java.util.UUID
 
 interface UserQueryApplicationSpi {
 

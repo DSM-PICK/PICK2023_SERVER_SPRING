@@ -22,5 +22,4 @@ class GlobalErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException::class)
     protected fun handleDataIntegrityViolationException(e: DataIntegrityViolationException): DataErrorResponse? = ErrorResponse.of(e)
-
 }
