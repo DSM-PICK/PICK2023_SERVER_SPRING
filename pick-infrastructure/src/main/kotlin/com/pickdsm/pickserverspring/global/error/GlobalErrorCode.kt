@@ -13,5 +13,4 @@ enum class GlobalErrorCode(
 
     override fun status(): Int = status
     override fun message(): String = message
-
 }

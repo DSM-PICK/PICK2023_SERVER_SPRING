@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PickServerSpringApplication
 
 fun main(args: Array<String>) {
-	runApplication<PickServerSpringApplication>(*args)
+    runApplication<PickServerSpringApplication>(*args)
 }

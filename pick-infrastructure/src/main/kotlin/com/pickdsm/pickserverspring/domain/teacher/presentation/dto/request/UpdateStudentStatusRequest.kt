@@ -1,7 +1,7 @@
 package com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request
 
 import com.pickdsm.pickserverspring.domain.application.StatusType
-import java.util.*
+import java.util.UUID
 import javax.validation.constraints.NotNull
 
 data class UpdateStudentStatusRequest(
