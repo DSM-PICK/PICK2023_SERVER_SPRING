@@ -16,7 +16,6 @@ class StatusPersistenceAdapter(
     private val jpaQueryFactory: JPAQueryFactory,
     private val statusMapper: StatusMapper,
     private val statusRepository: StatusRepository,
-    private val jpaQueryFactory: JPAQueryFactory,
 ) : StatusSpi {
 
     override fun saveAllStatus(statusList: List<Status>) {
@@ -40,7 +39,7 @@ class StatusPersistenceAdapter(
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> {
         return jpaQueryFactory
             .selectFrom(statusEntity)
-            .where(statusEntity.date.eq(date))
+            .where(statusEntity.date.eq(date), (statusEntity.type.eq(StatusType.PICNIC)))
             .fetch()
             .map(statusMapper::entityToDomain)
     }
