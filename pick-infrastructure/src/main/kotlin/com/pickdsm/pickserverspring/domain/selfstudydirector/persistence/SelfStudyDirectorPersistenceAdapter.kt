@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.persistence
 
+import com.pickdsm.pickserverspring.common.feign.client.UserClient
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.mapper.SelfStudyDirectorMapper
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QSelfStudyDirectorEntity.selfStudyDirectorEntity
@@ -7,12 +8,13 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.SelfStudyDirect
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class SelfStudyDirectorPersistenceAdapter(
     private val selfStudyDirectorMapper: SelfStudyDirectorMapper,
     private val jpaQueryFactory: JPAQueryFactory,
+    private val userClient: UserClient,
 ) : SelfStudyDirectorSpi {
 
     override fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector> =

@@ -20,7 +20,6 @@ dependencies {
     implementation(Dependencies.CLOUD_CONFIG)
     implementation(Dependencies.OPENFEIGN)
     implementation(Dependencies.JACKSON)
-    implementation(Dependencies.UUID_V7)
     implementation(Dependencies.QUERYDSL)
     kapt(Dependencies.QUERYDSL_PROCESSOR)
 

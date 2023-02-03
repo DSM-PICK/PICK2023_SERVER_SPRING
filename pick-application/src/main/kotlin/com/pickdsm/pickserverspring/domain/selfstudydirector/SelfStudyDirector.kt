@@ -2,12 +2,12 @@ package com.pickdsm.pickserverspring.domain.selfstudydirector
 
 import com.pickdsm.pickserverspring.common.annotation.Aggregate
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Aggregate
 class SelfStudyDirector(
 
-    val id: UUID = UUID(0, 0),
+    val id: UUID = UUID.randomUUID(),
 
     val floor: Int,
 

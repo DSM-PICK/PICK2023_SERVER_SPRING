@@ -1,7 +1,7 @@
 package com.pickdsm.pickserverspring.domain.user
 
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 class User(
     val id: UUID,

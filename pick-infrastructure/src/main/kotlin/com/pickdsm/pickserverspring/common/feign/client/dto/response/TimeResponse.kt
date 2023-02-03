@@ -3,7 +3,7 @@ package com.pickdsm.pickserverspring.common.feign.client.dto.response
 import com.pickdsm.pickserverspring.global.annotation.NoArg
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.*
+import java.util.UUID
 
 @NoArg
 data class TimeResponse(
