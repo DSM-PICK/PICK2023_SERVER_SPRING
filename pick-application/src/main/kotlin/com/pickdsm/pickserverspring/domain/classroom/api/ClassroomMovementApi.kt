@@ -1,6 +1,6 @@
 package com.pickdsm.pickserverspring.domain.classroom.api
 
-import java.util.*
+import java.util.UUID
 
 interface ClassroomMovementApi {
 

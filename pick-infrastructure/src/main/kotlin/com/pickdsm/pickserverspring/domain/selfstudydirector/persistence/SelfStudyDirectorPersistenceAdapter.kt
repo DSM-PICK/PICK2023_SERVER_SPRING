@@ -8,7 +8,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.SelfStudyDirect
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class SelfStudyDirectorPersistenceAdapter(

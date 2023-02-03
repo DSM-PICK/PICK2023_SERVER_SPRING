@@ -2,7 +2,7 @@ package com.pickdsm.pickserverspring.domain.selfstudydirector
 
 import com.pickdsm.pickserverspring.common.annotation.Aggregate
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Aggregate
 class SelfStudyDirector(

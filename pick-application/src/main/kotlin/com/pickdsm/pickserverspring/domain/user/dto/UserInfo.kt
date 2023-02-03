@@ -1,6 +1,6 @@
 package com.pickdsm.pickserverspring.domain.user.dto
 
-import java.util.*
+import java.util.UUID
 
 data class UserInfo(
     val id: UUID,
