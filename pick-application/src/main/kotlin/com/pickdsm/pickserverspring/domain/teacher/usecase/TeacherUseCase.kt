@@ -49,13 +49,14 @@ class TeacherUseCase(
     }
 
     override fun getStudentStatusCount(): QueryStudentStatusCountResponse {
-        val status = queryStatusSpi.queryPicnicStudentInfoListByToday(LocalDate.now())
+        val today = LocalDate.now()
+        val status = queryStatusSpi.queryPicnicStudentInfoListByToday(today)
         val picnicCount = status.count()
 
-        val classroomMovement = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
+        val classroomMovement = queryStatusSpi.queryMovementStudentInfoListByToday(today)
         val classroomMovementCount = classroomMovement.count()
 
-        val application = queryApplicationSpi.queryPicnicApplicationListByToday(LocalDate.now())
+        val application = queryApplicationSpi.queryPicnicApplicationListByToday(today)
         val applicationCount = application.count()
 
         return QueryStudentStatusCountResponse(

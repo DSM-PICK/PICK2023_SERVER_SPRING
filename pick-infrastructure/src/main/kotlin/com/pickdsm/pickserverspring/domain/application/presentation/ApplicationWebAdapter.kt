@@ -39,9 +39,10 @@ class ApplicationWebAdapter(
         request: ClassroomMovementRequest,
     ) {
         val domainRequest = DomainClassroomMovementRequest(
+            classroomId = classRoomId,
             period = request.period,
         )
-        classroomMovementApi.saveClassroomMovement(classRoomId, domainRequest)
+        classroomMovementApi.saveClassroomMovement(domainRequest)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
