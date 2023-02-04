@@ -7,6 +7,8 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
+import com.pickdsm.pickserverspring.domain.classroom.presentation.dto.request.ClassroomMovementRequest
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,8 +31,18 @@ class ApplicationWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{classroom-id}")
-    fun saveClassMovement(@PathVariable("classroom-id") classRoomId: UUID) {
-        classroomMovementApi.saveClassroomMovement(classRoomId)
+    fun saveClassMovement(
+        @PathVariable("classroom-id")
+        classRoomId: UUID,
+        @Valid
+        @RequestBody
+        request: ClassroomMovementRequest,
+    ) {
+        val domainRequest = DomainClassroomMovementRequest(
+            classroomId = classRoomId,
+            period = request.period,
+        )
+        classroomMovementApi.saveClassroomMovement(domainRequest)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -57,6 +69,7 @@ class ApplicationWebAdapter(
     @PatchMapping
     fun permitPicnicApplication(
         @RequestBody
+        @Valid
         request: ApplicationUserIdsRequest,
     ) {
         val domainRequest = DomainApplicationUserIdsRequest(
@@ -69,6 +82,7 @@ class ApplicationWebAdapter(
     @DeleteMapping
     fun rejectPicnicApplication(
         @RequestBody
+        @Valid
         request: ApplicationUserIdsRequest,
     ) {
         val domainRequest = DomainApplicationUserIdsRequest(

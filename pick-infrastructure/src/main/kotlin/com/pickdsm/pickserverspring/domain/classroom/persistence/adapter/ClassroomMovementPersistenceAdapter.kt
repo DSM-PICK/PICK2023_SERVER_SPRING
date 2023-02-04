@@ -6,7 +6,7 @@ import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomMoveme
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.ClassroomMovementEntity
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
-import java.util.UUID
+import java.util.*
 
 @Adapter
 class ClassroomMovementPersistenceAdapter(
