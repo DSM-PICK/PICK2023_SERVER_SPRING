@@ -8,4 +8,8 @@ interface CommandApplicationSpi {
     fun saveApplication(application: Application)
 
     fun changePermission(applicationIdList: List<UUID>)
+
+    fun changeStatus(applicationId: UUID)
+
+    fun deleteApplication(applicationId: UUID)
 }
