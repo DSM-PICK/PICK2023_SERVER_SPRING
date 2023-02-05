@@ -2,6 +2,8 @@ package com.pickdsm.pickserverspring.domain.teacher.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.StatusType
+import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
@@ -14,6 +16,7 @@ import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
+import java.util.*
 
 @UseCase
 class TeacherUseCase(
@@ -23,6 +26,7 @@ class TeacherUseCase(
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
     private val queryStatusSpi: QueryStatusSpi,
+    private val commandApplicationSpi: CommandApplicationSpi,
 ) : TeacherApi {
 
     override fun updateStudentStatus(request: DomainUpdateStudentStatusRequest) {
@@ -65,4 +69,30 @@ class TeacherUseCase(
             application = applicationCount,
         )
     }
+
+    override fun statusPicnicApplication(studentId: UUID) {
+        val teacherId = userSpi.getCurrentUserId()
+
+        val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
+
+        val student = todayApplicationList.find { application -> application.studentId == studentId }
+            ?:throw UserNotFoundException
+
+        val studentStatus = Status(
+            studentId = student.studentId,
+            teacherId = teacherId,
+            type = StatusType.ATTENDANCE,
+            date = LocalDate.now(),
+            startTime = student.startTime,
+            endTime = student.endTime
+        )
+
+        commandApplicationSpi.changeStatus(studentId)
+        statusCommandTeacherSpi.saveStatus(studentStatus)
+        commandApplicationSpi.deleteApplication(studentId)
+    }
+
+//    override fun queryStatus(date: LocalDate): QueryStatusListResponse {
+//        TODO("Not yet implemented")
+//    }
 }
