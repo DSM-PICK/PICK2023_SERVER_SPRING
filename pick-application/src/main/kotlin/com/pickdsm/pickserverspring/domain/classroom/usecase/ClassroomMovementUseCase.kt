@@ -12,7 +12,6 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.*
 
 @UseCase
 class ClassroomMovementUseCase(
@@ -23,8 +22,8 @@ class ClassroomMovementUseCase(
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
 ) : ClassroomMovementApi {
 
-    override fun saveClassroomMovement(classroomId: UUID, request: DomainClassroomMovementRequest) {
-        val classroom = queryClassroomSpi.queryClassroomById(classroomId)
+    override fun saveClassroomMovement(request: DomainClassroomMovementRequest) {
+        val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
         val studentId = userSpi.getCurrentUserId()
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val time = timeList.timeList.find { time -> time.period == request.period }
