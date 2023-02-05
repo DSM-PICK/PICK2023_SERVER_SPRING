@@ -2,8 +2,11 @@ package com.pickdsm.pickserverspring.domain.teacher.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
+import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
+import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.UserQueryTeacherSpi
@@ -18,6 +21,8 @@ class TeacherUseCase(
     private val userQueryTeacherSpi: UserQueryTeacherSpi,
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
+    private val queryApplicationSpi: QueryApplicationSpi,
+    private val queryStatusSpi: QueryStatusSpi,
 ) : TeacherApi {
 
     override fun updateStudentStatus(request: DomainUpdateStudentStatusRequest) {
@@ -41,5 +46,23 @@ class TeacherUseCase(
             )
         }
         statusCommandTeacherSpi.saveAllStatus(statusList)
+    }
+
+    override fun getStudentStatusCount(): QueryStudentStatusCountResponse {
+        val today = LocalDate.now()
+        val status = queryStatusSpi.queryPicnicStudentInfoListByToday(today)
+        val picnicCount = status.count()
+
+        val classroomMovement = queryStatusSpi.queryMovementStudentInfoListByToday(today)
+        val classroomMovementCount = classroomMovement.count()
+
+        val application = queryApplicationSpi.queryPicnicApplicationListByToday(today)
+        val applicationCount = application.count()
+
+        return QueryStudentStatusCountResponse(
+            picnic = picnicCount,
+            classroomMovement = classroomMovementCount,
+            application = applicationCount,
+        )
     }
 }

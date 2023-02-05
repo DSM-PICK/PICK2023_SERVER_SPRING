@@ -36,10 +36,23 @@ class StatusPersistenceAdapter(
             .fetch()
     }
 
+    override fun saveStatus(status: Status) {
+        val statusEntity = statusMapper.domainToEntity(status)
+        statusRepository.save(statusEntity)
+    }
+
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> {
         return jpaQueryFactory
             .selectFrom(statusEntity)
             .where(statusEntity.date.eq(date), (statusEntity.type.eq(StatusType.PICNIC)))
+            .fetch()
+            .map(statusMapper::entityToDomain)
+    }
+
+    override fun queryMovementStudentInfoListByToday(date: LocalDate): List<Status> {
+        return jpaQueryFactory
+            .selectFrom(statusEntity)
+            .where(statusEntity.date.eq(date), (statusEntity.type.eq(StatusType.MOVEMENT)))
             .fetch()
             .map(statusMapper::entityToDomain)
     }
