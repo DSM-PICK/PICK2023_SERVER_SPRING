@@ -43,10 +43,6 @@ class ApplicationPersistenceAdapter(
             .map(ApplicationEntity::changeStatus)
     }
 
-    override fun deleteApplication(applicationId: UUID) {
-        applicationRepository.deleteById(applicationId)
-    }
-
     override fun queryApplicationListByToday(date: LocalDate): List<Application> {
         return jpaQueryFactory
             .selectFrom(applicationEntity)
