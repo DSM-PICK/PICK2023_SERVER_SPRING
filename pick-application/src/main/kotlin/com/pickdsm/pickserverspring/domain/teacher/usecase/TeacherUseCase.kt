@@ -76,7 +76,7 @@ class TeacherUseCase(
         val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
 
         val student = todayApplicationList.find { application -> application.studentId == studentId }
-            ?:throw UserNotFoundException
+            ?: throw UserNotFoundException
 
         val studentStatus = Status(
             studentId = student.studentId,
@@ -84,7 +84,7 @@ class TeacherUseCase(
             type = StatusType.ATTENDANCE,
             date = LocalDate.now(),
             startTime = student.startTime,
-            endTime = student.endTime
+            endTime = student.endTime,
         )
 
         commandApplicationSpi.changeStatus(studentId)

@@ -7,10 +7,7 @@ import com.pickdsm.pickserverspring.domain.application.persistence.entity.Applic
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QApplicationEntity.applicationEntity
 import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
-import com.querydsl.core.types.dsl.ComparablePath
-import com.querydsl.jpa.JPAExpressions.selectFrom
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import java.time.LocalDate
 import java.util.UUID
 
