@@ -9,12 +9,15 @@ import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudent
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.UpdateStudentStatusRequest
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
+import java.util.*
 import javax.validation.Valid
 
 @RequestMapping("/teachers")
@@ -32,7 +35,7 @@ class TeacherWebAdapter(
         request: UpdateStudentStatusRequest,
     ) {
         val domainRequest = request.userList.map {
-            DomainUpdateStudentStatusElement(userId = it.userId, status = it.status)
+            DomainUpdateStudentStatusRequest.DomainUpdateStudentStatusElement(userId = it.userId, status = it.status)
         }
         teacherApi.updateStudentStatus(
             DomainUpdateStudentStatusRequest(
@@ -53,5 +56,11 @@ class TeacherWebAdapter(
         @RequestParam classNum: String,
     ): QueryPicnicApplicationList {
         return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{student-id}")
+    fun statusPicnicApplication(@PathVariable("student-id") studentId: UUID) {
+        teacherApi.statusPicnicApplication(studentId)
     }
 }
