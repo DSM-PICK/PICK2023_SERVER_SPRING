@@ -89,10 +89,5 @@ class TeacherUseCase(
 
         commandApplicationSpi.changeStatus(studentId)
         statusCommandTeacherSpi.saveStatus(studentStatus)
-        commandApplicationSpi.deleteApplication(studentId)
     }
-
-//    override fun queryStatus(date: LocalDate): QueryStatusListResponse {
-//        TODO("Not yet implemented")
-//    }
 }
