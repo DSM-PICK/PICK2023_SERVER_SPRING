@@ -34,8 +34,8 @@ class ApplicationWebAdapter(
     fun saveClassMovement(
         @PathVariable("classroom-id")
         classRoomId: UUID,
-        @Valid
         @RequestBody
+        @Valid
         request: ClassroomMovementRequest,
     ) {
         val domainRequest = DomainClassroomMovementRequest(
