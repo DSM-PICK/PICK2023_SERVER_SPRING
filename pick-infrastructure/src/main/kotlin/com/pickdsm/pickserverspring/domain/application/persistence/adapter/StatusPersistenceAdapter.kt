@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryUserStatus
 import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
@@ -23,17 +24,6 @@ class StatusPersistenceAdapter(
             statusMapper.domainToEntity(it)
         }
         statusRepository.saveAll(statusEntityList)
-    }
-    override fun queryStatusList(data: LocalDate): List<QueryUserStatus> {
-        TODO("Not yet implemented")
-    }
-
-    override fun queryPicnicStudentIdListByToday(date: LocalDate): List<UUID> {
-        return jpaQueryFactory
-            .select(statusEntity.studentId)
-            .from(statusEntity)
-            .where(statusEntity.date.eq(date))
-            .fetch()
     }
 
     override fun saveStatus(status: Status) {
