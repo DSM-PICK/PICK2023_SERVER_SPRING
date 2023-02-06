@@ -58,8 +58,8 @@ class TeacherWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/{student-id}")
-    fun statusPicnicApplication(@PathVariable("student-id") studentId: UUID) {
-        teacherApi.statusPicnicApplication(studentId)
+    @PatchMapping("/{application-id}")
+    fun statusPicnicApplication(@PathVariable("application-id") applicationId: UUID) {
+        teacherApi.statusPicnicApplication(applicationId)
     }
 }

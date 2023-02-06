@@ -70,12 +70,12 @@ class TeacherUseCase(
         )
     }
 
-    override fun statusPicnicApplication(studentId: UUID) {
+    override fun statusPicnicApplication(applicationId: UUID) {
         val teacherId = userSpi.getCurrentUserId()
 
         val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
 
-        val student = todayApplicationList.find { application -> application.studentId == studentId }
+        val student = todayApplicationList.find { application -> application.studentId == applicationId }
             ?: throw UserNotFoundException
 
         val studentStatus = Status(
@@ -87,7 +87,7 @@ class TeacherUseCase(
             endTime = student.endTime,
         )
 
-        commandApplicationSpi.changeStatus(studentId)
+        commandApplicationSpi.changeStatus(applicationId)
         statusCommandTeacherSpi.saveStatus(studentStatus)
     }
 }
