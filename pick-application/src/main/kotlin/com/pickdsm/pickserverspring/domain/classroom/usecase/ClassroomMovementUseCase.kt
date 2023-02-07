@@ -12,6 +12,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
+import java.util.UUID
 
 @UseCase
 class ClassroomMovementUseCase(
@@ -38,6 +39,6 @@ class ClassroomMovementUseCase(
         )
 
         statusCommandTeacherSpi.saveStatus(status)
-        commandClassroomMovementSpi.saveClassroom(studentId, classroom)
+        commandClassroomMovementSpi.saveClassroom(status, classroom)
     }
 }
