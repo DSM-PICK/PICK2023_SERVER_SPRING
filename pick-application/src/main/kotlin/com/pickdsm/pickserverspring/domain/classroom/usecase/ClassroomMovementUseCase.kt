@@ -38,6 +38,6 @@ class ClassroomMovementUseCase(
         )
 
         statusCommandTeacherSpi.saveStatus(status)
-        commandClassroomMovementSpi.saveClassroom(studentId, classroom)
+        commandClassroomMovementSpi.saveClassroom(status, classroom)
     }
 }

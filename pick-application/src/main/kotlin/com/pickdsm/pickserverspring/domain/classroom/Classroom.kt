@@ -11,4 +11,6 @@ class Classroom(
     val name: String,
 
     val floor: Int,
+
+    val homeroomTeacherId: UUID,
 )
