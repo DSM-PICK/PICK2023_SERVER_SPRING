@@ -19,6 +19,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
+import java.util.*
 
 @UseCase
 class ApplicationUseCase(
@@ -34,7 +35,7 @@ class ApplicationUseCase(
         val studentId = userSpi.getCurrentUserId()
         val status = Status(
             studentId = studentId,
-            teacherId = studentId,
+            teacherId = UUID(0, 0), // TODO: 선생님 아이디 뭐로 넣을지 나중에 정하기
             type = StatusType.AWAIT,
             date = LocalDate.now(),
             startTime = request.desiredStartTime,
