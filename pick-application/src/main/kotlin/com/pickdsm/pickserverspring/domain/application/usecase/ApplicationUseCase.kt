@@ -6,7 +6,6 @@ import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
-import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationUserIdsRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentElement
@@ -20,28 +19,35 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.UUID
 
 @UseCase
 class ApplicationUseCase(
-    private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val commandApplicationSpi: CommandApplicationSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
+    private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val queryStatusSpi: QueryStatusSpi,
     private val userQueryApplicationSpi: UserQueryApplicationSpi,
     private val userSpi: UserSpi,
 ) : ApplicationApi {
 
     override fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest) {
-        val studentId: UUID = userSpi.getCurrentUserId()
-        val application = Application(
+        val studentId = userSpi.getCurrentUserId()
+        val status = Status(
             studentId = studentId,
+            teacherId = studentId,
+            type = StatusType.AWAIT,
             date = LocalDate.now(),
-            startTime = request.startTime,
-            endTime = request.endTime,
+            startTime = request.desiredStartTime,
+            endTime = request.desiredEndTime,
+        )
+        val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(status)
+        val application = Application(
+            statusId = saveStatusId,
+            desiredStartTime = request.desiredStartTime,
+            desiredEndTime = request.desiredEndTime,
             reason = request.reason,
         )
-        commandApplicationSpi.saveApplication(application)
+        commandApplicationSpi.saveApplication(application, application.statusId)
     }
 
     override fun queryPicnicApplicationListByGradeAndClassNum(
@@ -49,14 +55,15 @@ class ApplicationUseCase(
         classNum: String,
     ): QueryPicnicApplicationList {
         val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday(LocalDate.now())
+        val todayStatusList = queryStatusSpi.queryAwaitStudentListByToday(LocalDate.now())
 
-        val todayApplicationStudentIdList = todayOutingList.map { application -> application.studentId }
+        val todayApplicationStudentIdList = todayStatusList.map { it.studentId }
 
         val userList = userQueryApplicationSpi.queryUserInfo(todayApplicationStudentIdList)
 
-        val outing: List<QueryPicnicApplicationElement> = todayOutingList
-            .filter { application ->
-                val user = userList.find { user -> user.id == application.studentId } ?: return@filter false
+        val outing: List<QueryPicnicApplicationElement> = todayStatusList
+            .filter { status ->
+                val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
 
                 val studentGrade = grade.toIntOrNull() ?: 0
                 val studentClassNum = classNum.toIntOrNull() ?: 0
@@ -67,20 +74,23 @@ class ApplicationUseCase(
                     else -> (studentGrade == user.grade && studentClassNum == user.classNum)
                 }
             }
-            .map { application ->
-                val user = userList.find { user -> user.id == application.studentId }
+            .map { status ->
+                val user = userList.find { user -> user.id == status.studentId }
                     ?: throw UserNotFoundException
+
+                val application = todayOutingList.find { application -> application.statusId == status.id }
+                    ?: throw ApplicationNotFoundException
 
                 val studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}"
 
                 val studentName = user.name
 
                 QueryPicnicApplicationElement(
-                    studentId = application.studentId,
+                    studentId = user.id,
                     studentNumber = studentNumber,
                     studentName = studentName,
-                    startTime = application.startTime,
-                    endTime = application.endTime,
+                    startTime = application.desiredStartTime,
+                    endTime = application.desiredEndTime,
                     reason = application.reason,
                 )
             }
@@ -113,68 +123,6 @@ class ApplicationUseCase(
             }
 
         return QueryPicnicStudentList(outing)
-    }
-
-    override fun permitPicnicApplication(request: DomainApplicationUserIdsRequest) {
-        val userIdList = request.userIdList
-
-        val teacherId = userSpi.getCurrentUserId()
-
-        val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
-
-        val applicationIdList = todayApplicationList.map { application -> application.id }
-
-        val userList = userQueryApplicationSpi.queryUserInfo(userIdList)
-
-        val statusList = userIdList.map {
-            val user = userList.find { user -> user.id == it }
-                ?: throw UserNotFoundException
-
-            val application = todayApplicationList.find { application -> application.studentId == it }
-                ?: throw ApplicationNotFoundException
-
-            Status(
-                studentId = user.id,
-                teacherId = teacherId,
-                type = StatusType.PICNIC,
-                date = LocalDate.now(),
-                startTime = application.startTime,
-                endTime = application.endTime,
-            )
-        }
-
-        commandApplicationSpi.changePermission(applicationIdList)
-
-        statusCommandTeacherSpi.saveAllStatus(statusList)
-    }
-
-    override fun rejectPicnicApplication(request: DomainApplicationUserIdsRequest) {
-        val userIdList = request.userIdList
-
-        val teacherId = userSpi.getCurrentUserId()
-
-        val todayApplicationList = queryApplicationSpi.queryApplicationListByToday(LocalDate.now())
-
-        val userList = userQueryApplicationSpi.queryUserInfo(userIdList)
-
-        val statusList = userIdList.map {
-            val user = userList.find { user -> user.id == it }
-                ?: throw UserNotFoundException
-
-            val application = todayApplicationList.find { application -> application.studentId == it }
-                ?: throw ApplicationNotFoundException
-
-            Status(
-                studentId = user.id,
-                teacherId = teacherId,
-                type = StatusType.PICNIC_REJECT,
-                date = LocalDate.now(),
-                startTime = application.startTime,
-                endTime = application.endTime,
-            )
-        }
-
-        statusCommandTeacherSpi.saveAllStatus(statusList)
     }
 
     private fun checkUserNumLessThanTen(userNum: Int) =
