@@ -3,7 +3,7 @@ package com.pickdsm.pickserverspring.domain.application.api.dto.request
 import java.time.LocalTime
 
 data class DomainApplicationGoOutRequest(
-    val startTime: LocalTime,
-    val endTime: LocalTime,
+    val desiredStartTime: LocalTime,
+    val desiredEndTime: LocalTime,
     val reason: String,
 )

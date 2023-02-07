@@ -14,5 +14,5 @@ class Club(
 
     val teacherId: UUID,
 
-    val classroomEntity: UUID,
+    val classroomId: UUID,
 )

@@ -19,4 +19,11 @@ class ClassroomEntity(
 
     @Column(columnDefinition = "INT", nullable = false)
     val floor: Int,
-) : BaseUUIDEntity(id)
+
+    homeroomTeacherId: UUID?,
+) : BaseUUIDEntity(id) {
+
+    @Column(columnDefinition = "BINARY(16)")
+    var homeroomTeacherId = homeroomTeacherId
+        protected set
+}
