@@ -9,7 +9,6 @@ import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.springframework.data.jpa.domain.Specification.where
 import java.util.UUID
 
 @Adapter
