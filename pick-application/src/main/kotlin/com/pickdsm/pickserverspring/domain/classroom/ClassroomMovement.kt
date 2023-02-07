@@ -6,7 +6,7 @@ import java.util.UUID
 @Aggregate
 class ClassroomMovement(
 
-    val statusId: UUID = UUID.randomUUID(),
+    val statusId: UUID,
 
     val classroomId: UUID,
 )
