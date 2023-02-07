@@ -3,7 +3,15 @@ package com.pickdsm.pickserverspring.domain.application.persistence.entity
 import org.hibernate.annotations.ColumnDefault
 import java.time.LocalTime
 import java.util.UUID
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.MapsId
+import javax.persistence.OneToOne
+import javax.persistence.Table
+import javax.persistence.Column
 
 @Table(name = "tbl_application")
 @Entity
