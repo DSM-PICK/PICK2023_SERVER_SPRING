@@ -12,6 +12,7 @@ class ClassroomMapperImpl : ClassroomMapper {
             id = classroom.id,
             name = classroom.name,
             floor = classroom.floor,
+            homeroomTeacherId = classroom.homeroomTeacherId,
         )
     }
 
@@ -20,6 +21,7 @@ class ClassroomMapperImpl : ClassroomMapper {
             id = classroomEntity.id,
             name = classroomEntity.name,
             floor = classroomEntity.floor,
+            homeroomTeacherId = classroomEntity.homeroomTeacherId!!,
         )
     }
 }
