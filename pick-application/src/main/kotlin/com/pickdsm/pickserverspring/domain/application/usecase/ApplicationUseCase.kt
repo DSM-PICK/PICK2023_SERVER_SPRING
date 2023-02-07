@@ -10,11 +10,15 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusElement
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
 import com.pickdsm.pickserverspring.domain.application.exception.ApplicationNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
+import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
+import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
@@ -29,7 +33,14 @@ class ApplicationUseCase(
     private val queryStatusSpi: QueryStatusSpi,
     private val userQueryApplicationSpi: UserQueryApplicationSpi,
     private val userSpi: UserSpi,
+    private val queryClassroomMovementSpi: QueryClassroomMovementSpi,
+    private val queryClassroomSpi: QueryClassroomSpi,
 ) : ApplicationApi {
+
+    companion object {
+        const val ALL = "all"
+        const val MOVEMENT = "movement"
+    }
 
     override fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest) {
         val studentId = userSpi.getCurrentUserId()
@@ -124,6 +135,62 @@ class ApplicationUseCase(
             }
 
         return QueryPicnicStudentList(outing)
+    }
+
+    override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID, type: String): QueryStudentStatusList {
+        val now = LocalDate.now()
+        val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(now)
+        val todayStudentStatus = queryStatusSpi.queryStudentInfoByToday(now)
+        val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
+        val userList = userQueryApplicationSpi.queryUserInfo(todayMovementStudentIdList)
+        val students = emptyList<QueryStudentStatusElement>()
+        val inputClassroom = queryClassroomSpi.queryClassroomById(classroomId)
+
+        when (type) {
+            ALL -> {
+                todayStudentStatus
+                    .map { status ->
+                        val user = userList.find { user -> user.id == status.studentId }
+                            ?: throw UserNotFoundException
+                        if (user.grade == inputClassroom.grade && user.num == inputClassroom.classNum) {
+                            val studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}"
+                            val studentName = user.name
+                            val studentStatus = QueryStudentStatusElement(
+                                studentId = user.id,
+                                studentNumber = studentNumber,
+                                studentName = studentName,
+                                type = status.type,
+                                classroomName = ""
+                            )
+                            students.plus(studentStatus)
+                        }
+                    }
+            }
+            MOVEMENT -> {
+                todayMovementStudentInfoList
+                    .map { status ->
+                        val user = userList.find { user -> user.id == status.studentId }
+                            ?: throw UserNotFoundException
+                        if (user.grade == inputClassroom.grade && user.num == inputClassroom.classNum) {
+                            val studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}"
+                            val studentName = user.name
+                            val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status)
+                            val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+                            val studentStatus = QueryStudentStatusElement(
+                                studentId = user.id,
+                                studentNumber = studentNumber,
+                                studentName = studentName,
+                                type = status.type,
+                                classroomName = classroom.name
+                            )
+                            students.plus(studentStatus)
+                        }
+                    }
+            }
+        }
+        return QueryStudentStatusList(
+            students = students
+        )
     }
 
     private fun checkUserNumLessThanTen(userNum: Int) =
