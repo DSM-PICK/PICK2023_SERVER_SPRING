@@ -9,6 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.StatusSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
+import java.util.*
 
 @Adapter
 class StatusPersistenceAdapter(
@@ -18,15 +19,20 @@ class StatusPersistenceAdapter(
 ) : StatusSpi {
 
     override fun saveAllStatus(statusList: List<Status>) {
-        val statusEntityList = statusList.map {
-            statusMapper.domainToEntity(it)
-        }
+        val statusEntityList = statusList.map(statusMapper::domainToEntity)
         statusRepository.saveAll(statusEntityList)
     }
 
     override fun saveStatus(status: Status) {
         val statusEntity = statusMapper.domainToEntity(status)
         statusRepository.save(statusEntity)
+    }
+
+    override fun saveStatusAndGetStatusId(status: Status): UUID {
+        val saveStatus = statusRepository.save(
+            statusMapper.domainToEntity(status)
+        )
+        return saveStatus.id
     }
 
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> {
@@ -41,6 +47,14 @@ class StatusPersistenceAdapter(
         return jpaQueryFactory
             .selectFrom(statusEntity)
             .where(statusEntity.date.eq(date), (statusEntity.type.eq(StatusType.MOVEMENT)))
+            .fetch()
+            .map(statusMapper::entityToDomain)
+    }
+
+    override fun queryAwaitStudentListByToday(date: LocalDate): List<Status> {
+        return jpaQueryFactory
+            .selectFrom(statusEntity)
+            .where(statusEntity.date.eq(date), statusEntity.type.eq(StatusType.AWAIT))
             .fetch()
             .map(statusMapper::entityToDomain)
     }
