@@ -5,7 +5,5 @@ import java.util.UUID
 
 interface CommandApplicationSpi {
 
-    fun saveApplication(application: Application)
-
-    fun changePermission(applicationIdList: List<UUID>)
+    fun saveApplication(application: Application, statusId: UUID)
 }
