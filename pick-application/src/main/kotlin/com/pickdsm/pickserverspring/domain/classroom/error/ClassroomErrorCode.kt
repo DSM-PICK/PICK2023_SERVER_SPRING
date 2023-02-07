@@ -7,7 +7,8 @@ enum class ClassroomErrorCode(
     private val message: String,
 ) : ErrorProperty {
 
-    CLASS_NOT_FOUND(404, "Class not found"), ;
+    CLASS_NOT_FOUND(404, "Class not found"),
+    CLASSROOM_MOVEMENT_NOT_FOUND(404, "Classroom Movement Not Found"), ;
 
     override fun status(): Int = status
     override fun message(): String = message
