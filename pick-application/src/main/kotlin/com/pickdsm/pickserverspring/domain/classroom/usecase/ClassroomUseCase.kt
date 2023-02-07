@@ -3,6 +3,7 @@ package com.pickdsm.pickserverspring.domain.classroom.usecase
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
+import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
@@ -25,7 +26,7 @@ class ClassroomUseCase(
         val teacherId = userSpi.getCurrentUserId()
 
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)
-            ?: throw UserNotFoundException
+            ?: throw FloorNotFoundException
 
         val classroomList = queryClassroomSpi.queryResponsibleClassroomListByFloor(floor)
 
