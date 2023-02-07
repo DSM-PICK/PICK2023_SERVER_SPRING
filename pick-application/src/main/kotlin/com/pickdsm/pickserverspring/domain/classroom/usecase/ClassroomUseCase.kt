@@ -6,7 +6,6 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClass
 import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
-import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 
 @ReadOnlyUseCase
