@@ -21,7 +21,7 @@ class ClassroomUseCase(
         return QueryClassroomList(classroomList)
     }
 
-    override fun responsibleClassroomList(): QueryClassroomList {
+    override fun queryResponsibleClassroomList(): QueryClassroomList {
         val teacherId = userSpi.getCurrentUserId()
 
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)

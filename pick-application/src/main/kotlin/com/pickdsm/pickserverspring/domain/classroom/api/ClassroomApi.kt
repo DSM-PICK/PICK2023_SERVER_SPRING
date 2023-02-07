@@ -6,5 +6,5 @@ interface ClassroomApi {
 
     fun queryClassroomList(floor: Int): QueryClassroomList
 
-    fun responsibleClassroomList(): QueryClassroomList
+    fun queryResponsibleClassroomList(): QueryClassroomList
 }
