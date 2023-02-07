@@ -1,10 +1,8 @@
 package com.pickdsm.pickserverspring.domain.classroom.persistence.entity
 
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.StatusEntity
-import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import java.util.UUID
 import javax.persistence.CascadeType
-import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.Id
