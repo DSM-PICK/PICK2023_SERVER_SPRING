@@ -2,6 +2,8 @@ package com.pickdsm.pickserverspring.domain.teacher.presentation
 
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
+import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest.DomainUpdateStudentStatusElement
@@ -22,6 +24,7 @@ import javax.validation.Valid
 class TeacherWebAdapter(
     private val teacherApi: TeacherApi,
     private val applicationApi: ApplicationApi,
+    private val classroomApi: ClassroomApi,
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -53,5 +56,10 @@ class TeacherWebAdapter(
         @RequestParam classNum: String,
     ): QueryPicnicApplicationList {
         return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum)
+    }
+
+    @GetMapping("/responsible")
+    fun queryResponsibleFloor(): QueryClassroomList {
+        return classroomApi.responsibleClassroomList()
     }
 }
