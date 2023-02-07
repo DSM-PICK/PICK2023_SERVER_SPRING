@@ -2,7 +2,6 @@ package com.pickdsm.pickserverspring.domain.classroom.persistence.entity
 
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.StatusEntity
 import java.util.UUID
-import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.Id
@@ -19,7 +18,7 @@ class ClassroomMovementEntity(
     val statusId: UUID,
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)")
     val statusEntity: StatusEntity,
 
