@@ -12,7 +12,6 @@ import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDate
-import java.util.UUID
 
 @Adapter
 class ApplicationPersistenceAdapter(
@@ -22,13 +21,13 @@ class ApplicationPersistenceAdapter(
     private val applicationRepository: ApplicationRepository,
 ) : ApplicationSpi {
 
-    override fun saveApplication(application: Application, statusId: UUID) {
-        val statusEntity = statusRepository.findByIdOrNull(statusId)
+    override fun saveApplication(application: Application) {
+        val statusEntity = statusRepository.findByIdOrNull(application.statusId)
             ?: throw StatusNotFoundException
 
         applicationRepository.save(
             ApplicationEntity(
-                statusId = statusId,
+                statusId = statusEntity.id,
                 statusEntity = statusEntity,
                 desiredStartTime = application.desiredStartTime,
                 desiredEndTime = application.desiredEndTime,

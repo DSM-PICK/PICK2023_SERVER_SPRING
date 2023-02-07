@@ -47,7 +47,7 @@ class ApplicationUseCase(
             desiredEndTime = request.desiredEndTime,
             reason = request.reason,
         )
-        commandApplicationSpi.saveApplication(application, application.statusId)
+        commandApplicationSpi.saveApplication(application)
     }
 
     override fun queryPicnicApplicationListByGradeAndClassNum(
