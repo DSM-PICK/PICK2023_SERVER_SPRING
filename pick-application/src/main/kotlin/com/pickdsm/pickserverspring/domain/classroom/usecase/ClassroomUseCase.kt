@@ -2,16 +2,11 @@ package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
-import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.ClassroomElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
-import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
-import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
-import java.time.LocalDate
-import java.util.UUID
 
 @ReadOnlyUseCase
 class ClassroomUseCase(
