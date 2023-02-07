@@ -160,7 +160,7 @@ class ApplicationUseCase(
                                 studentNumber = studentNumber,
                                 studentName = studentName,
                                 type = status.type,
-                                classroomName = ""
+                                classroomName = "",
                             )
                             students.plus(studentStatus)
                         }
@@ -181,7 +181,7 @@ class ApplicationUseCase(
                                 studentNumber = studentNumber,
                                 studentName = studentName,
                                 type = status.type,
-                                classroomName = classroom.name
+                                classroomName = classroom.name,
                             )
                             students.plus(studentStatus)
                         }
@@ -189,7 +189,7 @@ class ApplicationUseCase(
             }
         }
         return QueryStudentStatusList(
-            students = students
+            students = students,
         )
     }
 

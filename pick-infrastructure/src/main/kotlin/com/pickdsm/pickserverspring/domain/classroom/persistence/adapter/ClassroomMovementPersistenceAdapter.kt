@@ -2,7 +2,6 @@ package com.pickdsm.pickserverspring.domain.classroom.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
-import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
 import com.pickdsm.pickserverspring.domain.classroom.Classroom
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementNotFoundException
