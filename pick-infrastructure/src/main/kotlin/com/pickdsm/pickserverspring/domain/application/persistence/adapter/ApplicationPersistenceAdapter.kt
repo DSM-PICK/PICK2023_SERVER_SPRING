@@ -33,7 +33,7 @@ class ApplicationPersistenceAdapter(
                 desiredStartTime = application.desiredStartTime,
                 desiredEndTime = application.desiredEndTime,
                 reason = application.reason,
-            )
+            ),
         )
     }
 

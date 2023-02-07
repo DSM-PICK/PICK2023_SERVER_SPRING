@@ -25,7 +25,7 @@ class ClassroomMovementPersistenceAdapter(
                 statusId = statusEntity.id,
                 statusEntity = statusEntity,
                 classroomEntity = classroomEntity,
-            )
+            ),
         )
     }
 }

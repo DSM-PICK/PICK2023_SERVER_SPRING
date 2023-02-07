@@ -29,9 +29,8 @@ class StatusPersistenceAdapter(
     }
 
     override fun saveStatusAndGetStatusId(status: Status): UUID {
-        val saveStatus = statusRepository.save(
-            statusMapper.domainToEntity(status)
-        )
+        val statusEntity = statusMapper.domainToEntity(status)
+        val saveStatus = statusRepository.save(statusEntity)
         return saveStatus.id
     }
 
