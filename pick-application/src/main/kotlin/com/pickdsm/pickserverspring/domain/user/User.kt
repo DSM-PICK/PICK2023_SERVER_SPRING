@@ -12,5 +12,5 @@ class User(
     val classNum: Int,
     val num: Int,
     val birthDay: LocalDate,
-    val profileFileName: String,
+    val profileFileName: String?,
 )

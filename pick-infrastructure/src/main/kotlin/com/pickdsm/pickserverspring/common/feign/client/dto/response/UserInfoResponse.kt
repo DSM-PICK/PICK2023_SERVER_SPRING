@@ -27,6 +27,6 @@ data class UserInfoResponse(
         @JsonDeserialize(using = LocalDateDeserializer::class)
         val birthDay: LocalDate,
         @JsonProperty("profile_file_name")
-        val profileFileName: String,
+        val profileFileName: String?,
     )
 }
