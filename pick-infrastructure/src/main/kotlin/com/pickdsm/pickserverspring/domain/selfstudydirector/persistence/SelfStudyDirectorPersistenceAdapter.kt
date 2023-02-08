@@ -31,4 +31,12 @@ class SelfStudyDirectorPersistenceAdapter(
             .from(selfStudyDirectorEntity)
             .where(selfStudyDirectorEntity.date.between(date, date.plusMonths(1)))
             .fetch()
+
+    override fun queryResponsibleFloorByTeacherId(teacherId: UUID): Int? {
+        return jpaQueryFactory
+            .select(selfStudyDirectorEntity.floor)
+            .from(selfStudyDirectorEntity)
+            .where(selfStudyDirectorEntity.teacherId.eq(teacherId))
+            .fetchOne()
+    }
 }
