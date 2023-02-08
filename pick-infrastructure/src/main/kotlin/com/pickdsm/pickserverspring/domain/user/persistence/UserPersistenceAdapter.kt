@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.user.persistence
 
 import com.pickdsm.pickserverspring.common.feign.client.UserClient
 import com.pickdsm.pickserverspring.domain.user.User
+import com.pickdsm.pickserverspring.domain.user.dto.UserInfo
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import org.springframework.security.core.context.SecurityContextHolder
@@ -35,4 +36,16 @@ class UserPersistenceAdapter(
                     )
                 }
         }
+
+    override fun queryUserInfoByGradeAndClassNum(grade: Int, classNum: Int): List<UserInfo> =
+        userClient.getUserInfoByGradeAndClassNum(grade, classNum)
+            .response
+            .map {
+                UserInfo(
+                    id = it.id,
+                    profileFileName = it.profileFileName,
+                    num = it.num,
+                    name = it.name,
+                )
+            }
 }
