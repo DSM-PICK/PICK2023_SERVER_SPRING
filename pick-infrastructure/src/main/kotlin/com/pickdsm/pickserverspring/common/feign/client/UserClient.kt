@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.common.feign.client
 
 import com.pickdsm.pickserverspring.common.feign.client.dto.response.UserInfoResponse
+import com.pickdsm.pickserverspring.common.feign.client.dto.response.UserResponse
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -11,4 +12,10 @@ interface UserClient {
 
     @GetMapping("/id")
     fun getUserInfo(@RequestParam("userId") ids: List<UUID>): UserInfoResponse
+
+    @GetMapping("/class")
+    fun getUserInfoByGradeAndClassNum(
+        @RequestParam("grade") grade: Int,
+        @RequestParam("classNum") classNum: Int
+    ): UserResponse
 }
