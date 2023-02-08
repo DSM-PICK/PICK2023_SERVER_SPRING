@@ -140,17 +140,19 @@ class ApplicationUseCase(
     override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID, type: String): QueryStudentStatusList {
         val now = LocalDate.now()
         val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(now)
-        val todayStudentStatus = queryStatusSpi.queryStudentInfoByToday(now)
+        val todayStudentStatusList = queryStatusSpi.queryStudentInfoByToday(now)
+        val todayAllStudentIdList = todayStudentStatusList.map { status -> status.studentId }
         val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
         val userList = userQueryApplicationSpi.queryUserInfo(todayMovementStudentIdList)
+        val userAllStatusList = userQueryApplicationSpi.queryUserInfo(todayAllStudentIdList)
         val students = emptyList<QueryStudentStatusElement>()
         val inputClassroom = queryClassroomSpi.queryClassroomById(classroomId)
 
         when (type) {
             ALL -> {
-                todayStudentStatus
+                todayStudentStatusList
                     .map { status ->
-                        val user = userList.find { user -> user.id == status.studentId }
+                        val user = userAllStatusList.find { user -> user.id == status.studentId }
                             ?: throw UserNotFoundException
                         if (user.grade == inputClassroom.grade && user.num == inputClassroom.classNum) {
                             val studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}"
