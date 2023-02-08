@@ -21,10 +21,10 @@ class ClassroomEntity(
     val floor: Int,
 
     @Column(columnDefinition = "INT")
-    val grade: Int,
+    val grade: Int?,
 
     @Column(columnDefinition = "INT")
-    val classNum: Int,
+    val classNum: Int?,
 
     homeroomTeacherId: UUID?,
 ) : BaseUUIDEntity(id) {
