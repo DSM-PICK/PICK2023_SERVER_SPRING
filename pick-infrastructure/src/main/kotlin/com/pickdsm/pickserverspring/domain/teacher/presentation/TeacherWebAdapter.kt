@@ -60,6 +60,6 @@ class TeacherWebAdapter(
 
     @GetMapping("/responsible")
     fun queryResponsibleFloor(): QueryClassroomList {
-        return classroomApi.responsibleClassroomList()
+        return classroomApi.queryResponsibleClassroomList()
     }
 }
