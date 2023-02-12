@@ -33,5 +33,18 @@ class ClassPersistenceAdapter(
             }
     }
 
+    override fun queryResponsibleClassroomListByFloor(floor: Int?): List<ClassroomElement> {
+        return jpaQueryFactory
+            .selectFrom(classroomEntity)
+            .where(classroomEntity.floor.eq(floor))
+            .fetch()
+            .map { classroom ->
+                ClassroomElement(
+                    id = classroom.id,
+                    name = classroom.name,
+                )
+            }
+    }
+
     private fun floorEq(floor: Int): BooleanExpression = classroomEntity.floor.eq(floor)
 }

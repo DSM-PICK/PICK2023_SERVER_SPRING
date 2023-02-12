@@ -8,8 +8,9 @@ enum class ClassroomErrorCode(
 ) : ErrorProperty {
 
     CLASS_NOT_FOUND(404, "Class not found"),
-    CLASSROOM_MOVEMENT_NOT_FOUND(404, "Classroom Movement Not Found"), ;
-
+    CLASSROOM_MOVEMENT_NOT_FOUND(404, "Classroom Movement Not Found"),
+    FLOOR_NOT_FOUND(404, "Floor not found");
+    
     override fun status(): Int = status
     override fun message(): String = message
 }

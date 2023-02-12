@@ -3,16 +3,13 @@ package com.pickdsm.pickserverspring.common.feign.client.dto.response
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
-import com.pickdsm.pickserverspring.global.annotation.NoArg
 import java.time.LocalDate
 import java.util.UUID
 
-@NoArg
 data class UserInfoResponse(
     val users: List<UserInfoElement>,
 ) {
 
-    @NoArg
     data class UserInfoElement(
         val id: UUID,
         @JsonProperty("account_id")
@@ -27,6 +24,6 @@ data class UserInfoResponse(
         @JsonDeserialize(using = LocalDateDeserializer::class)
         val birthDay: LocalDate,
         @JsonProperty("profile_file_name")
-        val profileFileName: String,
+        val profileFileName: String?,
     )
 }

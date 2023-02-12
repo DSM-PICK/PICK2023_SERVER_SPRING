@@ -5,4 +5,6 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClass
 interface ClassroomApi {
 
     fun queryClassroomList(floor: Int): QueryClassroomList
+
+    fun queryResponsibleClassroomList(): QueryClassroomList
 }
