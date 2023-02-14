@@ -142,10 +142,10 @@ class ApplicationUseCase(
         val now = LocalDate.now()
         val todayStudentStatusList = queryStatusSpi.queryStudentInfoByToday()
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
-        val grade = classroom.grade ?: throw ClassroomNotFoundException //TODO 후처리
-        val classNum = classroom.classNum ?: throw ClassroomNotFoundException //TODO 이것도
+        val grade = classroom.grade ?: throw ClassroomNotFoundException // TODO grade랑 classNum으로 학생 리스트를 가져와서 에러처리했습니다.
+        val classNum = classroom.classNum ?: throw ClassroomNotFoundException // TODO 우선 에러처리
 
-        val classroomStudentList = userSpi.queryUserInfoByGradeAndClassNum(grade, classNum);
+        val classroomStudentList = userSpi.queryUserInfoByGradeAndClassNum(grade, classNum)
 
         val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(now)
         val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
@@ -171,14 +171,13 @@ class ApplicationUseCase(
                         )
                         students.add(studentStatus)
                     }
-
             }
             MOVEMENT -> {
                 userList
                     .map { user ->
                         if (user.grade == classroom.grade && user.classNum == classroom.classNum) {
                             val studentNumber =
-                                "${classroom.grade}${classroom.classNum}${checkUserNumLessThanTen(user.num)}";
+                                "${classroom.grade}${classroom.classNum}${checkUserNumLessThanTen(user.num)}"
                             val status = todayStudentStatusList.find { user.id == it.studentId }
                             val studentName = user.name
                             val movementClassroomName = movementStudent(status)
@@ -208,7 +207,6 @@ class ApplicationUseCase(
         }
         return moveClassroomName
     }
-
 
     private fun checkUserNumLessThanTen(userNum: Int) =
         if (userNum < 10) {

@@ -3,7 +3,6 @@ package com.pickdsm.pickserverspring.domain.application.presentation
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
-import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.util.*

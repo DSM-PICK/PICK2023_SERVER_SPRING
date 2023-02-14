@@ -69,7 +69,7 @@ class TeacherWebAdapter(
     @GetMapping("/students/{classroom-id}")
     fun queryStudentStatusByToday(
         @PathVariable("classroom-id") classroomId: UUID,
-        @RequestParam type: String
+        @RequestParam type: String,
     ): QueryStudentStatusList {
         return applicationApi.queryAllStudentStatusByClassroomAndType(classroomId, type)
     }

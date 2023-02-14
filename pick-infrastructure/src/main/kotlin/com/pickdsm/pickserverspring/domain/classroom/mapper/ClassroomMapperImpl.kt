@@ -12,8 +12,8 @@ class ClassroomMapperImpl : ClassroomMapper {
             id = classroom.id,
             name = classroom.name,
             floor = classroom.floor,
-            grade = if (classroom.grade == null) null else classroom.grade,
-            classNum = if(classroom.classNum == null) null else classroom.classNum,
+            grade = classroom.grade,
+            classNum = classroom.classNum,
             homeroomTeacherId = classroom.homeroomTeacherId,
         )
     }
@@ -24,8 +24,8 @@ class ClassroomMapperImpl : ClassroomMapper {
             name = classroomEntity.name,
             floor = classroomEntity.floor,
             grade = classroomEntity.grade,
-            classNum = if(classroomEntity.classNum == null) null else classroomEntity.classNum,
-            homeroomTeacherId = classroomEntity.homeroomTeacherId!!,
+            classNum = classroomEntity.classNum,
+            homeroomTeacherId = classroomEntity.homeroomTeacherId,
         )
     }
 }

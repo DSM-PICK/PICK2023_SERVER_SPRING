@@ -16,5 +16,5 @@ class Classroom(
 
     val classNum: Int?,
 
-    val homeroomTeacherId: UUID,
+    val homeroomTeacherId: UUID?,
 )
