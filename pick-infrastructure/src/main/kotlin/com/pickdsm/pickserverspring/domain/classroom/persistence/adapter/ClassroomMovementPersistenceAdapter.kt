@@ -3,7 +3,9 @@ package com.pickdsm.pickserverspring.domain.classroom.persistence.adapter
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
 import com.pickdsm.pickserverspring.domain.classroom.Classroom
+import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMapper
+import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMovementMapper
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomMovementRepository
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.ClassroomMovementEntity
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
@@ -14,9 +16,10 @@ class ClassroomMovementPersistenceAdapter(
     private val classroomMovementRepository: ClassroomMovementRepository,
     private val classroomMapper: ClassroomMapper,
     private val statusMapper: StatusMapper,
+    private val classroomMovementMapper: ClassroomMovementMapper,
 ) : ClassroomMovementSpi {
 
-    override fun saveClassroom(status: Status, classroom: Classroom) {
+    override fun saveClassroomMovement(status: Status, classroom: Classroom) {
         val statusEntity = statusMapper.domainToEntity(status)
         val classroomEntity = classroomMapper.domainToEntity(classroom)
 
@@ -27,5 +30,11 @@ class ClassroomMovementPersistenceAdapter(
                 classroomEntity = classroomEntity,
             ),
         )
+    }
+
+    override fun queryClassroomMovementByStatus(status: Status): ClassroomMovement {
+        val statusEntity = statusMapper.domainToEntity(status)
+        val classroomMovementEntity = classroomMovementRepository.findByStatusEntity(statusEntity)
+        return classroomMovementMapper.entityToDomain(classroomMovementEntity)
     }
 }

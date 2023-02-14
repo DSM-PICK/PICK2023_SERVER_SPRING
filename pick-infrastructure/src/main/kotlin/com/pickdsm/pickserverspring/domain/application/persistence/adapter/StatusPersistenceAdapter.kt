@@ -57,4 +57,11 @@ class StatusPersistenceAdapter(
             .fetch()
             .map(statusMapper::entityToDomain)
     }
+
+    override fun queryStudentInfoByToday(): List<Status> {
+        return jpaQueryFactory
+            .selectFrom(statusEntity)
+            .fetch()
+            .map(statusMapper::entityToDomain)
+    }
 }

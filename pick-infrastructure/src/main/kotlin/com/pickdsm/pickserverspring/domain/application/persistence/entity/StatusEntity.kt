@@ -27,18 +27,19 @@ class StatusEntity(
     @Column(columnDefinition = "DATE", nullable = false)
     val date: LocalDate,
 
+    type: StatusType,
+
     @Column(columnDefinition = "TIME", nullable = false)
     val startTime: LocalTime,
 
     @Column(columnDefinition = "TIME", nullable = false)
     val endTime: LocalTime,
 
-    type: StatusType,
 ) : BaseUUIDEntity(id) {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(13)", nullable = false)
-    @ColumnDefault("''")
+    @ColumnDefault("'ATTENDANCE'")
     var type = type
         protected set
 }

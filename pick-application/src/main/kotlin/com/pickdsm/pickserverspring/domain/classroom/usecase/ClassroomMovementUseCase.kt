@@ -33,11 +33,12 @@ class ClassroomMovementUseCase(
             studentId = studentId,
             teacherId = studentId, // 이동은 선생님 허락 없이 가능
             type = StatusType.MOVEMENT,
+            date = LocalDate.now(),
             startTime = time.startTime,
             endTime = time.endTime,
         )
 
         statusCommandTeacherSpi.saveStatus(status)
-        commandClassroomMovementSpi.saveClassroom(status, classroom)
+        commandClassroomMovementSpi.saveClassroomMovement(status, classroom)
     }
 }

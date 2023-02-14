@@ -10,7 +10,7 @@ data class UserResponse(
     data class UserElement(
         val id: UUID,
         @JsonProperty("profile_file_name")
-        val profileFileName: String,
+        val profileFileName: String?,
         val num: Int,
         val name: String,
     )
