@@ -12,5 +12,9 @@ class Classroom(
 
     val floor: Int,
 
-    val homeroomTeacherId: UUID,
+    val grade: Int?,
+
+    val classNum: Int?,
+
+    val homeroomTeacherId: UUID?,
 )
