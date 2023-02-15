@@ -32,7 +32,7 @@ class ClassroomMovementUseCase(
 
         val status = Status(
             studentId = studentId,
-            teacherId = studentId, // 이동은 선생님 허락 없이 가능
+            teacherId = studentId, // TODO: 해당 층 자습감독쌤 아이디 넣기
             startPeriod = time.period,
             endPeriod = time.period,
             type = StatusType.MOVEMENT,
