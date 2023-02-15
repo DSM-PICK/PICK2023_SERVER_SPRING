@@ -1,16 +1,16 @@
 package com.pickdsm.pickserverspring.domain.application.presentation.dto.request
 
-import java.time.LocalTime
+import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 data class ApplicationGoOutRequest(
 
     @field:NotNull
-    val desiredStartTime: LocalTime,
+    val desiredStartPeriod: Int,
 
     @field:NotNull
-    val desiredEndTime: LocalTime,
+    val desiredEndPeriod: Int,
 
-    @field:NotNull
+    @field:NotBlank
     val reason: String,
 )
