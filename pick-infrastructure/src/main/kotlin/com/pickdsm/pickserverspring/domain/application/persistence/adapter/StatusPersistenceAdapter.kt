@@ -34,34 +34,30 @@ class StatusPersistenceAdapter(
         return saveStatus.id
     }
 
-    override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> {
-        return jpaQueryFactory
+    override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> =
+        jpaQueryFactory
             .selectFrom(statusEntity)
             .where(statusEntity.date.eq(date), (statusEntity.type.eq(StatusType.PICNIC)))
             .fetch()
             .map(statusMapper::entityToDomain)
-    }
 
-    override fun queryMovementStudentInfoListByToday(date: LocalDate): List<Status> {
-        return jpaQueryFactory
+    override fun queryMovementStudentInfoListByToday(date: LocalDate): List<Status> =
+        jpaQueryFactory
             .selectFrom(statusEntity)
             .where(statusEntity.date.eq(date), (statusEntity.type.eq(StatusType.MOVEMENT)))
             .fetch()
             .map(statusMapper::entityToDomain)
-    }
 
-    override fun queryAwaitStudentListByToday(date: LocalDate): List<Status> {
-        return jpaQueryFactory
+    override fun queryAwaitStudentListByToday(date: LocalDate): List<Status> =
+        jpaQueryFactory
             .selectFrom(statusEntity)
             .where(statusEntity.date.eq(date), statusEntity.type.eq(StatusType.AWAIT))
             .fetch()
             .map(statusMapper::entityToDomain)
-    }
 
-    override fun queryStudentInfoByToday(): List<Status> {
-        return jpaQueryFactory
+    override fun queryStudentInfoByToday(): List<Status> =
+        jpaQueryFactory
             .selectFrom(statusEntity)
             .fetch()
             .map(statusMapper::entityToDomain)
-    }
 }
