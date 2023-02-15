@@ -107,6 +107,11 @@ class ApplicationUseCase(
                     reason = application.reason,
                 )
             }
+            .sortedWith(
+                compareBy(QueryPicnicApplicationElement::startTime)
+                    .thenBy(QueryPicnicApplicationElement::endTime)
+                    .thenBy(QueryPicnicApplicationElement::studentNumber)
+            )
 
         return QueryPicnicApplicationList(outing)
     }
@@ -131,6 +136,10 @@ class ApplicationUseCase(
                     endTime = endTime.endTime,
                 )
             }
+            .sortedWith(
+                compareBy(QueryPicnicStudentElement::endTime)
+                    .thenBy(QueryPicnicStudentElement::studentNumber)
+            )
 
         return QueryPicnicStudentList(outing)
     }
