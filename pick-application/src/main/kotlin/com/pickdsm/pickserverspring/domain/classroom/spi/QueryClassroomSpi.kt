@@ -8,6 +8,4 @@ interface QueryClassroomSpi {
     fun queryClassroomById(classroomId: UUID): Classroom
 
     fun queryClassroomListByFloor(floor: Int): List<ClassroomElement>
-
-    fun queryResponsibleClassroomListByFloor(floor: Int?): List<ClassroomElement>
 }
