@@ -17,20 +17,17 @@ class ApplicationMapperImpl(
             ?: throw StatusNotFoundException
 
         return ApplicationEntity(
-            statusId = application.statusId,
-            statusEntity = statusEntity,
-            desiredStartTime = application.desiredStartTime,
-            desiredEndTime = application.desiredEndTime,
+            id = application.id,
             reason = application.reason,
+            statusEntity = statusEntity,
         )
     }
 
     override fun entityToDomain(applicationEntity: ApplicationEntity): Application {
         return Application(
-            statusId = applicationEntity.statusId,
-            desiredStartTime = applicationEntity.desiredStartTime,
-            desiredEndTime = applicationEntity.desiredEndTime,
+            id = applicationEntity.id,
             reason = applicationEntity.reason,
+            statusId = applicationEntity.statusEntity.id,
         )
     }
 }
