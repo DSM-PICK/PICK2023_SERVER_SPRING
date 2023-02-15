@@ -27,7 +27,7 @@ class ClassroomUseCase(
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)
             ?: throw FloorNotFoundException
 
-        val classroomList = queryClassroomSpi.queryResponsibleClassroomListByFloor(floor)
+        val classroomList = queryClassroomSpi.queryClassroomListByFloor(floor)
 
         return QueryClassroomList(classroomList)
     }
