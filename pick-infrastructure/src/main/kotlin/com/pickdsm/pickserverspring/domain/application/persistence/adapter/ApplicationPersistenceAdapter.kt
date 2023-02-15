@@ -4,6 +4,7 @@ import com.pickdsm.pickserverspring.domain.application.Application
 import com.pickdsm.pickserverspring.domain.application.mapper.ApplicationMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.ApplicationRepository
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QApplicationEntity.applicationEntity
+import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
 import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -23,14 +24,16 @@ class ApplicationPersistenceAdapter(
     override fun queryPicnicApplicationListByToday(date: LocalDate): List<Application> =
         jpaQueryFactory
             .selectFrom(applicationEntity)
-            .where(applicationEntity.statusEntity.date.eq(date))
+            .innerJoin(applicationEntity.statusEntity, statusEntity)
+            .on(applicationEntity.statusEntity.date.eq(date))
             .fetch()
             .map(applicationMapper::entityToDomain)
 
     override fun queryApplicationListByToday(date: LocalDate): List<Application> =
         jpaQueryFactory
             .selectFrom(applicationEntity)
-            .where(applicationEntity.statusEntity.date.eq(date))
+            .innerJoin(applicationEntity.statusEntity, statusEntity)
+            .on(applicationEntity.statusEntity.date.eq(date))
             .fetch()
             .map(applicationMapper::entityToDomain)
 }
