@@ -1,42 +1,34 @@
-package com.pickdsm.pickserverspring.domain.selfstudydirector.persistence
+package com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.adapter
 
-import com.pickdsm.pickserverspring.common.feign.client.UserClient
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.mapper.SelfStudyDirectorMapper
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QSelfStudyDirectorEntity.selfStudyDirectorEntity
+import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QTypeEntity.typeEntity
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.SelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @Adapter
 class SelfStudyDirectorPersistenceAdapter(
     private val selfStudyDirectorMapper: SelfStudyDirectorMapper,
     private val jpaQueryFactory: JPAQueryFactory,
-    private val userClient: UserClient,
 ) : SelfStudyDirectorSpi {
 
     override fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector> =
         jpaQueryFactory
-            .select(selfStudyDirectorEntity)
-            .from(selfStudyDirectorEntity)
-            .where(selfStudyDirectorEntity.date.between(date, date.plusMonths(1)))
+            .selectFrom(selfStudyDirectorEntity)
+            .innerJoin(selfStudyDirectorEntity.typeEntity, typeEntity)
+            .on(selfStudyDirectorEntity.typeEntity.id.eq(typeEntity.id))
+            .where(typeEntity.date.between(date, date.plusMonths(1)))
             .fetch()
-            .map { selfStudyDirectorMapper.entityToDomain(it) }
+            .map(selfStudyDirectorMapper::entityToDomain)
 
-    override fun querySelfStudyDirectorTeacherIdByDate(date: LocalDate): List<UUID> =
+    override fun queryResponsibleFloorByTeacherId(teacherId: UUID): Int? =
         jpaQueryFactory
-            .select(selfStudyDirectorEntity.teacherId)
-            .from(selfStudyDirectorEntity)
-            .where(selfStudyDirectorEntity.date.between(date, date.plusMonths(1)))
-            .fetch()
-
-    override fun queryResponsibleFloorByTeacherId(teacherId: UUID): Int? {
-        return jpaQueryFactory
             .select(selfStudyDirectorEntity.floor)
             .from(selfStudyDirectorEntity)
             .where(selfStudyDirectorEntity.teacherId.eq(teacherId))
             .fetchOne()
-    }
 }
