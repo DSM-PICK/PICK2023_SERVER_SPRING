@@ -12,10 +12,10 @@ class StatusMapperImpl : StatusMapper {
             id = status.id,
             studentId = status.studentId,
             teacherId = status.teacherId,
-            type = status.type,
             date = status.date,
-            startTime = status.startTime,
-            endTime = status.endTime,
+            startPeriod = status.startPeriod,
+            endPeriod = status.endPeriod,
+            type = status.type,
         )
     }
 
@@ -24,10 +24,10 @@ class StatusMapperImpl : StatusMapper {
             id = statusEntity.id,
             studentId = statusEntity.studentId,
             teacherId = statusEntity.teacherId,
-            type = statusEntity.type,
             date = statusEntity.date,
-            startTime = statusEntity.startTime,
-            endTime = statusEntity.endTime,
+            startPeriod = statusEntity.startPeriod,
+            endPeriod = statusEntity.endPeriod,
+            type = statusEntity.type,
         )
     }
 }
