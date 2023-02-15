@@ -4,8 +4,12 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
-import java.util.*
-import javax.persistence.*
+import java.util.UUID
+import javax.persistence.Table
+import javax.persistence.Entity
+import javax.persistence.Column
+import javax.persistence.Enumerated
+import javax.persistence.EnumType
 
 @Table(name = "tbl_type")
 @Entity

@@ -59,8 +59,8 @@ class ApplicationUseCase(
         commandApplicationSpi.saveApplication(
             Application(
                 reason = request.reason,
-                statusId = saveStatusId
-            )
+                statusId = saveStatusId,
+            ),
         )
     }
 

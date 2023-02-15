@@ -17,7 +17,7 @@ class ClassroomMovementPersistenceAdapter(
 
     override fun saveClassroomMovement(classroomMovement: ClassroomMovement) {
         classroomMovementRepository.save(
-            classroomMovementMapper.domainToEntity(classroomMovement)
+            classroomMovementMapper.domainToEntity(classroomMovement),
         )
     }
 

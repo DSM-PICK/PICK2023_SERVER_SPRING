@@ -41,8 +41,8 @@ class ClassroomMovementUseCase(
         commandClassroomMovementSpi.saveClassroomMovement(
             ClassroomMovement(
                 classroomId = classroom.id,
-                statusId = status.id
-            )
+                statusId = status.id,
+            ),
         )
     }
 }

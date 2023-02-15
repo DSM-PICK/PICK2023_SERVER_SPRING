@@ -32,7 +32,7 @@ class ClassroomMovementMapperImpl(
         return ClassroomMovement(
             id = classroomMovementEntity.id,
             classroomId = classroomMovementEntity.classroomEntity.id,
-            statusId = classroomMovementEntity.statusEntity.id
+            statusId = classroomMovementEntity.statusEntity.id,
         )
     }
 }
