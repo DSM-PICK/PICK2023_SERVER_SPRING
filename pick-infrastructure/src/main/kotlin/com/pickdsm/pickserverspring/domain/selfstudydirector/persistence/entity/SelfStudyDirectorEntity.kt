@@ -10,7 +10,6 @@ import javax.persistence.FetchType
 import javax.persistence.JoinColumn
 import javax.persistence.Table
 
-
 @Table(name = "tbl_selfstudy_director")
 @Entity
 class SelfStudyDirectorEntity(
