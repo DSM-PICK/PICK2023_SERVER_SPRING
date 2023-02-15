@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.classroom.presentation
 
+import com.pickdsm.pickserverspring.domain.classroom.ClassroomType
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +17,7 @@ class ClassroomWebAdapter(
     @GetMapping
     fun getClassroomList(
         @RequestParam floor: Int,
-        @RequestParam type: String,
+        @RequestParam type: ClassroomType,
     ): QueryClassroomList {
         return classroomApi.queryClassroomList(floor, type)
     }
