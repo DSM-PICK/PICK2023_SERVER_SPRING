@@ -1,8 +1,7 @@
 package com.pickdsm.pickserverspring.domain.classroom.spi
 
-import com.pickdsm.pickserverspring.domain.application.Status
-import com.pickdsm.pickserverspring.domain.classroom.Classroom
+import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 
 interface CommandClassroomMovementSpi {
-    fun saveClassroomMovement(status: Status, classroom: Classroom)
+    fun saveClassroomMovement(classroomMovement: ClassroomMovement)
 }
