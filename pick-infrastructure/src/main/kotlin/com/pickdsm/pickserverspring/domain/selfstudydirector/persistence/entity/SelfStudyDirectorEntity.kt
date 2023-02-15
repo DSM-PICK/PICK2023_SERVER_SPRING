@@ -1,15 +1,9 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity
 
-import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
-import java.time.LocalDate
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.Table
+import javax.persistence.*
 
 @Table(name = "tbl_selfstudy_director")
 @Entity
@@ -23,11 +17,12 @@ class SelfStudyDirectorEntity(
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     val teacherId: UUID,
 
-    @Column(columnDefinition = "DATE", nullable = false)
-    val date: LocalDate,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "type_id", columnDefinition = "BINARY(16)", nullable = false)
+    val typeEntity: TypeEntity,
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(12)", nullable = false)
-    @ColumnDefault("''")
-    val type: DirectorType,
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @ColumnDefault("false")
+    val restrictionMovement: Boolean,
+
 ) : BaseUUIDEntity(id)

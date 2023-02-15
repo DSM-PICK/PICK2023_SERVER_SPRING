@@ -13,7 +13,7 @@ class SelfStudyDirector(
 
     val teacherId: UUID,
 
-    val date: LocalDate,
+    val restrictionMovement: Boolean = false,
 
-    val type: DirectorType,
+    val typeId: UUID,
 )
