@@ -3,6 +3,7 @@ package com.pickdsm.pickserverspring.domain.classroom.usecase
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
+import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
@@ -31,14 +32,17 @@ class ClassroomMovementUseCase(
 
         val status = Status(
             studentId = studentId,
-            teacherId = studentId, // 이동은 선생님 허락 없이 가능
+            teacherId = studentId, // TODO: 해당 층 자습감독쌤 아이디 넣기
+            startPeriod = time.period,
+            endPeriod = time.period,
             type = StatusType.MOVEMENT,
-            date = LocalDate.now(),
-            startTime = time.startTime,
-            endTime = time.endTime,
         )
-
         statusCommandTeacherSpi.saveStatus(status)
-        commandClassroomMovementSpi.saveClassroomMovement(status, classroom)
+        commandClassroomMovementSpi.saveClassroomMovement(
+            ClassroomMovement(
+                classroomId = classroom.id,
+                statusId = status.id,
+            ),
+        )
     }
 }

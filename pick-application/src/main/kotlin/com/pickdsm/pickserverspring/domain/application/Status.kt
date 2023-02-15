@@ -14,11 +14,11 @@ class Status(
 
     val teacherId: UUID,
 
-    val type: StatusType,
-
     val date: LocalDate = LocalDate.now(),
 
-    val startTime: LocalTime,
+    val startPeriod: Int,
 
-    val endTime: LocalTime,
+    val endPeriod: Int,
+
+    val type: StatusType,
 )

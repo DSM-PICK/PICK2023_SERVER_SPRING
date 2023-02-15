@@ -1,16 +1,14 @@
-package com.pickdsm.pickserverspring.domain.club
+package com.pickdsm.pickserverspring.domain.afterschool
 
 import com.pickdsm.pickserverspring.common.annotation.Aggregate
 import java.util.UUID
 
 @Aggregate
-class Club(
+class AfterSchool(
 
     val id: UUID = UUID.randomUUID(),
 
-    val name: String,
-
-    val headId: UUID,
+    val afterSchoolName: String,
 
     val teacherId: UUID,
 

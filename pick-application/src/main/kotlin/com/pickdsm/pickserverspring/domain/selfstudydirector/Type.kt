@@ -5,15 +5,11 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Aggregate
-class SelfStudyDirector(
+class Type(
 
     val id: UUID = UUID.randomUUID(),
 
-    val floor: Int,
+    val date: LocalDate = LocalDate.now(),
 
-    val teacherId: UUID,
-
-    val restrictionMovement: Boolean = false,
-
-    val typeId: UUID,
+    val type: DirectorType,
 )

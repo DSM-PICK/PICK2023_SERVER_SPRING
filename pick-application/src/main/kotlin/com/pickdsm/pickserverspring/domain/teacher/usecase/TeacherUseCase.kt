@@ -40,9 +40,9 @@ class TeacherUseCase(
             Status(
                 studentId = user.id,
                 teacherId = teacherId,
+                startPeriod = time.period,
+                endPeriod = time.period,
                 type = it.status,
-                startTime = time.startTime,
-                endTime = time.endTime,
             )
         }
         statusCommandTeacherSpi.saveAllStatus(statusList)

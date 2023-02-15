@@ -4,13 +4,12 @@ import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
 import javax.persistence.Table
+import javax.persistence.Entity
+import javax.persistence.Column
+import javax.persistence.Enumerated
+import javax.persistence.EnumType
 
 @Table(name = "tbl_status")
 @Entity
@@ -27,13 +26,13 @@ class StatusEntity(
     @Column(columnDefinition = "DATE", nullable = false)
     val date: LocalDate,
 
+    @Column(columnDefinition = "INT", nullable = false)
+    val startPeriod: Int,
+
+    @Column(columnDefinition = "INT", nullable = false)
+    val endPeriod: Int,
+
     type: StatusType,
-
-    @Column(columnDefinition = "TIME", nullable = false)
-    val startTime: LocalTime,
-
-    @Column(columnDefinition = "TIME", nullable = false)
-    val endTime: LocalTime,
 
 ) : BaseUUIDEntity(id) {
 

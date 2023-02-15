@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.UUID
 import javax.validation.Valid
 
 @RequestMapping("/applications")
@@ -49,8 +49,8 @@ class ApplicationWebAdapter(
         request: ApplicationGoOutRequest,
     ) {
         val domainRequest = DomainApplicationGoOutRequest(
-            desiredStartTime = request.desiredStartTime,
-            desiredEndTime = request.desiredEndTime,
+            desiredStartPeriod = request.desiredStartPeriod,
+            desiredEndPeriod = request.desiredEndPeriod,
             reason = request.reason,
         )
         applicationApi.saveApplicationToGoOut(domainRequest)
