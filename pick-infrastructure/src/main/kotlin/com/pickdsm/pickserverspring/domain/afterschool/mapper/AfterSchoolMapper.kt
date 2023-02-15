@@ -3,7 +3,7 @@ package com.pickdsm.pickserverspring.domain.afterschool.mapper
 import com.pickdsm.pickserverspring.domain.afterschool.AfterSchool
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.AfterSchoolEntity
 
-interface AfterSchoolEntityMapper {
+interface AfterSchoolMapper {
 
     fun domainToEntity(afterSchool: AfterSchool): AfterSchoolEntity
 
