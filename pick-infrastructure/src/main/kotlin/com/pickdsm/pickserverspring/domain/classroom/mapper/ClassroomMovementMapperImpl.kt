@@ -18,12 +18,11 @@ class ClassroomMovementMapperImpl(
     override fun domainToEntity(classroomMovement: ClassroomMovement): ClassroomMovementEntity {
         val statusEntity = statusRepository.findByIdOrNull(classroomMovement.statusId)
             ?: throw StatusNotFoundException
-
         val classroomEntity = classroomRepository.findByIdOrNull(classroomMovement.classroomId)
             ?: throw ClassroomNotFoundException
 
         return ClassroomMovementEntity(
-            statusId = classroomMovement.statusId,
+            id = classroomMovement.id,
             statusEntity = statusEntity,
             classroomEntity = classroomEntity,
         )
@@ -31,8 +30,9 @@ class ClassroomMovementMapperImpl(
 
     override fun entityToDomain(classroomMovementEntity: ClassroomMovementEntity): ClassroomMovement {
         return ClassroomMovement(
-            statusId = classroomMovementEntity.statusId,
-            classroomId = classroomMovementEntity.getClassroomId(),
+            id = classroomMovementEntity.id,
+            classroomId = classroomMovementEntity.classroomEntity.id,
+            statusId = classroomMovementEntity.statusEntity.id
         )
     }
 }
