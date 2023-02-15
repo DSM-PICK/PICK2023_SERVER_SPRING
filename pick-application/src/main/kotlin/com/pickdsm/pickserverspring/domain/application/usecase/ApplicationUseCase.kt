@@ -110,7 +110,7 @@ class ApplicationUseCase(
             .sortedWith(
                 compareBy(QueryPicnicApplicationElement::startTime)
                     .thenBy(QueryPicnicApplicationElement::endTime)
-                    .thenBy(QueryPicnicApplicationElement::studentNumber)
+                    .thenBy(QueryPicnicApplicationElement::studentNumber),
             )
 
         return QueryPicnicApplicationList(outing)
@@ -138,7 +138,7 @@ class ApplicationUseCase(
             }
             .sortedWith(
                 compareBy(QueryPicnicStudentElement::endTime)
-                    .thenBy(QueryPicnicStudentElement::studentNumber)
+                    .thenBy(QueryPicnicStudentElement::studentNumber),
             )
 
         return QueryPicnicStudentList(outing)
