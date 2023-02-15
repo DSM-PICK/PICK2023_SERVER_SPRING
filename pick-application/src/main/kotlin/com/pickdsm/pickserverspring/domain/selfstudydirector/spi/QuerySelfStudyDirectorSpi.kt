@@ -8,7 +8,5 @@ interface QuerySelfStudyDirectorSpi {
 
     fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector>
 
-    fun querySelfStudyDirectorTeacherIdByDate(date: LocalDate): List<UUID>
-
     fun queryResponsibleFloorByTeacherId(teacherId: UUID): Int?
 }
