@@ -20,8 +20,10 @@ class ClassroomEntity(
     @Column(columnDefinition = "INT", nullable = false)
     val floor: Int,
 
+    @Column(columnDefinition = "INT")
     val grade: Int?,
 
+    @Column(columnDefinition = "INT")
     val classNum: Int?,
 
     homeroomTeacherId: UUID?,
