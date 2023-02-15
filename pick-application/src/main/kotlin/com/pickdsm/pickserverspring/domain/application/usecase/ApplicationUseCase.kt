@@ -171,7 +171,7 @@ class ApplicationUseCase(
                             studentId = user.id,
                             studentNumber = studentNumber,
                             studentName = studentName,
-                            type = status?.type?.name ?: "",
+                            type = status?.type?.name ?: StatusType.ATTENDANCE.name,
                             classroomName = movementClassroomName,
                         )
                         students.add(studentStatus)
@@ -190,7 +190,7 @@ class ApplicationUseCase(
                                 studentId = user.id,
                                 studentNumber = studentNumber,
                                 studentName = studentName,
-                                type = status?.type?.name ?: "",
+                                type = status?.type?.name ?: StatusType.ATTENDANCE.name,
                                 classroomName = movementClassroomName,
                             )
                             students.add(studentStatus)
