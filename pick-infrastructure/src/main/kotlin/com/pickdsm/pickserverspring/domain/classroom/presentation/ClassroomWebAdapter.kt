@@ -14,7 +14,10 @@ class ClassroomWebAdapter(
 ) {
 
     @GetMapping
-    fun getClassroomList(@RequestParam floor: Int): QueryClassroomList {
-        return classroomApi.queryClassroomList(floor)
+    fun getClassroomList(
+        @RequestParam floor: Int,
+        @RequestParam type: String,
+    ): QueryClassroomList {
+        return classroomApi.queryClassroomList(floor, type)
     }
 }
