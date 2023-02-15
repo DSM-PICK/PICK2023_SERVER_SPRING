@@ -67,7 +67,7 @@ class ClassroomUseCase(
                     val classroomElement = ClassroomElement(
                         id = it.id,
                         name = it.name,
-                        description = afterSchool.afterSchoolName
+                        description = afterSchool.afterSchoolName,
                     )
                     classrooms.add(classroomElement)
                 }
