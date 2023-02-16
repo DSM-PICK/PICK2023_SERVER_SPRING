@@ -6,6 +6,8 @@ import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.QAfter
 import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.util.UUID
+import javax.persistence.LockModeType
 
 @Adapter
 class AfterSchoolPersistenceAdapter(
@@ -18,4 +20,26 @@ class AfterSchoolPersistenceAdapter(
             .selectFrom(afterSchoolEntity)
             .fetch()
             .map(afterSchoolMapper::entityToDomain)
+
+    override fun deleteByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID) {
+        jpaQueryFactory
+            .delete(afterSchoolEntity)
+            .where(
+                afterSchoolEntity.id.eq(afterSchoolId),
+                afterSchoolEntity.studentId.eq(studentId),
+            )
+            .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+            .execute()
+    }
+
+    override fun findByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID): AfterSchool? =
+        jpaQueryFactory
+            .selectFrom(afterSchoolEntity)
+            .where(
+                afterSchoolEntity.id.eq(afterSchoolId),
+                afterSchoolEntity.studentId.eq(studentId),
+            )
+            .setLockMode(LockModeType.PESSIMISTIC_READ)
+            .fetchOne()
+            ?.let(afterSchoolMapper::entityToDomain)
 }
