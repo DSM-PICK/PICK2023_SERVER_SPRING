@@ -4,7 +4,7 @@ import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
-import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolStudentNotFound
+import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
 
 @UseCase
@@ -18,7 +18,7 @@ class AfterSchoolUseCase(
             domainDeleteAfterSchoolStudentRequest.studentId
         )
 
-        require(!afterSchool?.studentId!!.equals(null)) { AfterSchoolStudentNotFound }
+        require(!afterSchool?.studentId!!.equals(null)) { AfterSchoolStudentNotFoundException }
         require(!afterSchool.id.equals(null)) { AfterSchoolNotFoundException }
 
         afterSchoolSpi.deleteByAfterSchoolIdAndStudentId(
