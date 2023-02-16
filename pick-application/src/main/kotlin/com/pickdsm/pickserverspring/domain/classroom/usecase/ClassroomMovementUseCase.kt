@@ -37,11 +37,11 @@ class ClassroomMovementUseCase(
             endPeriod = time.period,
             type = StatusType.MOVEMENT,
         )
-        statusCommandTeacherSpi.saveStatus(status)
+        val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(status)
         commandClassroomMovementSpi.saveClassroomMovement(
             ClassroomMovement(
                 classroomId = classroom.id,
-                statusId = status.id,
+                statusId = saveStatusId,
             ),
         )
     }
