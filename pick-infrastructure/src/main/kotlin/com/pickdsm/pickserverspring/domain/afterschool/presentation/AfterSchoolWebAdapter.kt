@@ -19,7 +19,11 @@ class AfterSchoolWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/")
-    fun deleteAfterSchoolStudent(@RequestBody @Valid requset: DeleteAfterSchoolStudentRequest) {
+    fun deleteAfterSchoolStudent(
+        @RequestBody
+        @Valid
+        requset: DeleteAfterSchoolStudentRequest,
+    ) {
         val domainRequset = DomainDeleteAfterSchoolStudentRequest(
             afterSchoolId = requset.afterSchoolId,
             studentId = requset.studentId,
