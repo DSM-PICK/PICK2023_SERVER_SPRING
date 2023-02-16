@@ -11,7 +11,7 @@ import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 @UseCase
 class AfterSchoolUseCase(
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
-    private val commandAfterSchoolSpi: CommandAfterSchoolSpi
+    private val commandAfterSchoolSpi: CommandAfterSchoolSpi,
 ) : AfterSchoolApi {
 
     override fun deleteAfterSchoolStudent(domainDeleteAfterSchoolStudentRequest: DomainDeleteAfterSchoolStudentRequest) {
