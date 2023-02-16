@@ -1,3 +1,8 @@
 package com.pickdsm.pickserverspring.domain.afterschool.spi
 
-interface CommandAfterSchoolSpi
+import java.util.UUID
+
+interface CommandAfterSchoolSpi {
+
+    fun deleteByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID)
+}
