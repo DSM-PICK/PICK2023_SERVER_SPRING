@@ -8,4 +8,6 @@ interface QueryTypeSpi {
     fun queryTypeListByToday(): List<Type>
 
     fun queryTypeById(typeId: UUID): Type
+
+    fun queryTypeByToday(): Type?
 }
