@@ -8,8 +8,7 @@ enum class AfterSchoolErrorCode(
 ) : ErrorProperty {
 
     AFTER_SCHOOL_NOT_FOUND(404, "After School Not Found"),
-    AFTER_SCHOOL_STUDENT_NOT_FOUND(404, "After School Student Not Found"),
-    ;
+    AFTER_SCHOOL_STUDENT_NOT_FOUND(404, "After School Student Not Found"), ;
 
     override fun status() = status
     override fun message() = message

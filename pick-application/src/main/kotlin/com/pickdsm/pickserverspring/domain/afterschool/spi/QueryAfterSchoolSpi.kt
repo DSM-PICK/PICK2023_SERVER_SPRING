@@ -5,5 +5,7 @@ import java.util.UUID
 
 interface QueryAfterSchoolSpi {
 
+    fun queryAfterSchoolList(): List<AfterSchool>
+
     fun findByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID): AfterSchool?
 }

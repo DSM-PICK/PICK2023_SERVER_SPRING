@@ -1,8 +1,8 @@
 package com.pickdsm.pickserverspring.domain.classroom.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.classroom.Classroom
-import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.ClassroomElement
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
+import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMapper
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomRepository
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomSpi
@@ -12,6 +12,7 @@ import java.util.UUID
 
 @Adapter
 class ClassPersistenceAdapter(
+    private val classroomMapper: ClassroomMapper,
     private val classroomRepository: ClassroomRepository,
     private val jpaQueryFactory: JPAQueryFactory,
 ) : ClassroomSpi {
@@ -20,15 +21,11 @@ class ClassPersistenceAdapter(
         classroomRepository.findClassroomEntityById(classroomId)
             ?: throw ClassroomNotFoundException
 
-    override fun queryClassroomListByFloor(floor: Int): List<ClassroomElement> =
+    override fun queryClassroomListByFloor(floor: Int): List<Classroom> =
         jpaQueryFactory
             .selectFrom(classroomEntity)
             .where(classroomEntity.floor.eq(floor))
             .fetch()
-            .map { classroom ->
-                ClassroomElement(
-                    id = classroom.id,
-                    name = classroom.name,
-                )
-            }
+            .map(classroomMapper::entityToDomain)
 }
+
