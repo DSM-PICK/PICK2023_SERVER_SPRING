@@ -9,13 +9,13 @@ import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
 
 @UseCase
 class AfterSchoolUseCase(
-    private val afterSchoolSpi: AfterSchoolSpi
+    private val afterSchoolSpi: AfterSchoolSpi,
 ) : AfterSchoolApi {
 
     override fun deleteAfterSchoolStudent(domainDeleteAfterSchoolStudentRequest: DomainDeleteAfterSchoolStudentRequest) {
         val afterSchool = afterSchoolSpi.findByAfterSchoolIdAndStudentId(
             domainDeleteAfterSchoolStudentRequest.afterSchoolId,
-            domainDeleteAfterSchoolStudentRequest.studentId
+            domainDeleteAfterSchoolStudentRequest.studentId,
         )
 
         require(!afterSchool?.studentId!!.equals(null)) { AfterSchoolStudentNotFoundException }
@@ -23,7 +23,7 @@ class AfterSchoolUseCase(
 
         afterSchoolSpi.deleteByAfterSchoolIdAndStudentId(
             afterSchool.id,
-            afterSchool.studentId
+            afterSchool.studentId,
         )
     }
 }

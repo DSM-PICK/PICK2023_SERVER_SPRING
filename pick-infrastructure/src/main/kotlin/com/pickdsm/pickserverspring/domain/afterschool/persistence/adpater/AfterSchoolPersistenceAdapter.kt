@@ -20,7 +20,7 @@ class AfterSchoolPersistenceAdapter(
             .delete(afterSchoolEntity)
             .where(
                 afterSchoolEntity.id.eq(afterSchoolId),
-                afterSchoolEntity.studentId.eq(studentId)
+                afterSchoolEntity.studentId.eq(studentId),
             )
             .setLockMode(LockModeType.PESSIMISTIC_WRITE)
             .execute()
@@ -31,7 +31,7 @@ class AfterSchoolPersistenceAdapter(
             .selectFrom(afterSchoolEntity)
             .where(
                 afterSchoolEntity.id.eq(afterSchoolId),
-                afterSchoolEntity.studentId.eq(studentId)
+                afterSchoolEntity.studentId.eq(studentId),
             )
             .setLockMode(LockModeType.PESSIMISTIC_READ)
             .fetchOne()

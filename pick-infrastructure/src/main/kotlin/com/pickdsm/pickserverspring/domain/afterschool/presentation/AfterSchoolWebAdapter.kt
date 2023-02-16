@@ -14,7 +14,7 @@ import javax.validation.Valid
 @RequestMapping("/admin")
 @RestController
 class AfterSchoolWebAdapter(
-    private val afterSchoolApi: AfterSchoolApi
+    private val afterSchoolApi: AfterSchoolApi,
 ) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -22,7 +22,7 @@ class AfterSchoolWebAdapter(
     fun deleteAfterSchoolStudent(@RequestBody @Valid requset: DeleteAfterSchoolStudentRequest) {
         val domainRequset = DomainDeleteAfterSchoolStudentRequest(
             afterSchoolId = requset.afterSchoolId,
-            studentId = requset.studentId
+            studentId = requset.studentId,
         )
         afterSchoolApi.deleteAfterSchoolStudent(domainRequset)
     }
