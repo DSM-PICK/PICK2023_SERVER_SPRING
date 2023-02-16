@@ -18,7 +18,7 @@ class AfterSchoolWebAdapter(
 ) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/")
+    @DeleteMapping
     fun deleteAfterSchoolStudent(
         @RequestBody
         @Valid

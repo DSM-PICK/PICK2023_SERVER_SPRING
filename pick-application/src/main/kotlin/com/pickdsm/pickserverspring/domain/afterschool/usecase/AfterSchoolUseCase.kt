@@ -5,15 +5,17 @@ import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolStudentNotFoundException
-import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
+import com.pickdsm.pickserverspring.domain.afterschool.spi.CommandAfterSchoolSpi
+import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 
 @UseCase
 class AfterSchoolUseCase(
-    private val afterSchoolSpi: AfterSchoolSpi,
+    private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
+    private val commandAfterSchoolSpi: CommandAfterSchoolSpi
 ) : AfterSchoolApi {
 
     override fun deleteAfterSchoolStudent(domainDeleteAfterSchoolStudentRequest: DomainDeleteAfterSchoolStudentRequest) {
-        val afterSchool = afterSchoolSpi.findByAfterSchoolIdAndStudentId(
+        val afterSchool = queryAfterSchoolSpi.findByAfterSchoolIdAndStudentId(
             domainDeleteAfterSchoolStudentRequest.afterSchoolId,
             domainDeleteAfterSchoolStudentRequest.studentId,
         )
@@ -21,7 +23,7 @@ class AfterSchoolUseCase(
         require(!afterSchool?.studentId!!.equals(null)) { AfterSchoolStudentNotFoundException }
         require(!afterSchool.id.equals(null)) { AfterSchoolNotFoundException }
 
-        afterSchoolSpi.deleteByAfterSchoolIdAndStudentId(
+        commandAfterSchoolSpi.deleteByAfterSchoolIdAndStudentId(
             afterSchool.id,
             afterSchool.studentId,
         )
