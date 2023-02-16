@@ -1,8 +1,8 @@
 package com.pickdsm.pickserverspring.domain.club.spi
 
-import com.pickdsm.pickserverspring.domain.club.Club
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.ClassroomElement
 
 interface QueryClubSpi {
 
-    fun queryClubList(): List<Club>
+    fun queryClubClassroomListByFloor(floor: Int): List<ClassroomElement>
 }
