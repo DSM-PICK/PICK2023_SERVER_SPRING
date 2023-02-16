@@ -29,7 +29,7 @@ class ClassPersistenceAdapter(
                 ClassroomElement(
                     id = it.id,
                     name = it.name,
-                    description = ""
+                    description = "",
                 )
             }
 
