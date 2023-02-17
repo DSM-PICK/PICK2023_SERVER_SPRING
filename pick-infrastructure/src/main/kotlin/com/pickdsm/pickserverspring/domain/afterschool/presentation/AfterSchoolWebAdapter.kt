@@ -37,7 +37,7 @@ class AfterSchoolWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("{after-school-id}")
+    @PostMapping("/{after-school-id}")
     fun createAfterSchoolStudent(
         @PathVariable("after-school-id")
         afterSchoolId: UUID,
