@@ -1,18 +1,17 @@
 package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
-import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomType
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.ClassroomElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
-import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
-import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 
 @ReadOnlyUseCase
@@ -22,64 +21,62 @@ class ClassroomUseCase(
     private val querySelfStudyDirectorSpi: QuerySelfStudyDirectorSpi,
     private val queryClubSpi: QueryClubSpi,
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
+    private val queryTypeSpi: QueryTypeSpi,
 ) : ClassroomApi {
 
     override fun queryClassroomList(floor: Int, type: ClassroomType): QueryClassroomList {
-        val classroomList = queryClassroomSpi.queryClassroomListByFloor(floor)
         val classrooms = mutableListOf<ClassroomElement>()
 
         when (type.name) {
-            ClassroomType.SELF_STUDY.name -> {
-                classroomList.map {
-                    val classroom = classroomList.find { classroom -> classroom.grade != null }
-                        ?: throw ClassroomNotFoundException
-                    val classroomElement = ClassroomElement(
-                        id = classroom.id,
-                        name = classroom.name,
-                        description = "", // 교실은 별다른 설명 없음
+            ClassroomType.AFTER_SCHOOL.name -> {
+                val afterSchoolRoomList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
+                afterSchoolRoomList.map {
+                    val afterSchoolRooms = ClassroomElement(
+                        id = it.classroomId,
+                        name = it.name,
+                        description = it.description,
                     )
-                    classrooms.add(classroomElement)
+                    classrooms.add(afterSchoolRooms)
                 }
             }
 
             ClassroomType.CLUB.name -> {
-                val clubList = queryClubSpi.queryClubList()
-                classroomList.map {
-                    val club = clubList.find { club -> club.classroomId == it.id }
-                        ?: throw ClubNotFoundException
-                    val classroomElement = ClassroomElement(
-                        id = it.id,
+                val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
+                clubRoomList.map {
+                    val clubRooms = ClassroomElement(
+                        id = it.classroomId,
                         name = it.name,
-                        description = club.name,
+                        description = it.description,
                     )
-                    classrooms.add(classroomElement)
-                }
-            }
-
-            ClassroomType.AFTER_SCHOOL.name -> {
-                val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolList()
-                classroomList.map {
-                    val afterSchool = afterSchoolList.find { afterSchool -> afterSchool.classroomId == it.id }
-                        ?: throw AfterSchoolNotFoundException
-                    val classroomElement = ClassroomElement(
-                        id = it.id,
-                        name = it.name,
-                        description = afterSchool.afterSchoolName,
-                    )
-                    classrooms.add(classroomElement)
+                    classrooms.add(clubRooms)
                 }
             }
 
             ClassroomType.ALL.name -> {
-                classroomList.map {
-                    val classroomElement = ClassroomElement(
+                val allClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
+                allClassroomList.map {
+                    val allRooms = ClassroomElement(
                         id = it.id,
                         name = it.name,
-                        description = "", // 전체 타입도 별다른 설명 없음
+                        description = "",
                     )
-                    classrooms.add(classroomElement)
+                    classrooms.add(allRooms)
                 }
             }
+
+            ClassroomType.SELF_STUDY.name -> {
+                val selfStudyClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
+                selfStudyClassroomList.map {
+                    val selfStudyRooms = ClassroomElement(
+                        id = it.id,
+                        name = it.name,
+                        description = "",
+                    )
+                    classrooms.add(selfStudyRooms)
+                }
+            }
+
+            else -> throw TypeNotFoundException
         }
 
         return QueryClassroomList(classrooms)
@@ -87,22 +84,51 @@ class ClassroomUseCase(
 
     override fun queryResponsibleClassroomList(): QueryClassroomList {
         val teacherId = userSpi.getCurrentUserId()
-
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)
             ?: throw FloorNotFoundException
+        val todayType = queryTypeSpi.queryTypeByToday()
+        val classrooms = mutableListOf<ClassroomElement>()
 
-        val classroomList = queryClassroomSpi.queryClassroomListByFloor(floor)
+        when (todayType?.type?.name) {
+            ClassroomType.AFTER_SCHOOL.name -> {
+                val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
+                afterSchoolList.map {
+                    val afterSchoolRooms = ClassroomElement(
+                        id = it.classroomId,
+                        name = it.name,
+                        description = it.description,
+                    )
+                    classrooms.add(afterSchoolRooms)
+                }
+            }
 
-        val response = classroomList.map {
-            ClassroomElement(
-                id = it.id,
-                name = it.name,
-                description = "",
-            )
+            ClassroomType.CLUB.name -> {
+                val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
+                clubRoomList.map {
+                    val clubRooms = ClassroomElement(
+                        id = it.classroomId,
+                        name = it.name,
+                        description = it.description,
+                    )
+                    classrooms.add(clubRooms)
+                }
+            }
+
+            ClassroomType.SELF_STUDY.name -> {
+                val selfStudyClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, todayType.type.name)
+                selfStudyClassroomList.map {
+                    val selfStudyRooms = ClassroomElement(
+                        id = it.id,
+                        name = it.name,
+                        description = "",
+                    )
+                    classrooms.add(selfStudyRooms)
+                }
+            }
+
+            else -> throw TypeNotFoundException
         }
 
-        // TODO: 층 별 교실 리스트 조회처럼 수정하기
-
-        return QueryClassroomList(response)
+        return QueryClassroomList(classrooms)
     }
 }
