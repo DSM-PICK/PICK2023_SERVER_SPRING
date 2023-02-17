@@ -37,8 +37,4 @@ class ClubEntity(
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     var headId = headId
         protected set
-
-    fun changeClubHeadId(newHeadStudentId: UUID) {
-        this.headId = newHeadStudentId
-    }
 }
