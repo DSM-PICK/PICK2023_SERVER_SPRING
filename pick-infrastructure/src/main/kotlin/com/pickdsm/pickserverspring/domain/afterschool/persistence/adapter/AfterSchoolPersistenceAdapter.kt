@@ -25,7 +25,7 @@ class AfterSchoolPersistenceAdapter(
                     classroomEntity.id,
                     classroomEntity.name,
                     afterSchoolEntity.afterSchoolName,
-                )
+                ),
             )
             .from(afterSchoolEntity)
             .innerJoin(afterSchoolEntity.classroomEntity, classroomEntity)

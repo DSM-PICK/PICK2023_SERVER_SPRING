@@ -9,5 +9,5 @@ class QueryClassroomVO @QueryProjection constructor(
     name: String,
 ) : ClassroomVO(
     id = id,
-    name = name
+    name = name,
 )
