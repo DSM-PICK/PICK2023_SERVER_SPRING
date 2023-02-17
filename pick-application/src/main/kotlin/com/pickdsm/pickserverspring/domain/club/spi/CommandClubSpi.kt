@@ -1,8 +1,8 @@
 package com.pickdsm.pickserverspring.domain.club.spi
 
-import java.util.UUID
+import com.pickdsm.pickserverspring.domain.club.Club
 
 interface CommandClubSpi {
 
-    fun changeClubHead(clubId: UUID, newHeadStudentId: UUID)
+    fun saveClub(club: Club)
 }
