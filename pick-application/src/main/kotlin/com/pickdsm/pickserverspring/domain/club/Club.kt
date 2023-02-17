@@ -24,7 +24,7 @@ class Club(
         headId: UUID = this.headId,
         teacherId: UUID = this.teacherId,
         studentId: UUID = this.studentId,
-        classroomId: UUID = this.classroomId
+        classroomId: UUID = this.classroomId,
     ) = Club(
         id = id,
         name = name,

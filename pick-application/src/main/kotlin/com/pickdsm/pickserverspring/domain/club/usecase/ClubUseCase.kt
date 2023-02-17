@@ -17,7 +17,7 @@ class ClubUseCase(
         val club = queryClubSpi.queryClubByClubId(request.clubId)
             ?: throw ClubNotFoundException
         commandClubSpi.saveClub(
-            club.copy(headId = request.studentId)
+            club.copy(headId = request.studentId,)
         )
     }
 }
