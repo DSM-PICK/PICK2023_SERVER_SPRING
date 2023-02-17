@@ -24,6 +24,8 @@ class SecurityConfig(
 
         http
             .authorizeRequests()
+
+            //.antMatchers("/admin/head").hasAuthority(UserRole.SCH.name) TODO: 권한 설정하기
             .anyRequest().permitAll()
 
         http
