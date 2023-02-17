@@ -75,7 +75,7 @@ class TeacherUseCase(
         statusCommandTeacherSpi.saveStatus(
             picnicStatusStudent.changeStatusToAttendance(
                 endPeriod = request.endPeriod,
-            )
+            ),
         )
     }
 }
