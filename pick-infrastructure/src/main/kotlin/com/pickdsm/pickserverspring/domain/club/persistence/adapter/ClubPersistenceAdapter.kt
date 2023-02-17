@@ -1,14 +1,12 @@
 package com.pickdsm.pickserverspring.domain.club.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.club.Club
-import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.mapper.ClubMapper
 import com.pickdsm.pickserverspring.domain.club.persistence.ClubRepository
 import com.pickdsm.pickserverspring.domain.club.persistence.entity.QClubEntity.clubEntity
 import com.pickdsm.pickserverspring.domain.club.spi.ClubSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.springframework.data.repository.findByIdOrNull
 import java.util.UUID
 
 @Adapter
@@ -24,9 +22,14 @@ class ClubPersistenceAdapter(
             .fetch()
             .map(clubMapper::entityToDomain)
 
-    override fun changeClubHead(clubId: UUID, newHeadStudentId: UUID) {
-        val clubEntity = clubRepository.findByIdOrNull(clubId)
-            ?: throw ClubNotFoundException
-        clubEntity.changeClubHeadId(newHeadStudentId)
+    override fun queryClubByClubId(clubId: UUID): Club? =
+        jpaQueryFactory
+            .selectFrom(clubEntity)
+            .where(clubEntity.id.eq(clubId))
+            .fetchOne()
+            ?.let(clubMapper::entityToDomain)
+
+    override fun saveClub(club: Club) {
+        clubRepository.save(clubMapper.domainToEntity(club))
     }
 }
