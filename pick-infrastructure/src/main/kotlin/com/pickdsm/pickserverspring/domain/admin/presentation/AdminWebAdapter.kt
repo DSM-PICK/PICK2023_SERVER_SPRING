@@ -7,7 +7,12 @@ import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfter
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.PatchMapping
 import javax.validation.Valid
 
 @RequestMapping("/admin")
