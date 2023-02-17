@@ -21,11 +21,11 @@ class Status(
 
     val type: StatusType,
 ) {
-    fun changeStatusToAttendance(endPeriod: Int) =
+    fun changeStatusToAttendance(teacherId: UUID, endPeriod: Int) =
         Status(
             id = this.id,
             studentId = this.studentId,
-            teacherId = this.teacherId,
+            teacherId = teacherId,
             date = this.date,
             startPeriod = this.startPeriod,
             endPeriod = endPeriod,

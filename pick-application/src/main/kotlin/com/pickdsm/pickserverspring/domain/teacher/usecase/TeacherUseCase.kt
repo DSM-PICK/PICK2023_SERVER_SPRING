@@ -69,11 +69,13 @@ class TeacherUseCase(
     }
 
     override fun comebackStudent(request: DomainComebackStudentRequest) {
+        val teacherId = userSpi.getCurrentUserId()
         val picnicStatusStudent = queryStatusSpi.queryPicnicStudentByStudentId(request.studentId)
             ?: throw StatusNotFoundException
 
         statusCommandTeacherSpi.saveStatus(
             picnicStatusStudent.changeStatusToAttendance(
+                teacherId = teacherId,
                 endPeriod = request.endPeriod,
             ),
         )
