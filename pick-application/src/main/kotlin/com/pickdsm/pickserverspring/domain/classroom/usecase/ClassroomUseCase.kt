@@ -26,10 +26,10 @@ class ClassroomUseCase(
 
     override fun queryClassroomList(floor: Int, type: ClassroomType): QueryClassroomList {
         val classroomList = when (type.name) {
-            ClassroomType.SELF_STUDY.name -> queryClassroomSpi.querySelfStudyClassroomListByFloor(floor)
-            ClassroomType.CLUB.name -> queryClubSpi.queryClubClassroomListByFloor(floor)
             ClassroomType.AFTER_SCHOOL.name -> queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
-            ClassroomType.ALL.name -> queryClassroomSpi.queryAllClassroomListByFloor(floor)
+            ClassroomType.CLUB.name -> queryClubSpi.queryClubClassroomListByFloor(floor)
+            ClassroomType.ALL.name -> queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
+            ClassroomType.SELF_STUDY.name -> queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
             else -> throw TypeNotFoundException
         }
 
@@ -51,9 +51,9 @@ class ClassroomUseCase(
         val todayType = queryTypeSpi.queryTypeByToday()
 
         val classroomList = when (todayType?.type?.name) {
-            ClassroomType.SELF_STUDY.name -> queryClassroomSpi.querySelfStudyClassroomListByFloor(floor)
-            ClassroomType.CLUB.name -> queryClubSpi.queryClubClassroomListByFloor(floor)
             ClassroomType.AFTER_SCHOOL.name -> queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
+            ClassroomType.CLUB.name -> queryClubSpi.queryClubClassroomListByFloor(floor)
+            ClassroomType.SELF_STUDY.name -> queryClassroomSpi.queryClassroomListByFloorAndByType(floor, todayType.type.name)
             else -> throw TypeNotFoundException
         }
 
