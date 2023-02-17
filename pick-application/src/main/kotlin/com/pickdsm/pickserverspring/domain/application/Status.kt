@@ -2,7 +2,6 @@ package com.pickdsm.pickserverspring.domain.application
 
 import com.pickdsm.pickserverspring.common.annotation.Aggregate
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.UUID
 
 @Aggregate
@@ -21,4 +20,15 @@ class Status(
     val endPeriod: Int,
 
     val type: StatusType,
-)
+) {
+    fun changeStatusToAttendance(endPeriod: Int) =
+        Status(
+            id = this.id,
+            studentId = this.studentId,
+            teacherId = this.teacherId,
+            date = this.date,
+            startPeriod = this.startPeriod,
+            endPeriod = endPeriod,
+            type = StatusType.ATTENDANCE,
+        )
+}
