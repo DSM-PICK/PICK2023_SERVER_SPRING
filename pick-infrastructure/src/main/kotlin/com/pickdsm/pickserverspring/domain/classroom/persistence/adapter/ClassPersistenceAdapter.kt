@@ -31,7 +31,7 @@ class ClassPersistenceAdapter(
                 QQueryClassroomVO(
                     classroomEntity.id,
                     classroomEntity.name,
-                )
+                ),
             )
             .from(classroomEntity)
             .where(checkClassroomType(classroomType), classroomEntity.floor.eq(floor))

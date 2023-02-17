@@ -1,9 +1,6 @@
 package com.pickdsm.pickserverspring.domain.club.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
-import com.pickdsm.pickserverspring.domain.classroom.persistence.vo.QQueryClassroomVO
-import com.pickdsm.pickserverspring.domain.classroom.persistence.vo.QueryClassroomVO
-import com.pickdsm.pickserverspring.domain.classroom.vo.ClassroomVO
 import com.pickdsm.pickserverspring.domain.club.persistence.entity.QClubEntity.clubEntity
 import com.pickdsm.pickserverspring.domain.club.persistence.vo.QQueryClubRoomVO
 import com.pickdsm.pickserverspring.domain.club.persistence.vo.QueryClubRoomVO
@@ -22,8 +19,8 @@ class ClubPersistenceAdapter(
                 QQueryClubRoomVO(
                     classroomEntity.id,
                     classroomEntity.name,
-                    clubEntity.name
-                )
+                    clubEntity.name,
+                ),
             )
             .from(clubEntity)
             .innerJoin(clubEntity.classroomEntity, classroomEntity)
