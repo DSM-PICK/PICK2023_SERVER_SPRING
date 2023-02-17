@@ -55,7 +55,7 @@ class AfterSchoolPersistenceAdapter(
 
     override fun saveAll(afterSchools: List<AfterSchool>) {
         afterSchoolRepository.saveAll(
-            afterSchools.map(afterSchoolMapper::domainToEntity)
+            afterSchools.map(afterSchoolMapper::domainToEntity),
         )
     }
 }
