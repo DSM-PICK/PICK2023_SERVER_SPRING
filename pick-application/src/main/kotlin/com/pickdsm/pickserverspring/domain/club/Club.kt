@@ -18,19 +18,13 @@ class Club(
 
     val classroomId: UUID,
 ) {
-    fun copy(
-        id: UUID = this.id,
-        name: String = this.name,
-        headId: UUID = this.headId,
-        teacherId: UUID = this.teacherId,
-        studentId: UUID = this.studentId,
-        classroomId: UUID = this.classroomId,
-    ) = Club(
-        id = id,
-        name = name,
-        headId = headId,
-        teacherId = teacherId,
-        studentId = studentId,
-        classroomId = classroomId,
-    )
+    fun changeClubHead(headId: UUID) =
+        Club(
+            id = this.id,
+            name = this.name,
+            headId = headId,
+            teacherId = this.teacherId,
+            studentId = this.studentId,
+            classroomId = this.classroomId,
+        )
 }
