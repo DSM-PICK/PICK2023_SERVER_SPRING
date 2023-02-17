@@ -3,7 +3,10 @@ package com.pickdsm.pickserverspring.domain.afterschool.persistence.adapter
 import com.pickdsm.pickserverspring.domain.afterschool.AfterSchool
 import com.pickdsm.pickserverspring.domain.afterschool.mapper.AfterSchoolMapper
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.QAfterSchoolEntity.afterSchoolEntity
+import com.pickdsm.pickserverspring.domain.afterschool.persistence.vo.QQueryAfterSchoolRoomVO
+import com.pickdsm.pickserverspring.domain.afterschool.persistence.vo.QueryAfterSchoolRoomVO
 import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
+import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
@@ -15,11 +18,20 @@ class AfterSchoolPersistenceAdapter(
     private val afterSchoolMapper: AfterSchoolMapper,
 ) : AfterSchoolSpi {
 
-    override fun queryAfterSchoolList(): List<AfterSchool> =
+    override fun queryAfterSchoolClassroomListByFloor(floor: Int): List<QueryAfterSchoolRoomVO> =
         jpaQueryFactory
-            .selectFrom(afterSchoolEntity)
+            .select(
+                QQueryAfterSchoolRoomVO(
+                    classroomEntity.id,
+                    classroomEntity.name,
+                    afterSchoolEntity.afterSchoolName,
+                ),
+            )
+            .from(afterSchoolEntity)
+            .innerJoin(afterSchoolEntity.classroomEntity, classroomEntity)
+            .on(afterSchoolEntity.classroomEntity.id.eq(classroomEntity.id))
+            .where(afterSchoolEntity.classroomEntity.floor.eq(floor))
             .fetch()
-            .map(afterSchoolMapper::entityToDomain)
 
     override fun deleteByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID) {
         jpaQueryFactory

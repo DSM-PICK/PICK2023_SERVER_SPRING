@@ -1,12 +1,16 @@
 package com.pickdsm.pickserverspring.domain.classroom.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.classroom.Classroom
+import com.pickdsm.pickserverspring.domain.classroom.ClassroomType
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMapper
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomRepository
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
+import com.pickdsm.pickserverspring.domain.classroom.persistence.vo.QQueryClassroomVO
+import com.pickdsm.pickserverspring.domain.classroom.persistence.vo.QueryClassroomVO
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 
@@ -21,11 +25,22 @@ class ClassPersistenceAdapter(
         classroomRepository.findClassroomEntityById(classroomId)
             ?: throw ClassroomNotFoundException
 
-    override fun queryClassroomListByFloor(floor: Int): List<Classroom> =
+    override fun queryClassroomListByFloorAndByType(floor: Int, classroomType: String): List<QueryClassroomVO> =
         jpaQueryFactory
-            .selectFrom(classroomEntity)
-            .where(classroomEntity.floor.eq(floor))
+            .select(
+                QQueryClassroomVO(
+                    classroomEntity.id,
+                    classroomEntity.name,
+                ),
+            )
+            .from(classroomEntity)
+            .where(checkClassroomType(classroomType), classroomEntity.floor.eq(floor))
             .fetch()
-            .map(classroomMapper::entityToDomain)
-}
 
+    private fun checkClassroomType(classroomType: String): BooleanExpression? {
+        if (classroomType == ClassroomType.SELF_STUDY.name) {
+            return classroomEntity.grade.isNotNull
+        }
+        return null
+    }
+}
