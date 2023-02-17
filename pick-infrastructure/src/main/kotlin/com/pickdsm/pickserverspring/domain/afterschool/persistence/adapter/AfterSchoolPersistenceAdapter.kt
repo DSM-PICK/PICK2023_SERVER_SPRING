@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.afterschool.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.afterschool.AfterSchool
 import com.pickdsm.pickserverspring.domain.afterschool.mapper.AfterSchoolMapper
+import com.pickdsm.pickserverspring.domain.afterschool.persistence.AfterSchoolRepository
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.QAfterSchoolEntity.afterSchoolEntity
 import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
@@ -13,6 +14,7 @@ import javax.persistence.LockModeType
 class AfterSchoolPersistenceAdapter(
     private val jpaQueryFactory: JPAQueryFactory,
     private val afterSchoolMapper: AfterSchoolMapper,
+    private val afterSchoolRepository: AfterSchoolRepository,
 ) : AfterSchoolSpi {
 
     override fun queryAfterSchoolList(): List<AfterSchool> =
@@ -42,4 +44,18 @@ class AfterSchoolPersistenceAdapter(
             .setLockMode(LockModeType.PESSIMISTIC_READ)
             .fetchOne()
             ?.let(afterSchoolMapper::entityToDomain)
+
+    override fun findByAfterSchoolId(afterSchoolId: UUID): AfterSchool? {
+        return jpaQueryFactory
+            .selectFrom(afterSchoolEntity)
+            .where(afterSchoolEntity.id.eq(afterSchoolId))
+            .fetchOne()
+            ?.let(afterSchoolMapper::entityToDomain)
+    }
+
+    override fun saveAll(afterSchools: List<AfterSchool>) {
+        afterSchoolRepository.saveAll(
+            afterSchools.map(afterSchoolMapper::domainToEntity)
+        )
+    }
 }
