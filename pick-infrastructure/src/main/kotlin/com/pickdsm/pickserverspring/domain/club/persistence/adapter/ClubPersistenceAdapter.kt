@@ -33,7 +33,6 @@ class ClubPersistenceAdapter(
             .on(clubEntity.classroomEntity.id.eq(classroomEntity.id))
             .where(clubEntity.classroomEntity.floor.eq(floor))
             .fetch()
-            .map(clubMapper::entityToDomain)
 
     override fun queryClubByClubId(clubId: UUID): Club? =
         jpaQueryFactory

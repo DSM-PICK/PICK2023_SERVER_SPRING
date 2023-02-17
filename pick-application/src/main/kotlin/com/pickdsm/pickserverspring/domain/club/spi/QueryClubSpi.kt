@@ -6,9 +6,7 @@ import com.pickdsm.pickserverspring.domain.club.vo.ClubRoomVO
 
 interface QueryClubSpi {
 
-    fun queryClubList(): List<Club>
+    fun queryClubClassroomListByFloor(floor: Int): List<ClubRoomVO>
 
     fun queryClubByClubId(clubId: UUID): Club?
-    
-    fun queryClubClassroomListByFloor(floor: Int): List<ClubRoomVO>
 }
