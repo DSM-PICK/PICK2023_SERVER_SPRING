@@ -18,7 +18,7 @@ class ClubUseCase(
             ?: throw ClubNotFoundException
 
         commandClubSpi.saveClub(
-            club.changeClubHead(headId = request.studentId)
+            club.changeClubHead(headId = request.studentId),
         )
     }
 }
