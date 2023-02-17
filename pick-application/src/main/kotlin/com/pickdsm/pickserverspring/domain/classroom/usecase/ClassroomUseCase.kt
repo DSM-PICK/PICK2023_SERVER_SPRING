@@ -25,23 +25,61 @@ class ClassroomUseCase(
 ) : ClassroomApi {
 
     override fun queryClassroomList(floor: Int, type: ClassroomType): QueryClassroomList {
-        val classroomList = when (type.name) {
-            ClassroomType.AFTER_SCHOOL.name -> queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
-            ClassroomType.CLUB.name -> queryClubSpi.queryClubClassroomListByFloor(floor)
-            ClassroomType.ALL.name -> queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
-            ClassroomType.SELF_STUDY.name -> queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
+        val classrooms = mutableListOf<ClassroomElement>()
+
+        when (type.name) {
+            ClassroomType.AFTER_SCHOOL.name -> {
+                val afterSchoolRoomList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
+                afterSchoolRoomList.map {
+                    val afterSchoolRooms = ClassroomElement(
+                        id = it.classroomId,
+                        name = it.name,
+                        description = it.description,
+                    )
+                    classrooms.add(afterSchoolRooms)
+                }
+            }
+
+            ClassroomType.CLUB.name -> {
+                val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
+                clubRoomList.map {
+                    val clubRooms = ClassroomElement(
+                        id = it.classroomId,
+                        name = it.name,
+                        description = it.description,
+                    )
+                    classrooms.add(clubRooms)
+                }
+            }
+
+            ClassroomType.ALL.name -> {
+                val allClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
+                allClassroomList.map {
+                    val allRooms = ClassroomElement(
+                        id = it.id,
+                        name = it.name,
+                        description = "",
+                    )
+                    classrooms.add(allRooms)
+                }
+            }
+
+            ClassroomType.SELF_STUDY.name -> {
+                val selfStudyClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
+                selfStudyClassroomList.map {
+                    val selfStudyRooms = ClassroomElement(
+                        id = it.id,
+                        name = it.name,
+                        description = "",
+                    )
+                    classrooms.add(selfStudyRooms)
+                }
+            }
+
             else -> throw TypeNotFoundException
         }
 
-        val response = classroomList.map {
-            ClassroomElement(
-                id = it.id,
-                name = it.name,
-                description = it.description,
-            )
-        }
-
-        return QueryClassroomList(response)
+        return QueryClassroomList(classrooms)
     }
 
     override fun queryResponsibleClassroomList(): QueryClassroomList {
@@ -49,22 +87,48 @@ class ClassroomUseCase(
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)
             ?: throw FloorNotFoundException
         val todayType = queryTypeSpi.queryTypeByToday()
+        val classrooms = mutableListOf<ClassroomElement>()
 
-        val classroomList = when (todayType?.type?.name) {
-            ClassroomType.AFTER_SCHOOL.name -> queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
-            ClassroomType.CLUB.name -> queryClubSpi.queryClubClassroomListByFloor(floor)
-            ClassroomType.SELF_STUDY.name -> queryClassroomSpi.queryClassroomListByFloorAndByType(floor, todayType.type.name)
+        when (todayType?.type?.name) {
+            ClassroomType.AFTER_SCHOOL.name -> {
+                val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
+                afterSchoolList.map {
+                    val afterSchoolRooms = ClassroomElement(
+                        id = it.classroomId,
+                        name = it.name,
+                        description = it.description,
+                    )
+                    classrooms.add(afterSchoolRooms)
+                }
+            }
+
+            ClassroomType.CLUB.name -> {
+                val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
+                clubRoomList.map {
+                    val clubRooms = ClassroomElement(
+                        id = it.classroomId,
+                        name = it.name,
+                        description = it.description,
+                    )
+                    classrooms.add(clubRooms)
+                }
+            }
+
+            ClassroomType.SELF_STUDY.name -> {
+                val selfStudyClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, todayType.type.name)
+                selfStudyClassroomList.map {
+                    val selfStudyRooms = ClassroomElement(
+                        id = it.id,
+                        name = it.name,
+                        description = "",
+                    )
+                    classrooms.add(selfStudyRooms)
+                }
+            }
+
             else -> throw TypeNotFoundException
         }
 
-        val response = classroomList.map {
-            ClassroomElement(
-                id = it.id,
-                name = it.name,
-                description = it.description,
-            )
-        }
-
-        return QueryClassroomList(response)
+        return QueryClassroomList(classrooms)
     }
 }
