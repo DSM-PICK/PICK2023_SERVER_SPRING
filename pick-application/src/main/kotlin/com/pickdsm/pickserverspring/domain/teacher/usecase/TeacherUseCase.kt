@@ -2,9 +2,11 @@ package com.pickdsm.pickserverspring.domain.teacher.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
+import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
@@ -63,6 +65,19 @@ class TeacherUseCase(
             picnic = picnicCount,
             classroomMovement = classroomMovementCount,
             application = applicationCount,
+        )
+    }
+
+    override fun comebackStudent(request: DomainComebackStudentRequest) {
+        val teacherId = userSpi.getCurrentUserId()
+        val picnicStatusStudent = queryStatusSpi.queryPicnicStudentByStudentId(request.studentId)
+            ?: throw StatusNotFoundException
+
+        statusCommandTeacherSpi.saveStatus(
+            picnicStatusStudent.changeStatusToAttendance(
+                teacherId = teacherId,
+                endPeriod = request.endPeriod,
+            ),
         )
     }
 }

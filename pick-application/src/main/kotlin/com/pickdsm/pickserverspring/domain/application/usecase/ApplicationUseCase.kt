@@ -145,7 +145,6 @@ class ApplicationUseCase(
     }
 
     override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID, type: String): QueryStudentStatusList {
-        val now = LocalDate.now()
         val todayStudentStatusList = queryStatusSpi.queryStudentInfoByToday()
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
         val grade = classroom.grade ?: throw ClassroomNotFoundException // TODO grade랑 classNum으로 학생 리스트를 가져와서 에러처리했습니다.
@@ -153,7 +152,7 @@ class ApplicationUseCase(
 
         val classroomStudentList = userSpi.queryUserInfoByGradeAndClassNum(grade, classNum)
 
-        val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(now)
+        val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
         val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
         val userList = userQueryApplicationSpi.queryUserInfo(todayMovementStudentIdList)
 
