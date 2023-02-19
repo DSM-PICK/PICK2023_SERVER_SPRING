@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.domain.afterschool.presentation.dto.requset
+package com.pickdsm.pickserverspring.domain.admin.presentation.dto.request
 
 import java.util.UUID
 

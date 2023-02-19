@@ -17,4 +17,14 @@ class Club(
     val studentId: UUID,
 
     val classroomId: UUID,
-)
+) {
+    fun changeClubHead(headId: UUID) =
+        Club(
+            id = this.id,
+            name = this.name,
+            headId = headId,
+            teacherId = this.teacherId,
+            studentId = this.studentId,
+            classroomId = this.classroomId,
+        )
+}
