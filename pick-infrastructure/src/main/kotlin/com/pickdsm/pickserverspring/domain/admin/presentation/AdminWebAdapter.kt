@@ -8,16 +8,19 @@ import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfter
 import com.pickdsm.pickserverspring.domain.afterschool.presentation.dto.requset.CreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
-import java.util.UUID
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
+import java.util.*
 import javax.validation.Valid
 
 @RequestMapping("/admin")
@@ -25,6 +28,7 @@ import javax.validation.Valid
 class AdminWebAdapter(
     private val afterSchoolApi: AfterSchoolApi,
     private val clubApi: ClubApi,
+    private val selfStudyDirectorApi: SelfStudyDirectorApi,
 ) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -69,5 +73,10 @@ class AdminWebAdapter(
             studentIds = request.userIdList,
         )
         afterSchoolApi.createAfterSchoolStudent(domainRequest)
+    }
+
+    @GetMapping("/state")
+    fun getSelfStudyState(): SelfStudyStateResponse {
+        return selfStudyDirectorApi.getSelfStudyState()
     }
 }
