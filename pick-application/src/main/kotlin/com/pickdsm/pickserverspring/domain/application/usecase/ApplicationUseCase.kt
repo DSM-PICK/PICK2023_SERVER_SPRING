@@ -6,6 +6,7 @@ import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentElement
@@ -199,6 +200,26 @@ class ApplicationUseCase(
         }
 
         return QueryStudentStatusList(students)
+    }
+
+    override fun savePicnicPass(request: DomainPicnicPassRequest) {
+        val teacherId = userSpi.getCurrentUserId()
+        val userList = userSpi.queryUserInfo(request.userIdList)
+
+        val statusList = request.userIdList.map {
+            val user = userList.find { user -> user.id == it }
+                ?: throw UserNotFoundException
+
+            Status(
+                studentId = user.id,
+                teacherId = teacherId,
+                startPeriod = request.startPeriod,
+                endPeriod = request.endPeriod,
+                type = StatusType.PICNIC,
+            )
+        }
+
+        statusCommandTeacherSpi.saveAllStatus(statusList)
     }
 
     private fun movementStudent(status: Status?): String {
