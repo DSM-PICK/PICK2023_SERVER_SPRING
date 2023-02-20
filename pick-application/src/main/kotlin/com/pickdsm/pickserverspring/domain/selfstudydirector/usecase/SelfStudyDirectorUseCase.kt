@@ -87,7 +87,7 @@ class SelfStudyDirectorUseCase(
         return SelfStudyStateResponse(
             date = date,
             name = teacher.name,
-            floor = selfStudy.map(SelfStudyDirector::floor)
+            floor = selfStudy.map(SelfStudyDirector::floor),
         )
     }
 }

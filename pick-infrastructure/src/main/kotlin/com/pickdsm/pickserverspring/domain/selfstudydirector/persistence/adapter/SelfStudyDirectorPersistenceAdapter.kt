@@ -42,7 +42,7 @@ class SelfStudyDirectorPersistenceAdapter(
             .on(selfStudyDirectorEntity.typeEntity.id.eq(typeEntity.id))
             .where(
                 selfStudyDirectorEntity.teacherId.eq(teacherId),
-                typeEntity.date.eq(date)
+                typeEntity.date.eq(date),
             )
             .orderBy(selfStudyDirectorEntity.floor.asc())
             .fetch()
