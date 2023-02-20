@@ -2,10 +2,13 @@ package com.pickdsm.pickserverspring.domain.admin.presentation
 
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.presentation.dto.requset.CreateAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
+import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
 import org.springframework.http.HttpStatus
@@ -25,6 +28,7 @@ import javax.validation.Valid
 class AdminWebAdapter(
     private val afterSchoolApi: AfterSchoolApi,
     private val clubApi: ClubApi,
+    private val applicationApi: ApplicationApi,
 ) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -69,5 +73,21 @@ class AdminWebAdapter(
             studentIds = request.userIdList,
         )
         afterSchoolApi.createAfterSchoolStudent(domainRequest)
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/picnic")
+    fun savePassIssued(
+        @RequestBody
+        @Valid
+        request: PicnicPassRequest,
+    ) {
+        val domainRequest = DomainPicnicPassRequest(
+            userIdList = request.userIdList,
+            reason = request.reason,
+            startPeriod = request.startPeriod,
+            endPeriod = request.endPeriod,
+        )
+        applicationApi.savePicnicPass(domainRequest)
     }
 }
