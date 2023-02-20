@@ -9,7 +9,7 @@ class WebConfig : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry
-            .addMapping("*")
+            .addMapping("/**")
             .allowedMethods("*")
             .allowedHeaders("*")
             .allowedOrigins("https://service.xquare.app/")
