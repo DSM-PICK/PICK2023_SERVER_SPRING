@@ -8,9 +8,9 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class ClubEntityMapperImpl(
+class ClubMapperImpl(
     private val classroomRepository: ClassroomRepository,
-) : ClubEntityMapper {
+) : ClubMapper {
 
     override fun domainToEntity(club: Club): ClubEntity {
         val classroomEntity = classroomRepository.findByIdOrNull(club.classroomId)
