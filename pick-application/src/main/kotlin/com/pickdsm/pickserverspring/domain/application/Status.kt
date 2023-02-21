@@ -31,4 +31,15 @@ class Status(
             endPeriod = endPeriod,
             type = StatusType.ATTENDANCE,
         )
+
+    fun changeStatusOfClass(teacherId: UUID, startPeriod: Int, endPeriod: Int, type: StatusType) =
+        Status(
+            id = this.id,
+            studentId = this.studentId,
+            teacherId = teacherId,
+            date = this.date,
+            startPeriod = startPeriod,
+            endPeriod = endPeriod,
+            type = type,
+        )
 }
