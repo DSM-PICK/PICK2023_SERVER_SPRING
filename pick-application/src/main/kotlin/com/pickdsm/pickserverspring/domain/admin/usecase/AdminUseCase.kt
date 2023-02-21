@@ -23,7 +23,7 @@ class AdminUseCase(
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val queryTimeSpi: QueryTimeSpi,
-    private val queryStatusSpi: QueryStatusSpi
+    private val queryStatusSpi: QueryStatusSpi,
 ) : AdminApi {
 
     override fun updateStudentStatusOfClass(request: DomainUpdateStudentStatusOfClassRequest) {

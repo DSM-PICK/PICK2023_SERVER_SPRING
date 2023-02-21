@@ -81,7 +81,7 @@ class AdminWebAdapter(
                     userId = it.userId,
                     status = it.status,
                 )
-            }
+            },
         )
         adminApi.updateStudentStatusOfClass(domainRequest)
     }
