@@ -1,8 +1,12 @@
 package com.pickdsm.pickserverspring.domain.admin.presentation
 
+import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
+import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
+import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.UpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfterSchoolStudentRequest
@@ -23,12 +27,13 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.UUID
 import javax.validation.Valid
 
 @RequestMapping("/admin")
 @RestController
 class AdminWebAdapter(
+    private val adminApi: AdminApi,
     private val afterSchoolApi: AfterSchoolApi,
     private val clubApi: ClubApi,
     private val selfStudyDirectorApi: SelfStudyDirectorApi,
@@ -63,6 +68,24 @@ class AdminWebAdapter(
         clubApi.changeClubHead(domainRequest)
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/class")
+    fun updateStudentStatusOfClass(
+        @RequestBody
+        @Valid
+        request: UpdateStudentStatusOfClassRequest,
+    ) {
+        val domainRequest = DomainUpdateStudentStatusOfClassRequest(
+            userList = request.userList.map {
+                DomainUpdateStudentElement(
+                    userId = it.userId,
+                    status = it.status,
+                )
+            }
+        )
+        adminApi.updateStudentStatusOfClass(domainRequest)
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{after-school-id}")
     fun createAfterSchoolStudent(
@@ -79,11 +102,6 @@ class AdminWebAdapter(
         afterSchoolApi.createAfterSchoolStudent(domainRequest)
     }
 
-    @GetMapping("/state")
-    fun getSelfStudyState(): SelfStudyStateResponse {
-        return selfStudyDirectorApi.getSelfStudyState()
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/picnic")
     fun savePassIssued(
@@ -98,5 +116,10 @@ class AdminWebAdapter(
             endPeriod = request.endPeriod,
         )
         applicationApi.savePicnicPass(domainRequest)
+    }
+
+    @GetMapping("/state")
+    fun getSelfStudyState(): SelfStudyStateResponse {
+        return selfStudyDirectorApi.getSelfStudyState()
     }
 }
