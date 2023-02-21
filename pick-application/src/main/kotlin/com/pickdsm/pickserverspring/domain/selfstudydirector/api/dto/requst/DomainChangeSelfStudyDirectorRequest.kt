@@ -6,5 +6,5 @@ import java.util.UUID
 data class DomainChangeSelfStudyDirectorRequest(
     val teacherId: UUID,
     val floor: Int,
-    val date: LocalDate
+    val date: LocalDate,
 )
