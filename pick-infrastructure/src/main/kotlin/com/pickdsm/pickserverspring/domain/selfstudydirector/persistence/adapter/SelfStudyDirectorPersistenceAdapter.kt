@@ -60,4 +60,12 @@ class SelfStudyDirectorPersistenceAdapter(
             .fetchOne()
         return selfStudyDirectorEntity?.let(selfStudyDirectorMapper::entityToDomain)
     }
+
+    override fun updateSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
+        jpaQueryFactory
+            .update(selfStudyDirectorEntity)
+            .set(selfStudyDirectorEntity.teacherId, selfStudyDirector.teacherId)
+            .where(selfStudyDirectorEntity.floor.eq(selfStudyDirector.floor))
+            .execute()
+    }
 }
