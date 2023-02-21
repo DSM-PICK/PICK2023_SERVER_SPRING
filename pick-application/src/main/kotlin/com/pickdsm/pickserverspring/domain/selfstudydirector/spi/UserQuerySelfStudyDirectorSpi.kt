@@ -6,4 +6,5 @@ import java.util.UUID
 interface UserQuerySelfStudyDirectorSpi {
 
     fun queryUserInfo(ids: List<UUID>): List<User>
+
 }
