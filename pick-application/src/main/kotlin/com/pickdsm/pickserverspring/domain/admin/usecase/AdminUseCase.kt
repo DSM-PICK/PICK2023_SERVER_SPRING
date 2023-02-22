@@ -14,6 +14,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.time.spi.QueryTimeSpi
+import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 
@@ -31,8 +32,12 @@ class AdminUseCase(
         val statusList = queryStatusSpi.queryStatusListByToday()
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val nowPeriod = queryTimeSpi.queryNowPeriod(timeList)
+        val userIdList = request.userList.map { it.userId }
+        val userInfoList = userSpi.queryUserInfo(userIdList)
 
         val changeStatusList: List<Status> = request.userList.map {
+            val user = userInfoList.find { user -> user.id == it.userId }
+                ?: throw UserNotFoundException
             val status = statusList.find { status -> status.studentId == it.userId }
                 ?: throw StatusNotFoundException
             val time = timeList.timeList.find { time -> time.period == nowPeriod }
@@ -49,8 +54,9 @@ class AdminUseCase(
                 }
 
                 StatusType.EMPLOYMENT -> {
-                    checkStudentThirdGrade(status, it)
-
+                    if (user.grade != 3) {
+                        throw CannotChangeEmploymentException
+                    }
                     status.changeStatusOfClass(
                         teacherId = teacherId,
                         startPeriod = 1,
@@ -72,16 +78,5 @@ class AdminUseCase(
             }
         }
         statusCommandTeacherSpi.saveAllStatus(changeStatusList)
-    }
-
-    private fun checkStudentThirdGrade(
-        status: Status,
-        it: DomainUpdateStudentElement,
-    ) {
-        val students = userSpi.queryUserInfo(listOf(status.studentId))
-        val student = students.find { student -> student.id == it.userId }
-        if (student?.grade != 3) {
-            throw CannotChangeEmploymentException
-        }
     }
 }
