@@ -40,7 +40,7 @@ class StatusEntity(
         protected set
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(13)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(16)", nullable = false)
     @ColumnDefault("'ATTENDANCE'")
     var type = type
         protected set
