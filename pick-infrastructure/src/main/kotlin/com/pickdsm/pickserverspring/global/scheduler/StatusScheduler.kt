@@ -15,12 +15,11 @@ class StatusScheduler(
     @Transactional
     @Scheduled(cron = "0 0 8 * * *", zone = "Asia/Seoul")
     fun changeStudentStatusDate() {
-        val statusList = statusRepository.findAllByDate(LocalDate.now())
-        val changeStatus = statusList
-            .filter { statusEntity ->
-                statusEntity.type == StatusType.EMPLOYMENT || statusEntity.type == StatusType.FIELD_TRIP
-            }
-            .map { statusEntity -> statusEntity.changeStatusDate() }
-        statusRepository.saveAll(changeStatus)
+        val statusList = statusRepository.findAllByTypeOrTypeAndDate(
+            employment = StatusType.EMPLOYMENT,
+            fieldTrip = StatusType.FIELD_TRIP,
+            date = LocalDate.now(),
+        )
+        statusList.map { statusEntity -> statusEntity.changeStatusDate() }
     }
 }
