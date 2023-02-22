@@ -27,4 +27,14 @@ class Club(
             studentId = this.studentId,
             classroomId = this.classroomId,
         )
+
+    fun changeClubStudent(clubId: UUID) =
+        Club(
+            id = this.id,
+            name = this.name,
+            headId = this.headId,
+            teacherId = this.teacherId,
+            studentId = this.studentId,
+            classroomId = clubId,
+        )
 }
