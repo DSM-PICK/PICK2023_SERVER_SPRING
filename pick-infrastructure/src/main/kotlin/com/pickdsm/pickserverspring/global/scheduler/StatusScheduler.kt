@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.global.scheduler
 
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
+import com.pickdsm.pickserverspring.domain.application.persistence.entity.StatusEntity
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -20,6 +21,6 @@ class StatusScheduler(
             fieldTrip = StatusType.FIELD_TRIP,
             date = LocalDate.now(),
         )
-        statusList.map { statusEntity -> statusEntity.changeStatusDate() }
+        statusList.map(StatusEntity::changeStatusDate)
     }
 }
