@@ -52,7 +52,7 @@ class AdminUseCase(
                     )
                 }
 
-                StatusType.EMPLOYMENT -> {
+                StatusType.EMPLOYMENT_START -> {
                     if (user.grade != 3) {
                         throw CannotChangeEmploymentException
                     }
@@ -64,7 +64,7 @@ class AdminUseCase(
                     )
                 }
 
-                StatusType.FIELD_TRIP, StatusType.LEAVE -> {
+                StatusType.FIELD_TRIP_START, StatusType.LEAVE -> {
                     status.changeStatusOfClass(
                         teacherId = teacherId,
                         startPeriod = time.period,
