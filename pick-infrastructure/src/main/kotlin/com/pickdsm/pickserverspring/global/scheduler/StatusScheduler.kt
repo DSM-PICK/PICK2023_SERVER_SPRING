@@ -19,7 +19,9 @@ class StatusScheduler(
     @Scheduled(cron = "0 0 8 * * *", zone = "Asia/Seoul")
     fun changeStudentStatusDate() {
         val statusList = statusRepository.findAllByTypeOrTypeAndDate(
-            StatusType.EMPLOYMENT, StatusType.FIELD_TRIP, LocalDate.now(),
+            type = StatusType.EMPLOYMENT,
+            type2 = StatusType.FIELD_TRIP,
+            date = LocalDate.now(),
         )
         statusList.map(StatusEntity::changeStatusDate)
     }
@@ -28,7 +30,9 @@ class StatusScheduler(
     @Scheduled(cron = "0 30 20 * * *", zone = "Asia/Seoul")
     fun saveEmploymentAndFieldTrip() {
         val statusList = statusRepository.findAllByTypeOrTypeAndDate(
-            StatusType.EMPLOYMENT_START, StatusType.FIELD_TRIP_START, LocalDate.now(),
+            type = StatusType.EMPLOYMENT,
+            type2 = StatusType.FIELD_TRIP,
+            date = LocalDate.now(),
         )
         val changeList = statusList.map { statusEntity ->
             when (statusEntity.type) {
