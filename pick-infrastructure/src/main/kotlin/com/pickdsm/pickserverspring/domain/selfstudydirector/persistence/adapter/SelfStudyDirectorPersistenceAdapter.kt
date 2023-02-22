@@ -31,4 +31,20 @@ class SelfStudyDirectorPersistenceAdapter(
             .from(selfStudyDirectorEntity)
             .where(selfStudyDirectorEntity.teacherId.eq(teacherId))
             .fetchOne()
+
+    override fun queryAllSelfStudyDirectorByTeacherIdAndDate(
+        teacherId: UUID,
+        date: LocalDate,
+    ): List<SelfStudyDirector> =
+        jpaQueryFactory
+            .selectFrom(selfStudyDirectorEntity)
+            .innerJoin(selfStudyDirectorEntity.typeEntity, typeEntity)
+            .on(selfStudyDirectorEntity.typeEntity.id.eq(typeEntity.id))
+            .where(
+                selfStudyDirectorEntity.teacherId.eq(teacherId),
+                typeEntity.date.eq(date),
+            )
+            .orderBy(selfStudyDirectorEntity.floor.asc())
+            .fetch()
+            .map(selfStudyDirectorMapper::entityToDomain)
 }

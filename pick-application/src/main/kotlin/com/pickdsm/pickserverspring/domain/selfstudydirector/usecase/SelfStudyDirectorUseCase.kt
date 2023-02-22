@@ -7,12 +7,15 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyElement
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.TodaySelfStudyTeacherResponse
+import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.SelfStudyDirectorNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.UserQuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.user.User
+import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 
 @ReadOnlyUseCase
@@ -20,6 +23,7 @@ class SelfStudyDirectorUseCase(
     private val querySelfStudyDirectorSpi: QuerySelfStudyDirectorSpi,
     private val userQuerySelfStudyDirectorSpi: UserQuerySelfStudyDirectorSpi,
     private val queryTypeSpi: QueryTypeSpi,
+    private val userSpi: UserSpi,
 ) : SelfStudyDirectorApi {
 
     override fun getSelfStudyTeacher(month: String): SelfStudyListResponse {
@@ -70,5 +74,20 @@ class SelfStudyDirectorUseCase(
     private fun getTeacherName(teachers: List<User>, selfStudies: List<SelfStudyDirector>, floor: Int): String {
         val teacherId = selfStudies.find { it.floor == floor }?.teacherId ?: return ""
         return teachers.find { it.id == teacherId }?.name ?: ""
+    }
+
+    override fun getSelfStudyState(): SelfStudyStateResponse {
+        val date = LocalDate.now()
+        val teacherId = userSpi.getCurrentUserId()
+        val teacher = userQuerySelfStudyDirectorSpi.queryUserInfo(listOf(teacherId)).first()
+        val selfStudy = querySelfStudyDirectorSpi.queryAllSelfStudyDirectorByTeacherIdAndDate(teacher.id, date)
+        if (selfStudy.isEmpty()) {
+            throw SelfStudyDirectorNotFoundException
+        }
+        return SelfStudyStateResponse(
+            date = date,
+            name = teacher.name,
+            floor = selfStudy.map(SelfStudyDirector::floor),
+        )
     }
 }
