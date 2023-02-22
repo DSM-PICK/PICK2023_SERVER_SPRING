@@ -11,7 +11,6 @@ class WebConfig : WebMvcConfigurer {
         registry
             .addMapping("/**")
             .allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE")
-            .allowedHeaders("*")
             .allowedOrigins("https://service.xquare.app/", "http://localhost:3000")
     }
 }
