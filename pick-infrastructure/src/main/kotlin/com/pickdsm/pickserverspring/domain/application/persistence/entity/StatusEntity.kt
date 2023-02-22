@@ -45,8 +45,7 @@ class StatusEntity(
     var type = type
         protected set
 
-    fun changeStatusDate(): StatusEntity {
+    fun changeStatusDate() {
         this.date = LocalDate.now().plusDays(1L)
-        return this
     }
 }
