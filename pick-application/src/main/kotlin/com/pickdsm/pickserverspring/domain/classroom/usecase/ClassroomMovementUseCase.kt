@@ -3,14 +3,20 @@ package com.pickdsm.pickserverspring.domain.classroom.usecase
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
+import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
+import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementStudentElement
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
+import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
+import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 
@@ -21,7 +27,11 @@ class ClassroomMovementUseCase(
     private val commandClassroomMovementSpi: CommandClassroomMovementSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
-) : ClassroomMovementApi {
+    private val queryStatusSpi: QueryStatusSpi,
+    private val userQueryApplicationSpi: UserQueryApplicationSpi,
+    private val queryClassroomMovementSpi: QueryClassroomMovementSpi,
+
+    ) : ClassroomMovementApi {
 
     override fun saveClassroomMovement(request: DomainClassroomMovementRequest) {
         val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
@@ -45,4 +55,60 @@ class ClassroomMovementUseCase(
             ),
         )
     }
+
+    override fun queryMovementStudentList(
+        grade: Int?,
+        classNum: Int?,
+        floor: Int?,
+        date: LocalDate
+    ): QueryMovementStudentList {
+        val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
+        val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
+        val userList = userQueryApplicationSpi.queryUserInfo(todayMovementStudentIdList)
+        val movementStudent = mutableListOf<MovementStudentElement>()
+        
+
+        if (floor == null) {
+            val moveList = userList.filter {
+                it.grade == grade && it.classNum == classNum
+            }.map {
+                val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
+                val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
+                val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+                MovementStudentElement(
+                    studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
+                    studentName = it.name,
+                    before = "$grade-$classNum",
+                    after = classroom.name
+                )
+            }
+            movementStudent.addAll(moveList)
+        } else {
+            val moveList = userList
+                .map {
+                    val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
+                    val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
+                    val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+                    if (classroom.floor == floor) {
+                        MovementStudentElement(
+                            studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
+                            studentName = it.name,
+                            before = "$grade-$classNum",
+                            after = classroom.name
+                        )
+                    } else {
+                        throw UserNotFoundException // TODO 없을 땐 빈 배열로 보내야하도록 수정
+                    }
+                }
+            movementStudent.addAll(moveList)
+        }
+        return QueryMovementStudentList(movementStudent)
+    }
+
+    private fun checkUserNumLessThanTen(userNum: Int) =
+        if (userNum < 10) {
+            "0$userNum"
+        } else {
+            userNum.toString()
+        }
 }

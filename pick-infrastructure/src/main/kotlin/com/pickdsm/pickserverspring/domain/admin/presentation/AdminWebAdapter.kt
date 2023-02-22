@@ -6,6 +6,9 @@ import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.presentation.dto.requset.CreateAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
+import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
 import org.springframework.http.HttpStatus
@@ -14,9 +17,12 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
+import java.time.LocalDate
 import java.util.UUID
 import javax.validation.Valid
 
@@ -25,6 +31,7 @@ import javax.validation.Valid
 class AdminWebAdapter(
     private val afterSchoolApi: AfterSchoolApi,
     private val clubApi: ClubApi,
+    private val classroomMovementApi: ClassroomMovementApi,
 ) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -69,5 +76,15 @@ class AdminWebAdapter(
             studentIds = request.userIdList,
         )
         afterSchoolApi.createAfterSchoolStudent(domainRequest)
+    }
+
+    @GetMapping("/movement")
+    fun queryMovementStudentList(
+        @RequestParam("grade") grade: Int?,
+        @RequestParam("classNum") classNum: Int?,
+        @RequestParam("floor") floor: Int?,
+        @RequestParam("date") date: LocalDate
+    ): QueryMovementStudentList {
+        return classroomMovementApi.queryMovementStudentList(grade, classNum, floor, date)
     }
 }
