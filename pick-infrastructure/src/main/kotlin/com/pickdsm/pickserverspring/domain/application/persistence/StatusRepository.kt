@@ -10,5 +10,5 @@ import java.util.UUID
 @Repository
 interface StatusRepository : CrudRepository<StatusEntity, UUID> {
 
-    fun findAllByTypeOrTypeAndDate(type: StatusType, type2: StatusType, date: LocalDate): List<StatusEntity>
+    fun findAllByTypeOrTypeAndDate(firstType: StatusType, secondType: StatusType, date: LocalDate): List<StatusEntity>
 }
