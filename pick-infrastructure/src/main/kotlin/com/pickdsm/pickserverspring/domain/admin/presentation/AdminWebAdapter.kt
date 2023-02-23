@@ -123,6 +123,7 @@ class AdminWebAdapter(
     @GetMapping("/state")
     fun getSelfStudyState(): SelfStudyStateResponse {
         return selfStudyDirectorApi.getSelfStudyState()
+    }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/teacher")
@@ -131,11 +132,11 @@ class AdminWebAdapter(
         @Valid
         request: ChangeSelfStudyDirectorRequset,
     ) {
-        val domainRequset = DomainChangeSelfStudyDirectorRequest(
+        val domainRequest = DomainChangeSelfStudyDirectorRequest(
             teacherId = request.teacherId,
             floor = request.floor,
             date = request.date,
         )
-        selfStudyDirectorApi.changeSelfStudyDirector(domainRequset)
+        selfStudyDirectorApi.changeSelfStudyDirector(domainRequest)
     }
 }
