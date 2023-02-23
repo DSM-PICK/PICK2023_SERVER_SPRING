@@ -5,12 +5,14 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyElement
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.TodaySelfStudyTeacherResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.SelfStudyDirectorNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.CommandSelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.UserQuerySelfStudyDirectorSpi
@@ -24,6 +26,7 @@ class SelfStudyDirectorUseCase(
     private val userQuerySelfStudyDirectorSpi: UserQuerySelfStudyDirectorSpi,
     private val queryTypeSpi: QueryTypeSpi,
     private val userSpi: UserSpi,
+    private val commandSelfStudyDirectorSpi: CommandSelfStudyDirectorSpi,
 ) : SelfStudyDirectorApi {
 
     override fun getSelfStudyTeacher(month: String): SelfStudyListResponse {
@@ -88,6 +91,15 @@ class SelfStudyDirectorUseCase(
             date = date,
             name = teacher.name,
             floor = selfStudy.map(SelfStudyDirector::floor),
+        )
+    }
+
+    override fun changeSelfStudyDirector(requset: DomainChangeSelfStudyDirectorRequest) {
+        val selfStudyDirector = querySelfStudyDirectorSpi.querySelfStudyDirectorByDateAndFloor(requset.date, requset.floor)
+            ?: throw SelfStudyDirectorNotFoundException
+
+        commandSelfStudyDirectorSpi.updateSelfStudyDirector(
+            selfStudyDirector.changeSelfStudyDirector(teacherId = requset.teacherId),
         )
     }
 }
