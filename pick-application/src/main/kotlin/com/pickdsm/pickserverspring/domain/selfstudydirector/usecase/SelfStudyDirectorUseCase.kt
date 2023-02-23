@@ -99,7 +99,7 @@ class SelfStudyDirectorUseCase(
             ?: throw SelfStudyDirectorNotFoundException
 
         commandSelfStudyDirectorSpi.updateSelfStudyDirector(
-            selfStudyDirector.changeSelfStudyDirector(teacherId = requset.teacherId)
+            selfStudyDirector.changeSelfStudyDirector(teacherId = requset.teacherId),
         )
     }
 }

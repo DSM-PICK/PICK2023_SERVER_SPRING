@@ -18,7 +18,7 @@ data class SelfStudyDirector(
 ) {
     fun changeSelfStudyDirector(teacherId: UUID): SelfStudyDirector {
         return copy(
-            teacherId = teacherId
+            teacherId = teacherId,
         )
     }
 }

@@ -20,7 +20,7 @@ data class Club(
 ) {
     fun changeClubHead(headId: UUID): Club {
         return copy(
-            headId = headId
+            headId = headId,
         )
     }
 }
