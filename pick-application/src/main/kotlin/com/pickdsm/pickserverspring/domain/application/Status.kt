@@ -27,6 +27,14 @@ data class Status(
             endPeriod = endPeriod,
             type = StatusType.ATTENDANCE,
         )
+    }
 
+    fun changeStatusOfClass(teacherId: UUID, startPeriod: Int, endPeriod: Int, type: StatusType): Status {
+        return copy(
+            teacherId = teacherId,
+            startPeriod = startPeriod,
+            endPeriod = endPeriod,
+            type = type,
+        )
     }
 }
