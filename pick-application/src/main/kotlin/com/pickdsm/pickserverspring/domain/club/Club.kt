@@ -30,11 +30,11 @@ class Club(
 
     fun changeClubStudent(clubId: UUID) =
         Club(
-            id = this.id,
+            id = clubId,
             name = this.name,
             headId = this.headId,
             teacherId = this.teacherId,
             studentId = this.studentId,
-            classroomId = clubId,
+            classroomId = this.classroomId,
         )
 }
