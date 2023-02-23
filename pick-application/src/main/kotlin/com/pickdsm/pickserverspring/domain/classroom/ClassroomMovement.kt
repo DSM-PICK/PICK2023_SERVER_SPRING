@@ -4,7 +4,7 @@ import com.pickdsm.pickserverspring.common.annotation.Aggregate
 import java.util.UUID
 
 @Aggregate
-class ClassroomMovement(
+data class ClassroomMovement(
 
     val id: UUID = UUID.randomUUID(),
 

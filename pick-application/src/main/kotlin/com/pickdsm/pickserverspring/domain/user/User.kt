@@ -3,7 +3,7 @@ package com.pickdsm.pickserverspring.domain.user
 import java.time.LocalDate
 import java.util.UUID
 
-class User(
+data class User(
     val id: UUID,
     val accountId: String,
     val password: String,

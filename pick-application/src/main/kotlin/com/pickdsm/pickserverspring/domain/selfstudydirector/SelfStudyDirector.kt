@@ -4,7 +4,7 @@ import com.pickdsm.pickserverspring.common.annotation.Aggregate
 import java.util.UUID
 
 @Aggregate
-class SelfStudyDirector(
+data class SelfStudyDirector(
 
     val id: UUID = UUID.randomUUID(),
 
@@ -16,13 +16,9 @@ class SelfStudyDirector(
 
     val typeId: UUID,
 ) {
-
-    fun changeSelfStudyDirector(teacherId: UUID) =
-        SelfStudyDirector(
-            id = id,
-            floor = floor,
-            teacherId = teacherId,
-            restrictionMovement = restrictionMovement,
-            typeId = typeId,
+    fun changeSelfStudyDirector(teacherId: UUID): SelfStudyDirector {
+        return copy(
+            teacherId = teacherId
         )
+    }
 }

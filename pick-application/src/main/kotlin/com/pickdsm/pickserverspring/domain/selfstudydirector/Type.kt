@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Aggregate
-class Type(
+data class Type(
 
     val id: UUID = UUID.randomUUID(),
 
