@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.admin.presentation
 
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
@@ -13,6 +14,7 @@ import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -113,5 +115,20 @@ class AdminWebAdapter(
             clubId = request.clubId,
         )
         clubApi.changeClubStudent(domainRequest)
+    }
+    
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/teacher")
+    fun changeSelfStudyDirector(
+        @RequestBody
+        @Valid
+        request: ChangeSelfStudyDirectorRequset,
+    ) {
+        val domainRequset = DomainChangeSelfStudyDirectorRequest(
+            teacherId = request.teacherId,
+            floor = request.floor,
+            date = request.date,
+        )
+        selfStudyDirectorApi.changeSelfStudyDirector(domainRequset)
     }
 }

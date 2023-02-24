@@ -4,7 +4,7 @@ import com.pickdsm.pickserverspring.common.annotation.Aggregate
 import java.util.UUID
 
 @Aggregate
-class Club(
+data class Club(
 
     val id: UUID = UUID.randomUUID(),
 
@@ -18,15 +18,11 @@ class Club(
 
     val classroomId: UUID,
 ) {
-    fun changeClubHead(headId: UUID) =
-        Club(
-            id = this.id,
-            name = this.name,
+    fun changeClubHead(headId: UUID): Club {
+        return copy(
             headId = headId,
-            teacherId = this.teacherId,
-            studentId = this.studentId,
-            classroomId = this.classroomId,
         )
+    }
 
     fun changeClubStudent(clubId: UUID) =
         Club(
