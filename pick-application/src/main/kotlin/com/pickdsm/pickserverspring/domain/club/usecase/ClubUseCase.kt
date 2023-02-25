@@ -30,7 +30,7 @@ class ClubUseCase(
             ?: throw ClubNotFoundException
 
         commandClubSpi.saveClub(
-            club.changeClubStudent(clubId = request.clubId, studentId = request.studentId)
+            club.changeClubStudent(clubId = request.clubId, studentId = request.studentId),
         )
     }
 }

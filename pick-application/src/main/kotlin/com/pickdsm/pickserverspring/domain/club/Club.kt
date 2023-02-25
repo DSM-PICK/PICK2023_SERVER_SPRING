@@ -27,7 +27,7 @@ data class Club(
     fun changeClubStudent(clubId: UUID, studentId: UUID): Club {
         return copy(
             id = clubId,
-            studentId = studentId
+            studentId = studentId,
         )
     }
 }
