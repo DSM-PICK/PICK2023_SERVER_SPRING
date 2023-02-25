@@ -24,13 +24,10 @@ data class Club(
         )
     }
 
-    fun changeClubStudent(clubId: UUID) =
-        Club(
+    fun changeClubStudent(clubId: UUID, studentId: UUID): Club {
+        return copy(
             id = clubId,
-            name = this.name,
-            headId = this.headId,
-            teacherId = this.teacherId,
-            studentId = this.studentId,
-            classroomId = this.classroomId,
+            studentId = studentId
         )
+    }
 }
