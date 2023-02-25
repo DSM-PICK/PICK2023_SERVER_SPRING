@@ -12,7 +12,7 @@ interface QueryStatusSpi {
 
     fun queryAwaitStudentListByToday(date: LocalDate): List<Status>
 
-    fun queryStudentInfoByToday(): List<Status>
+    fun queryStatusListByToday(): List<Status>
 
     fun queryPicnicStudentByStudentId(studentId: UUID): Status?
 }
