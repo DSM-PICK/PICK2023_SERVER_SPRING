@@ -37,4 +37,12 @@ data class Status(
             type = type,
         )
     }
+
+    fun changePicnicStatus(studentId: UUID, teacherId: UUID, type: StatusType): Status {
+        return copy(
+            studentId = studentId,
+            teacherId = teacherId,
+            type = type
+        )
+    }
 }
