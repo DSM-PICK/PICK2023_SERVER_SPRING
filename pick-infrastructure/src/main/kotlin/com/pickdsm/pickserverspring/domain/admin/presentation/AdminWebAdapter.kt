@@ -3,6 +3,7 @@ package com.pickdsm.pickserverspring.domain.admin.presentation
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTodayTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
@@ -27,8 +28,10 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 import java.util.UUID
 import javax.validation.Valid
 
@@ -138,5 +141,12 @@ class AdminWebAdapter(
             date = request.date,
         )
         selfStudyDirectorApi.changeSelfStudyDirector(domainRequest)
+    }
+
+    @GetMapping
+    fun queryTypeByDate(
+        @RequestParam date: LocalDate,
+    ): QueryTodayTypeResponse {
+       return adminApi.queryTypeByDate(date)
     }
 }
