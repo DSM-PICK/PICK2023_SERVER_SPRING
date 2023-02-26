@@ -1,14 +1,11 @@
 package com.pickdsm.pickserverspring.domain.admin.presentation
 
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
-import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
-import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTodayTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.UpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfterSchoolStudentRequest
@@ -32,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 import javax.validation.Valid
 
 @RequestMapping("/admin")
@@ -73,24 +70,6 @@ class AdminWebAdapter(
         clubApi.changeClubHead(domainRequest)
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/class")
-    fun updateStudentStatusOfClass(
-        @RequestBody
-        @Valid
-        request: UpdateStudentStatusOfClassRequest,
-    ) {
-        val domainRequest = DomainUpdateStudentStatusOfClassRequest(
-            userList = request.userList.map {
-                DomainUpdateStudentElement(
-                    userId = it.userId,
-                    status = it.status,
-                )
-            },
-        )
-        adminApi.updateStudentStatusOfClass(domainRequest)
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{after-school-id}")
     fun createAfterSchoolStudent(
@@ -105,6 +84,11 @@ class AdminWebAdapter(
             studentIds = request.userIdList,
         )
         afterSchoolApi.createAfterSchoolStudent(domainRequest)
+    }
+
+    @GetMapping("/state")
+    fun getSelfStudyState(): SelfStudyStateResponse {
+        return selfStudyDirectorApi.getSelfStudyState()
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -123,11 +107,6 @@ class AdminWebAdapter(
         applicationApi.savePicnicPass(domainRequest)
     }
 
-    @GetMapping("/state")
-    fun getSelfStudyState(): SelfStudyStateResponse {
-        return selfStudyDirectorApi.getSelfStudyState()
-    }
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/teacher")
     fun changeSelfStudyDirector(
@@ -135,18 +114,18 @@ class AdminWebAdapter(
         @Valid
         request: ChangeSelfStudyDirectorRequset,
     ) {
-        val domainRequest = DomainChangeSelfStudyDirectorRequest(
+        val domainRequset = DomainChangeSelfStudyDirectorRequest(
             teacherId = request.teacherId,
             floor = request.floor,
             date = request.date,
         )
-        selfStudyDirectorApi.changeSelfStudyDirector(domainRequest)
+        selfStudyDirectorApi.changeSelfStudyDirector(domainRequset)
     }
 
     @GetMapping
-    fun queryTypeByDate(
+    fun queryTypeByToday(
         @RequestParam date: LocalDate,
     ): QueryTodayTypeResponse {
-       return adminApi.queryTypeByDate(date)
+        return adminApi.queryTypeByDate(date)
     }
 }
