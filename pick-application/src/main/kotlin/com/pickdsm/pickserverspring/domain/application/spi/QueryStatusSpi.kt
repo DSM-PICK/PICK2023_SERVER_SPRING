@@ -14,5 +14,9 @@ interface QueryStatusSpi {
 
     fun queryStatusListByToday(): List<Status>
 
+    fun queryStatusListByDate(date: LocalDate): List<Status>
+
+    fun queryStudentStatusByDateAndOrderByStartPeriod(date: LocalDate): List<Status>
+
     fun queryPicnicStudentByStudentId(studentId: UUID): Status?
 }
