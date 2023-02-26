@@ -63,7 +63,7 @@ class StatusPersistenceAdapter(
             .fetch()
             .map(statusMapper::entityToDomain)
 
-    override fun queryStudentInfoByToday(): List<Status> =
+    override fun queryStatusListByToday(): List<Status> =
         jpaQueryFactory
             .selectFrom(statusEntity)
             .where(statusEntity.date.eq(LocalDate.now()))

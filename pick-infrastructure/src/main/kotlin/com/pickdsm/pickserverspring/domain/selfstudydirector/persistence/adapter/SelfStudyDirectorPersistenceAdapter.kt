@@ -61,4 +61,25 @@ class SelfStudyDirectorPersistenceAdapter(
 
         return selfStudyDirectorMapper.entityToDomain(selfStudyDirectorEntity)
     }
+        
+    override fun querySelfStudyDirectorByDateAndFloor(date: LocalDate, floor: Int): SelfStudyDirector? {
+        val selfStudyDirectorEntity = jpaQueryFactory
+            .selectFrom(selfStudyDirectorEntity)
+            .innerJoin(selfStudyDirectorEntity.typeEntity, typeEntity)
+            .on(selfStudyDirectorEntity.typeEntity.id.eq(typeEntity.id))
+            .where(
+                typeEntity.date.eq(date),
+                selfStudyDirectorEntity.floor.eq(floor),
+            )
+            .fetchOne()
+        return selfStudyDirectorEntity?.let(selfStudyDirectorMapper::entityToDomain)
+    }
+
+    override fun updateSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
+        jpaQueryFactory
+            .update(selfStudyDirectorEntity)
+            .set(selfStudyDirectorEntity.teacherId, selfStudyDirector.teacherId)
+            .where(selfStudyDirectorEntity.floor.eq(selfStudyDirector.floor))
+            .execute()
+    }
 }

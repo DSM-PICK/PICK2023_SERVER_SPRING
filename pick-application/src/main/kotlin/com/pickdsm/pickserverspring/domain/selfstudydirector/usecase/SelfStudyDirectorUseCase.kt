@@ -7,6 +7,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyElement
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
@@ -105,5 +106,14 @@ class SelfStudyDirectorUseCase(
         val statusList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
         
         commandStatusSpi.deleteAllMovementStudent(statusList)
+    }
+
+    override fun changeSelfStudyDirector(requset: DomainChangeSelfStudyDirectorRequest) {
+        val selfStudyDirector = querySelfStudyDirectorSpi.querySelfStudyDirectorByDateAndFloor(requset.date, requset.floor)
+            ?: throw SelfStudyDirectorNotFoundException
+
+        commandSelfStudyDirectorSpi.updateSelfStudyDirector(
+            selfStudyDirector.changeSelfStudyDirector(teacherId = requset.teacherId),
+        )
     }
 }
