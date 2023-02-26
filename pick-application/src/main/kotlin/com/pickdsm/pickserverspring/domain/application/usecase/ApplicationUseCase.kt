@@ -241,7 +241,7 @@ class ApplicationUseCase(
                     status.changePicnicStatus(
                         studentId = user.id,
                         teacherId = teacherId,
-                        type = StatusType.PICNIC
+                        type = StatusType.PICNIC,
                     )
                 }
 
@@ -258,7 +258,7 @@ class ApplicationUseCase(
                     status.changePicnicStatus(
                         studentId = user.id,
                         teacherId = teacherId,
-                        type = StatusType.PICNIC_REJECT
+                        type = StatusType.PICNIC_REJECT,
                     )
                 }
 
