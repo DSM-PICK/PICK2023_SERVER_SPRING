@@ -104,7 +104,7 @@ class SelfStudyDirectorUseCase(
 
         commandSelfStudyDirectorSpi.setRestrictionMovementTrue(teacher)
         val statusList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
-        
+
         commandStatusSpi.deleteAllMovementStudent(statusList)
     }
 

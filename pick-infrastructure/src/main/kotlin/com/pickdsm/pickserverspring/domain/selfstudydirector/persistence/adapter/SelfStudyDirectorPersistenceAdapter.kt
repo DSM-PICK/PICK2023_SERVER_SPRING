@@ -61,7 +61,7 @@ class SelfStudyDirectorPersistenceAdapter(
 
         return selfStudyDirectorMapper.entityToDomain(selfStudyDirectorEntity)
     }
-        
+
     override fun querySelfStudyDirectorByDateAndFloor(date: LocalDate, floor: Int): SelfStudyDirector? {
         val selfStudyDirectorEntity = jpaQueryFactory
             .selectFrom(selfStudyDirectorEntity)
