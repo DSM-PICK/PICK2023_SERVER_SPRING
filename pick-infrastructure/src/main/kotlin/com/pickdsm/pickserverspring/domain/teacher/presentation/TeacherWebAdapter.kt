@@ -96,8 +96,8 @@ class TeacherWebAdapter(
     @PatchMapping("/status")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun picnicAcceptOrRefuse(
-        @Valid
         @RequestBody
+        @Valid
         request: PicnicAcceptOrRefuseRequest,
     ) {
         val domainRequest = DomainPicnicAcceptOrRefuseRequest(
