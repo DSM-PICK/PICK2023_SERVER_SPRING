@@ -223,6 +223,12 @@ class ApplicationUseCase(
             }
         }
 
+        outing.sortedWith(
+            compareBy(QueryPicnicApplicationElement::endTime)
+                .thenBy(QueryPicnicApplicationElement::startTime)
+                .thenBy(QueryPicnicApplicationElement::studentNumber),
+        )
+
         return QueryPicnicApplicationList(outing)
 
     }
