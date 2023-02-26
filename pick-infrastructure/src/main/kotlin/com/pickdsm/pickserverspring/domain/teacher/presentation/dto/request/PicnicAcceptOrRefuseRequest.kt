@@ -6,9 +6,9 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 data class PicnicAcceptOrRefuseRequest(
-    @field: NotBlank
+    @field:NotBlank
     val type: StatusType,
 
-    @field: NotNull
+    @field:NotNull
     val userIdList: List<UUID>,
 )
