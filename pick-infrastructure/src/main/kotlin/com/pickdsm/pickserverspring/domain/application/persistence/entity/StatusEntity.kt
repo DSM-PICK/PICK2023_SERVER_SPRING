@@ -23,22 +23,29 @@ class StatusEntity(
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     val teacherId: UUID,
 
-    @Column(columnDefinition = "DATE", nullable = false)
-    val date: LocalDate,
-
     @Column(columnDefinition = "INT", nullable = false)
     val startPeriod: Int,
 
     @Column(columnDefinition = "INT", nullable = false)
     val endPeriod: Int,
 
+    date: LocalDate,
+
     type: StatusType,
 
 ) : BaseUUIDEntity(id) {
 
+    @Column(columnDefinition = "DATE", nullable = false)
+    var date = date
+        protected set
+
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(13)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(16)", nullable = false)
     @ColumnDefault("'ATTENDANCE'")
     var type = type
         protected set
+
+    fun changeStatusDate() {
+        this.date = LocalDate.now().plusDays(1L)
+    }
 }

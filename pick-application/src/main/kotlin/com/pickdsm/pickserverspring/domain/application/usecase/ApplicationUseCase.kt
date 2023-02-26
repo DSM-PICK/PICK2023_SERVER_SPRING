@@ -260,7 +260,7 @@ class ApplicationUseCase(
     }
 
     override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID, type: String): QueryStudentStatusList {
-        val todayStudentStatusList = queryStatusSpi.queryStudentInfoByToday()
+        val todayStudentStatusList = queryStatusSpi.queryStatusListByToday()
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
         val grade = classroom.grade ?: throw ClassroomNotFoundException // TODO grade랑 classNum으로 학생 리스트를 가져와서 에러처리했습니다.
         val classNum = classroom.classNum ?: throw ClassroomNotFoundException // TODO 우선 에러처리
