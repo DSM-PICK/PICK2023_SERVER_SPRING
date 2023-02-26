@@ -99,4 +99,10 @@ class AdminWebAdapter(
         )
         applicationApi.savePicnicPass(domainRequest)
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping
+    fun blockMoveClassroom() {
+        selfStudyDirectorApi.blockMoveClassroom()
+    }
 }

@@ -1,6 +1,8 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
+import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
+import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
@@ -11,6 +13,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.Se
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.TodaySelfStudyTeacherResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.SelfStudyDirectorNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.CommandSelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.UserQuerySelfStudyDirectorSpi
@@ -24,6 +27,9 @@ class SelfStudyDirectorUseCase(
     private val userQuerySelfStudyDirectorSpi: UserQuerySelfStudyDirectorSpi,
     private val queryTypeSpi: QueryTypeSpi,
     private val userSpi: UserSpi,
+    private val commandSelfStudyDirectorSpi: CommandSelfStudyDirectorSpi,
+    private val queryStatusSpi: QueryStatusSpi,
+    private val commandStatusSpi: CommandStatusSpi,
 ) : SelfStudyDirectorApi {
 
     override fun getSelfStudyTeacher(month: String): SelfStudyListResponse {
@@ -89,5 +95,15 @@ class SelfStudyDirectorUseCase(
             name = teacher.name,
             floor = selfStudy.map(SelfStudyDirector::floor),
         )
+    }
+
+    override fun blockMoveClassroom() {
+        val teacherId = userSpi.getCurrentUserId()
+        val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorById(teacherId)
+
+        commandSelfStudyDirectorSpi.setRestrictionMovementTrue(teacher)
+        val statusList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
+        
+        commandStatusSpi.deleteAllMovementStudent(statusList)
     }
 }

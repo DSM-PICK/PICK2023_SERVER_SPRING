@@ -1,7 +1,9 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
+import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.SelfStudyDirectorNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.mapper.SelfStudyDirectorMapper
+import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.SelfStudyDirectorRepository
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QSelfStudyDirectorEntity.selfStudyDirectorEntity
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QTypeEntity.typeEntity
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.SelfStudyDirectorSpi
@@ -12,9 +14,14 @@ import java.util.*
 
 @Adapter
 class SelfStudyDirectorPersistenceAdapter(
+    private val selfStudyDirectorRepository: SelfStudyDirectorRepository,
     private val selfStudyDirectorMapper: SelfStudyDirectorMapper,
     private val jpaQueryFactory: JPAQueryFactory,
 ) : SelfStudyDirectorSpi {
+    override fun setRestrictionMovementTrue(selfStudyDirector: SelfStudyDirector) {
+        val selfStudyDirectorEntity = selfStudyDirectorMapper.domainToEntity(selfStudyDirector)
+        selfStudyDirectorEntity.setRestrictionMovementTrue()
+    }
 
     override fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector> =
         jpaQueryFactory
@@ -47,4 +54,11 @@ class SelfStudyDirectorPersistenceAdapter(
             .orderBy(selfStudyDirectorEntity.floor.asc())
             .fetch()
             .map(selfStudyDirectorMapper::entityToDomain)
+
+    override fun querySelfStudyDirectorById(teacherId: UUID): SelfStudyDirector {
+        val selfStudyDirectorEntity = selfStudyDirectorRepository.findSelfStudyDirectorEntityById(teacherId)
+            ?: throw SelfStudyDirectorNotFoundException
+
+        return selfStudyDirectorMapper.entityToDomain(selfStudyDirectorEntity)
+    }
 }

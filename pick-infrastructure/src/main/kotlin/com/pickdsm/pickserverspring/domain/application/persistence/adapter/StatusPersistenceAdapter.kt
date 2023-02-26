@@ -9,7 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.StatusSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @Adapter
 class StatusPersistenceAdapter(
@@ -32,6 +32,14 @@ class StatusPersistenceAdapter(
         val statusEntity = statusMapper.domainToEntity(status)
         val saveStatus = statusRepository.save(statusEntity)
         return saveStatus.id
+    }
+
+    override fun deleteAllMovementStudent(statusList: List<Status>) {
+        val statusEntityList = statusList.stream()
+            .map { statusMapper.domainToEntity(it) }
+            .toList()
+
+        statusRepository.deleteAll(statusEntityList)
     }
 
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> =

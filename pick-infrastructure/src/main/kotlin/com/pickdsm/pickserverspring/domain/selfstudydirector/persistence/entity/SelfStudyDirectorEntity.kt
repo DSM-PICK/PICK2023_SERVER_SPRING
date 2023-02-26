@@ -26,8 +26,16 @@ class SelfStudyDirectorEntity(
     @JoinColumn(name = "type_id", columnDefinition = "BINARY(16)", nullable = false)
     val typeEntity: TypeEntity,
 
+     restrictionMovement: Boolean,
+
+) : BaseUUIDEntity(id) {
+
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     @ColumnDefault("false")
-    val restrictionMovement: Boolean,
+    var restrictionMovement = restrictionMovement
+        protected set
 
-) : BaseUUIDEntity(id)
+    fun setRestrictionMovementTrue() {
+        this.restrictionMovement = true
+    }
+}

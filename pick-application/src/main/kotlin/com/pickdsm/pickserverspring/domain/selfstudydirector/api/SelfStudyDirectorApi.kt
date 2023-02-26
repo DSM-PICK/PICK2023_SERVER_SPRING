@@ -11,4 +11,6 @@ interface SelfStudyDirectorApi {
     fun getTodaySelfStudyTeacher(): TodaySelfStudyTeacherResponse
 
     fun getSelfStudyState(): SelfStudyStateResponse
+
+    fun blockMoveClassroom()
 }
