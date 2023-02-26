@@ -13,6 +13,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFo
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
+import java.time.LocalDate
 
 @ReadOnlyUseCase
 class ClassroomUseCase(
@@ -86,7 +87,7 @@ class ClassroomUseCase(
         val teacherId = userSpi.getCurrentUserId()
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)
             ?: throw FloorNotFoundException
-        val todayType = queryTypeSpi.queryTypeByToday()
+        val todayType = queryTypeSpi.queryTypeByToday(LocalDate.now())
         val classrooms = mutableListOf<ClassroomElement>()
 
         when (todayType?.type?.name) {

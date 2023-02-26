@@ -29,10 +29,10 @@ class TypePersistenceAdapter(
         typeRepository.findTypeEntityById(typeId)
             ?: throw TypeNotFoundException
 
-    override fun queryTypeByToday(): Type? =
+    override fun queryTypeByToday(date: LocalDate): Type? =
         jpaQueryFactory
             .selectFrom(typeEntity)
-            .where(typeEntity.date.eq(LocalDate.now()))
+            .where(typeEntity.date.eq(date))
             .fetchOne()
             ?.let(typeMapper::entityToDomain)
 }
