@@ -230,8 +230,7 @@ class ApplicationUseCase(
         val userList = userSpi.queryUserInfo(request.userIdList)
         val todayAwaitStatusList = queryStatusSpi.queryAwaitStudentListByToday(LocalDate.now())
 
-        when(request.type) {
-
+        when (request.type) {
             StatusType.PICNIC -> {
                 val statusList = request.userIdList.map {
                     val user = userList.find { user -> user.id == it }
