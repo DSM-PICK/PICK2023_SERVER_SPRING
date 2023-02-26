@@ -121,7 +121,7 @@ class AdminWebAdapter(
         )
         selfStudyDirectorApi.changeSelfStudyDirector(domainRequset)
     }
-
+    
     @GetMapping
     fun queryTypeByToday(
         @RequestParam date: LocalDate,
