@@ -93,7 +93,7 @@ class TeacherWebAdapter(
         return applicationApi.queryAllStudentStatusByClassroomAndType(classroomId, type)
     }
 
-    @PostMapping("/status")
+    @PatchMapping("/status")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun picnicAcceptOrRefuse(
         @Valid
