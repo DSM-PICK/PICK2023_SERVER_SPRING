@@ -3,7 +3,6 @@ package com.pickdsm.pickserverspring.domain.teacher.presentation
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
-import com.pickdsm.pickserverspring.domain.application.presentation.Request
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
@@ -34,7 +33,6 @@ class TeacherWebAdapter(
     private val teacherApi: TeacherApi,
     private val applicationApi: ApplicationApi,
     private val classroomApi: ClassroomApi,
-    private val clubApi: ClubApi
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -79,7 +77,7 @@ class TeacherWebAdapter(
         @RequestParam grade: String?,
         @RequestParam classNum: String?,
         @RequestParam floor: Int?,
-        @RequestParam type: DirectorType
+        @RequestParam type: DirectorType,
     ): QueryPicnicApplicationList {
         return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum, floor, type)
     }

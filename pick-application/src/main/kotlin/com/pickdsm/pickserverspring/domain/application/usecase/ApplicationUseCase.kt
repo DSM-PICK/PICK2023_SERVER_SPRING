@@ -42,7 +42,7 @@ class ApplicationUseCase(
     private val queryClassroomMovementSpi: QueryClassroomMovementSpi,
     private val queryClassroomSpi: QueryClassroomSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
-    private val queryClubSpi: QueryClubSpi
+    private val queryClubSpi: QueryClubSpi,
 ) : ApplicationApi {
 
     companion object {

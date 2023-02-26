@@ -12,7 +12,6 @@ import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.bouncycastle.asn1.x500.style.RFC4519Style.c
 import java.util.UUID
 
 @Adapter
