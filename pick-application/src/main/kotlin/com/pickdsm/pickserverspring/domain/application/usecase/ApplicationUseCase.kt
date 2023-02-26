@@ -23,7 +23,6 @@ import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationS
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
-import com.pickdsm.pickserverspring.domain.club.Club
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
@@ -232,6 +231,7 @@ class ApplicationUseCase(
         val todayAwaitStatusList = queryStatusSpi.queryAwaitStudentListByToday(LocalDate.now())
 
         when(request.type) {
+
             StatusType.PICNIC -> {
                 val statusList = request.userIdList.map {
                     val user = userList.find { user -> user.id == it }

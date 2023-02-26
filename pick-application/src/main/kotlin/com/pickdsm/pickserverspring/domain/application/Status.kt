@@ -42,7 +42,7 @@ data class Status(
         return copy(
             studentId = studentId,
             teacherId = teacherId,
-            type = type
+            type = type,
         )
     }
 }

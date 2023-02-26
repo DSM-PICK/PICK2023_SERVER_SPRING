@@ -98,7 +98,7 @@ class TeacherWebAdapter(
     fun picnicAcceptOrRefuse(
         @Valid
         @RequestBody
-        request: PicnicAcceptOrRefuseRequest
+        request: PicnicAcceptOrRefuseRequest,
     ) {
         val domainRequest = DomainPicnicAcceptOrRefuseRequest(
             type = request.type,
