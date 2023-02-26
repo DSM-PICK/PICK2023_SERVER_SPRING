@@ -6,6 +6,7 @@ import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
@@ -14,6 +15,7 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
 import com.pickdsm.pickserverspring.domain.application.exception.ApplicationNotFoundException
+import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
@@ -21,6 +23,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationS
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
+import com.pickdsm.pickserverspring.domain.club.Club
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
@@ -205,6 +208,7 @@ class ApplicationUseCase(
     override fun savePicnicPass(request: DomainPicnicPassRequest) {
         val teacherId = userSpi.getCurrentUserId()
         val userList = userSpi.queryUserInfo(request.userIdList)
+        val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
 
         val statusList = request.userIdList.map {
             val user = userList.find { user -> user.id == it }
@@ -220,6 +224,40 @@ class ApplicationUseCase(
         }
 
         statusCommandTeacherSpi.saveAllStatus(statusList)
+    }
+
+    override fun savePicnicAcceptOrRefuse(request: DomainPicnicAcceptOrRefuseRequest) {
+        val teacherId = userSpi.getCurrentUserId()
+        val userList = userSpi.queryUserInfo(request.userIdList)
+        val todayAwaitStatusList = queryStatusSpi.queryAwaitStudentListByToday(LocalDate.now())
+
+        when(request.type) {
+            StatusType.PICNIC -> {
+                val statusList = request.userIdList.map {
+                    val user = userList.find { user -> user.id == it }
+                        ?: throw UserNotFoundException
+                    val status = todayAwaitStatusList.find { user.id == it.studentId }
+                        ?: throw StatusNotFoundException
+
+                    status.changePicnicStatus(user.id, teacherId, StatusType.PICNIC)
+                }
+
+                statusCommandTeacherSpi.saveAllStatus(statusList)
+            }
+
+            StatusType.PICNIC_REJECT -> {
+                val statusList = request.userIdList.map {
+                    val user = userList.find { user -> user.id == it }
+                        ?: throw UserNotFoundException
+                    val status = todayAwaitStatusList.find { user.id == it.studentId }
+                        ?: throw StatusNotFoundException
+
+                    status.changePicnicStatus(user.id, teacherId, StatusType.PICNIC_REJECT)
+                }
+
+                statusCommandTeacherSpi.saveAllStatus(statusList)
+            }
+        }
     }
 
     private fun movementStudent(status: Status?): String {
