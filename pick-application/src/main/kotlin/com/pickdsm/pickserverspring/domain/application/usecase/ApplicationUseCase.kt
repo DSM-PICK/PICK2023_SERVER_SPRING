@@ -238,7 +238,11 @@ class ApplicationUseCase(
                     val status = todayAwaitStatusList.find { user.id == it.studentId }
                         ?: throw StatusNotFoundException
 
-                    status.changePicnicStatus(user.id, teacherId, StatusType.PICNIC)
+                    status.changePicnicStatus(
+                        studentId = user.id,
+                        teacherId = teacherId,
+                        type = StatusType.PICNIC
+                    )
                 }
 
                 statusCommandTeacherSpi.saveAllStatus(statusList)
@@ -251,7 +255,11 @@ class ApplicationUseCase(
                     val status = todayAwaitStatusList.find { user.id == it.studentId }
                         ?: throw StatusNotFoundException
 
-                    status.changePicnicStatus(user.id, teacherId, StatusType.PICNIC_REJECT)
+                    status.changePicnicStatus(
+                        studentId = user.id,
+                        teacherId = teacherId,
+                        type = StatusType.PICNIC_REJECT
+                    )
                 }
 
                 statusCommandTeacherSpi.saveAllStatus(statusList)
