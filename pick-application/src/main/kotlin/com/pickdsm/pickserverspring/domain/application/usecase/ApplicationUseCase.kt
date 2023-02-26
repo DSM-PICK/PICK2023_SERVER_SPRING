@@ -83,7 +83,7 @@ class ApplicationUseCase(
 
         val outing = mutableListOf<QueryPicnicApplicationElement>()
 
-        when(type) {
+        when (type) {
             DirectorType.SELF_STUDY -> {
                 when {
                     floor == null -> {
@@ -218,7 +218,6 @@ class ApplicationUseCase(
                             outing.add(picnicApplications)
                         }
                     }
-
                 }
             }
         }
@@ -230,7 +229,6 @@ class ApplicationUseCase(
         )
 
         return QueryPicnicApplicationList(outing)
-
     }
 
     override fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
