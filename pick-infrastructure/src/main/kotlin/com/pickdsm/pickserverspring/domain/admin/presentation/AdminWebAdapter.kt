@@ -3,14 +3,15 @@ package com.pickdsm.pickserverspring.domain.admin.presentation
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.UpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
-import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainCreateAfterSchoolStudentRequest
-import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainCreateAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainDeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.presentation.dto.requset.CreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
@@ -19,6 +20,7 @@ import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequ
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.RequestParam
+import java.time.LocalDate
 import java.util.UUID
 import javax.validation.Valid
 
@@ -123,6 +127,17 @@ class AdminWebAdapter(
     @GetMapping("/state")
     fun getSelfStudyState(): SelfStudyStateResponse {
         return selfStudyDirectorApi.getSelfStudyState()
+    }
+
+    @GetMapping("/attendance/{classroom-id}")
+    fun getStudentAttendanceList(
+        @PathVariable("classroom-id")
+        classroomId: UUID,
+        @RequestParam
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate,
+    ): QueryStudentAttendanceList {
+        return adminApi.getStudentAttendanceList(classroomId, date)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
