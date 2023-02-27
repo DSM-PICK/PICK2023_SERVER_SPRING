@@ -13,5 +13,6 @@ data class Time(
         val period: Int,
         val startTime: LocalTime,
         val endTime: LocalTime,
+        val periodType: String,
     )
 }

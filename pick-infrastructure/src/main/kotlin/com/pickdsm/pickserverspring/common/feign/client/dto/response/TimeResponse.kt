@@ -17,5 +17,6 @@ data class TimeResponse(
         val period: Int,
         val beginTime: LocalTime,
         val endTime: LocalTime,
+        val periodType: String,
     )
 }
