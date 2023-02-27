@@ -204,7 +204,7 @@ class AdminUseCase(
             studentList = students,
         )
     }
-        
+
     override fun getTypeByDate(date: LocalDate): QueryTypeResponse {
         val type = queryTypeSpi.queryTypeByDate(date)
             ?: throw StatusNotFoundException
@@ -214,7 +214,7 @@ class AdminUseCase(
             type = type.type,
         )
     }
-    
+
      private fun getStatusByStartPeriodAndEndPeriod(
         statusList: List<Status>,
         statusPeriod: Int,

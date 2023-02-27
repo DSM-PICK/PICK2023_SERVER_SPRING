@@ -43,7 +43,7 @@ class TypePersistenceAdapter(
             .from(typeEntity)
             .where(typeEntity.date.eq(date))
             .fetchOne()
-            
+    
     override fun queryTypeByDate(date: LocalDate): Type? =
         jpaQueryFactory
             .selectFrom(typeEntity)
