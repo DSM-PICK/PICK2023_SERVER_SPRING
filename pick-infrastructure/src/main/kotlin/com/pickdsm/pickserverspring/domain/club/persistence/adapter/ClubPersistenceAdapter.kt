@@ -10,7 +10,7 @@ import com.pickdsm.pickserverspring.domain.club.persistence.vo.QueryClubRoomVO
 import com.pickdsm.pickserverspring.domain.club.spi.ClubSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class ClubPersistenceAdapter(

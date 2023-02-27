@@ -23,7 +23,7 @@ import com.pickdsm.pickserverspring.domain.time.spi.QueryTimeSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @UseCase
 class AdminUseCase(
@@ -178,7 +178,7 @@ class AdminUseCase(
                         val classroomStatus = getStatusByStartPeriodAndEndPeriod(
                             statusList = classroomStatusList,
                             statusPeriod = i,
-                            userId = user.id
+                            userId = user.id,
                         )
 
                         awaitOrPicnicRejectChangeToAttendance(
@@ -210,8 +210,7 @@ class AdminUseCase(
         userId: UUID,
     ): StatusType =
         statusList.find {
-            it.startPeriod <= statusPeriod && it.endPeriod >= statusPeriod
-                    && it.studentId == userId
+            it.startPeriod <= statusPeriod && it.endPeriod >= statusPeriod && it.studentId == userId
         }?.type ?: StatusType.ATTENDANCE
 
     private fun awaitOrPicnicRejectChangeToAttendance(

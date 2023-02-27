@@ -11,6 +11,6 @@ data class QueryStudentAttendanceList(
         val studentId: UUID,
         val studentNumber: String,
         val studentName: String,
-        val typeList: List<StatusType>
+        val typeList: List<StatusType>,
     )
 }
