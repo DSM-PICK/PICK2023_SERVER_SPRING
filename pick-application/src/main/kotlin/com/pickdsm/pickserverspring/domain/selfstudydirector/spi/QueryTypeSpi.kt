@@ -10,5 +10,7 @@ interface QueryTypeSpi {
 
     fun queryTypeById(typeId: UUID): Type
 
-    fun queryTypeByToday(date: LocalDate): Type?
+    fun queryTypeByToday(): Type?
+
+    fun queryTypeByDate(date: LocalDate): Type?
 }
