@@ -3,6 +3,7 @@ package com.pickdsm.pickserverspring.domain.admin.presentation
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
@@ -20,6 +21,7 @@ import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentR
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,8 +30,10 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 import java.util.UUID
 import javax.validation.Valid
 
@@ -105,6 +109,11 @@ class AdminWebAdapter(
         afterSchoolApi.createAfterSchoolStudent(domainRequest)
     }
 
+    @GetMapping("/state")
+    fun getSelfStudyState(): SelfStudyStateResponse {
+        return selfStudyDirectorApi.getSelfStudyState()
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/picnic")
     fun savePassIssued(
@@ -119,11 +128,6 @@ class AdminWebAdapter(
             endPeriod = request.endPeriod,
         )
         applicationApi.savePicnicPass(domainRequest)
-    }
-
-    @GetMapping("/state")
-    fun getSelfStudyState(): SelfStudyStateResponse {
-        return selfStudyDirectorApi.getSelfStudyState()
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -153,5 +157,14 @@ class AdminWebAdapter(
             date = request.date,
         )
         selfStudyDirectorApi.changeSelfStudyDirector(domainRequest)
+    }
+
+    @GetMapping
+    fun getTypeByToday(
+        @RequestParam
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate,
+    ): QueryTypeResponse {
+        return adminApi.getTypeByDate(date)
     }
 }

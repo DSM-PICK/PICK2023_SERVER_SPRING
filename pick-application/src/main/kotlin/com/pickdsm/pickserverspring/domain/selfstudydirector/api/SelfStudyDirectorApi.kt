@@ -13,5 +13,5 @@ interface SelfStudyDirectorApi {
 
     fun getSelfStudyState(): SelfStudyStateResponse
 
-    fun changeSelfStudyDirector(requset: DomainChangeSelfStudyDirectorRequest)
+    fun changeSelfStudyDirector(request: DomainChangeSelfStudyDirectorRequest)
 }
