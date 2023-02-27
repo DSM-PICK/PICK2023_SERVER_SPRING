@@ -2,10 +2,10 @@ package com.pickdsm.pickserverspring.domain.admin.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
-import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList.StudentElement
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
@@ -215,7 +215,7 @@ class AdminUseCase(
         )
     }
 
-     private fun getStatusByStartPeriodAndEndPeriod(
+    private fun getStatusByStartPeriodAndEndPeriod(
         statusList: List<Status>,
         statusPeriod: Int,
         userId: UUID,
