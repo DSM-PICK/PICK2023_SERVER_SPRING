@@ -1,7 +1,7 @@
 package com.pickdsm.pickserverspring.domain.admin.api.dto.response
 
 import com.pickdsm.pickserverspring.domain.application.StatusType
-import java.util.*
+import java.util.UUID
 
 data class QueryStudentAttendanceList(
     val classroom: String,

@@ -5,7 +5,7 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPic
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
-import java.util.*
+import java.util.UUID
 
 interface ApplicationApi {
 
