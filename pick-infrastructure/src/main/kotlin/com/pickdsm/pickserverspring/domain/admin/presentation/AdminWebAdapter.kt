@@ -14,6 +14,7 @@ import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
+import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
@@ -107,6 +108,20 @@ class AdminWebAdapter(
         applicationApi.savePicnicPass(domainRequest)
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/club")
+    fun changeClubStudent(
+        @RequestBody
+        @Valid
+        request: DomainChangeClubStudentRequest,
+    ) {
+        val domainRequest = DomainChangeClubStudentRequest(
+            studentId = request.studentId,
+            clubId = request.clubId,
+        )
+        clubApi.changeClubStudent(domainRequest)
+    }
+    
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/teacher")
     fun changeSelfStudyDirector(
