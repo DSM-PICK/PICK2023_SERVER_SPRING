@@ -84,9 +84,6 @@ class SelfStudyDirectorUseCase(
         val teacherId = userSpi.getCurrentUserId()
         val teacher = userQuerySelfStudyDirectorSpi.queryUserInfo(listOf(teacherId)).first()
         val selfStudy = querySelfStudyDirectorSpi.queryAllSelfStudyDirectorByTeacherIdAndDate(teacher.id, date)
-        if (selfStudy.isEmpty()) {
-            throw SelfStudyDirectorNotFoundException
-        }
         return SelfStudyStateResponse(
             date = date,
             name = teacher.name,
