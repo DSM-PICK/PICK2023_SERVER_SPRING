@@ -21,6 +21,7 @@ import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentR
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -159,7 +160,11 @@ class AdminWebAdapter(
     }
 
     @GetMapping
-    fun getTypeByToday(@RequestParam date: LocalDate): QueryTypeResponse {
+    fun getTypeByToday(
+        @RequestParam
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate
+    ): QueryTypeResponse {
         return adminApi.getTypeByDate(date)
     }
 }
