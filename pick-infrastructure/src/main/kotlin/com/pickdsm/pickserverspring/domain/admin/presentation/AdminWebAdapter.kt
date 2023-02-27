@@ -163,7 +163,7 @@ class AdminWebAdapter(
     fun getTypeByToday(
         @RequestParam
         @DateTimeFormat(pattern = "yyyy-MM-dd")
-        date: LocalDate
+        date: LocalDate,
     ): QueryTypeResponse {
         return adminApi.getTypeByDate(date)
     }
