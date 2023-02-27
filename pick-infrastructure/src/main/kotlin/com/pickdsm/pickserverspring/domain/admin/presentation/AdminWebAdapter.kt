@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestParam
@@ -61,6 +60,38 @@ class AdminWebAdapter(
             studentId = request.studentId,
         )
         afterSchoolApi.deleteAfterSchoolStudent(domainRequest)
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{after-school-id}")
+    fun createAfterSchoolStudent(
+        @PathVariable("after-school-id")
+        afterSchoolId: UUID,
+        @RequestBody
+        @Valid
+        request: CreateAfterSchoolStudentRequest,
+    ) {
+        val domainRequest = DomainCreateAfterSchoolStudentRequest(
+            afterSchoolId = afterSchoolId,
+            studentIds = request.userIdList,
+        )
+        afterSchoolApi.createAfterSchoolStudent(domainRequest)
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/picnic")
+    fun savePassIssued(
+        @RequestBody
+        @Valid
+        request: PicnicPassRequest,
+    ) {
+        val domainRequest = DomainPicnicPassRequest(
+            userIdList = request.userIdList,
+            reason = request.reason,
+            startPeriod = request.startPeriod,
+            endPeriod = request.endPeriod,
+        )
+        applicationApi.savePicnicPass(domainRequest)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -95,43 +126,6 @@ class AdminWebAdapter(
         adminApi.updateStudentStatusOfClass(domainRequest)
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{after-school-id}")
-    fun createAfterSchoolStudent(
-        @PathVariable("after-school-id")
-        afterSchoolId: UUID,
-        @RequestBody
-        @Valid
-        request: CreateAfterSchoolStudentRequest,
-    ) {
-        val domainRequest = DomainCreateAfterSchoolStudentRequest(
-            afterSchoolId = afterSchoolId,
-            studentIds = request.userIdList,
-        )
-        afterSchoolApi.createAfterSchoolStudent(domainRequest)
-    }
-
-    @GetMapping("/state")
-    fun getSelfStudyState(): SelfStudyStateResponse {
-        return selfStudyDirectorApi.getSelfStudyState()
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/picnic")
-    fun savePassIssued(
-        @RequestBody
-        @Valid
-        request: PicnicPassRequest,
-    ) {
-        val domainRequest = DomainPicnicPassRequest(
-            userIdList = request.userIdList,
-            reason = request.reason,
-            startPeriod = request.startPeriod,
-            endPeriod = request.endPeriod,
-        )
-        applicationApi.savePicnicPass(domainRequest)
-    }
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/club")
     fun changeClubStudent(
@@ -144,17 +138,6 @@ class AdminWebAdapter(
             clubId = request.clubId,
         )
         clubApi.changeClubStudent(domainRequest)
-    }
-
-    @GetMapping("/attendance/{classroom-id}")
-    fun getStudentAttendanceList(
-        @PathVariable("classroom-id")
-        classroomId: UUID,
-        @RequestParam
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
-        date: LocalDate,
-    ): QueryStudentAttendanceList {
-        return adminApi.getStudentAttendanceList(classroomId, date)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -170,6 +153,22 @@ class AdminWebAdapter(
             date = request.date,
         )
         selfStudyDirectorApi.changeSelfStudyDirector(domainRequest)
+    }
+
+    @GetMapping("/attendance/{classroom-id}")
+    fun getStudentAttendanceList(
+        @PathVariable("classroom-id")
+        classroomId: UUID,
+        @RequestParam
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate,
+    ): QueryStudentAttendanceList {
+        return adminApi.getStudentAttendanceList(classroomId, date)
+    }
+
+    @GetMapping("/state")
+    fun getSelfStudyState(): SelfStudyStateResponse {
+        return selfStudyDirectorApi.getSelfStudyState()
     }
 
     @GetMapping
