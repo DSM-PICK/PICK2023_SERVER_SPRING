@@ -23,7 +23,7 @@ import com.pickdsm.pickserverspring.domain.time.spi.QueryTimeSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @UseCase
 class AdminUseCase(
