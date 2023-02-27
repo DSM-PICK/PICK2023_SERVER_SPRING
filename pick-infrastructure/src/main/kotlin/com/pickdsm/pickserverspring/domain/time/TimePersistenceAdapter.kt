@@ -21,6 +21,7 @@ class TimePersistenceAdapter(
                 period = it.period,
                 startTime = it.beginTime,
                 endTime = it.endTime,
+                periodType = it.periodType,
             )
         }
         return Time(
