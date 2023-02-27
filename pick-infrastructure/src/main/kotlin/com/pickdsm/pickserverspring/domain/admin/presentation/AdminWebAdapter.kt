@@ -4,6 +4,7 @@ import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
@@ -17,6 +18,7 @@ import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
+import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestParam
@@ -108,6 +111,11 @@ class AdminWebAdapter(
         afterSchoolApi.createAfterSchoolStudent(domainRequest)
     }
 
+    @GetMapping("/state")
+    fun getSelfStudyState(): SelfStudyStateResponse {
+        return selfStudyDirectorApi.getSelfStudyState()
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/picnic")
     fun savePassIssued(
@@ -124,9 +132,18 @@ class AdminWebAdapter(
         applicationApi.savePicnicPass(domainRequest)
     }
 
-    @GetMapping("/state")
-    fun getSelfStudyState(): SelfStudyStateResponse {
-        return selfStudyDirectorApi.getSelfStudyState()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/club")
+    fun changeClubStudent(
+        @RequestBody
+        @Valid
+        request: DomainChangeClubStudentRequest,
+    ) {
+        val domainRequest = DomainChangeClubStudentRequest(
+            studentId = request.studentId,
+            clubId = request.clubId,
+        )
+        clubApi.changeClubStudent(domainRequest)
     }
 
     @GetMapping("/attendance/{classroom-id}")
@@ -153,5 +170,14 @@ class AdminWebAdapter(
             date = request.date,
         )
         selfStudyDirectorApi.changeSelfStudyDirector(domainRequest)
+    }
+
+    @GetMapping
+    fun getTypeByToday(
+        @RequestParam
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate,
+    ): QueryTypeResponse {
+        return adminApi.getTypeByDate(date)
     }
 }

@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.admin.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList.StudentElement
@@ -36,6 +37,7 @@ class AdminUseCase(
     private val queryTypeSpi: QueryTypeSpi,
     private val queryTimeSpi: QueryTimeSpi,
     private val queryStatusSpi: QueryStatusSpi,
+    private val queryTypeSpi: QueryTypeSpi,
 ) : AdminApi {
 
     override fun updateStudentStatusOfClass(request: DomainUpdateStudentStatusOfClassRequest) {
@@ -203,8 +205,18 @@ class AdminUseCase(
             studentList = students,
         )
     }
+        
+    override fun getTypeByDate(date: LocalDate): QueryTypeResponse {
+        val type = queryTypeSpi.queryTypeByDate(date)
+            ?: throw StatusNotFoundException
 
-    private fun getStatusByStartPeriodAndEndPeriod(
+        return QueryTypeResponse(
+            date = type.date,
+            type = type.type,
+        )
+    }
+    
+     private fun getStatusByStartPeriodAndEndPeriod(
         statusList: List<Status>,
         statusPeriod: Int,
         userId: UUID,

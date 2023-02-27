@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.application.api
 
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
@@ -18,4 +19,6 @@ interface ApplicationApi {
     fun queryAllStudentStatusByClassroomAndType(classroomId: UUID, type: String): QueryStudentStatusList
 
     fun savePicnicPass(request: DomainPicnicPassRequest)
+
+    fun savePicnicAcceptOrRefuse(request: DomainPicnicAcceptOrRefuseRequest)
 }
