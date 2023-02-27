@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.admin.presentation
 
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
+import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
@@ -82,7 +83,7 @@ class AdminWebAdapter(
     ) {
         val domainRequest = DomainUpdateStudentStatusOfClassRequest(
             userList = request.userList.map {
-                DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement(
+                DomainUpdateStudentElement(
                     userId = it.userId,
                     status = it.status,
                 )
