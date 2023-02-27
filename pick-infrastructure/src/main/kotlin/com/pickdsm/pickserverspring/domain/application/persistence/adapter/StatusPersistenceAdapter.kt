@@ -35,10 +35,7 @@ class StatusPersistenceAdapter(
     }
 
     override fun deleteAllMovementStudent(statusList: List<Status>) {
-        val statusEntityList = statusList.stream()
-            .map { statusMapper.domainToEntity(it) }
-            .toList()
-
+        val statusEntityList = statusList.map(statusMapper::domainToEntity)
         statusRepository.deleteAll(statusEntityList)
     }
 
