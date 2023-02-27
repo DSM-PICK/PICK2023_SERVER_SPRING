@@ -159,9 +159,7 @@ class AdminWebAdapter(
     }
 
     @GetMapping
-    fun getTypeByToday(
-        @RequestParam date: LocalDate,
-    ): QueryTypeResponse {
+    fun getTypeByToday(@RequestParam date: LocalDate): QueryTypeResponse {
         return adminApi.getTypeByDate(date)
     }
 }
