@@ -2,7 +2,7 @@ package com.pickdsm.pickserverspring.domain.admin.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
-import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTodayTypeResponse
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
@@ -82,13 +82,13 @@ class AdminUseCase(
         statusCommandTeacherSpi.saveAllStatus(changeStatusList)
     }
 
-    override fun queryTypeByDate(date: LocalDate): QueryTodayTypeResponse {
-        val todayType = queryTypeSpi.queryTypeByToday(date)
+    override fun getTypeByDate(date: LocalDate): QueryTypeResponse {
+        val type = queryTypeSpi.queryTypeByDate(date)
             ?: throw StatusNotFoundException
 
-        return QueryTodayTypeResponse(
-            date = todayType.date,
-            type = todayType.type,
+        return QueryTypeResponse(
+            date = type.date,
+            type = type.type,
         )
     }
 }
