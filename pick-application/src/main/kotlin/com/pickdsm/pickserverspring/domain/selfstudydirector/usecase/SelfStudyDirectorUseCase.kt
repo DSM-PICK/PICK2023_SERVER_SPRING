@@ -100,7 +100,7 @@ class SelfStudyDirectorUseCase(
 
     override fun blockMoveClassroom() {
         val teacherId = userSpi.getCurrentUserId()
-        val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorById(teacherId)
+        val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorByTeacherId(teacherId)
 
         commandSelfStudyDirectorSpi.setRestrictionMovementTrue(teacher)
         val statusList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())

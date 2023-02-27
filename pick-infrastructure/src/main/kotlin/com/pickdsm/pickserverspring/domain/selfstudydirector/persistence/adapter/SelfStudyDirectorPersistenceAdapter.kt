@@ -55,7 +55,7 @@ class SelfStudyDirectorPersistenceAdapter(
             .fetch()
             .map(selfStudyDirectorMapper::entityToDomain)
 
-    override fun querySelfStudyDirectorById(teacherId: UUID): SelfStudyDirector {
+    override fun querySelfStudyDirectorByTeacherId(teacherId: UUID): SelfStudyDirector {
         val selfStudyDirectorEntity = selfStudyDirectorRepository.findSelfStudyDirectorEntityById(teacherId)
             ?: throw SelfStudyDirectorNotFoundException
 
