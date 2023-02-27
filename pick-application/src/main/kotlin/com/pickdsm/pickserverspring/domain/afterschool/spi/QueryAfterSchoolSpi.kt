@@ -8,6 +8,8 @@ interface QueryAfterSchoolSpi {
 
     fun queryAfterSchoolClassroomListByFloor(floor: Int): List<AfterSchoolRoomVO>
 
+    fun queryAfterSchoolListByClassroomId(classroomId: UUID): List<AfterSchool>
+
     fun findByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID): AfterSchool?
 
     fun findByAfterSchoolId(afterSchoolId: UUID): AfterSchool?
