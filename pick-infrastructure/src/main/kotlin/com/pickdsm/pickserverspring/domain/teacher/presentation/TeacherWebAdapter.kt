@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.teacher.presentation
 
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
+import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
@@ -11,6 +12,7 @@ import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateS
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest.DomainUpdateStudentStatusElement
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.ComebackStudentRequest
+import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.PicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.UpdateStudentStatusRequest
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -89,5 +91,19 @@ class TeacherWebAdapter(
         @RequestParam type: String,
     ): QueryStudentStatusList {
         return applicationApi.queryAllStudentStatusByClassroomAndType(classroomId, type)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/status")
+    fun picnicAcceptOrRefuse(
+        @RequestBody
+        @Valid
+        request: PicnicAcceptOrRefuseRequest,
+    ) {
+        val domainRequest = DomainPicnicAcceptOrRefuseRequest(
+            type = request.type,
+            userIdList = request.userIdList,
+        )
+        applicationApi.savePicnicAcceptOrRefuse(domainRequest)
     }
 }

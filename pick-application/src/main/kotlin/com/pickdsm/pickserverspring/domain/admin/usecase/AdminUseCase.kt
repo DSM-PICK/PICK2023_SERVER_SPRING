@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.admin.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
@@ -9,6 +10,7 @@ import com.pickdsm.pickserverspring.domain.application.exception.CannotChangeEmp
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
@@ -24,6 +26,7 @@ class AdminUseCase(
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val queryTimeSpi: QueryTimeSpi,
     private val queryStatusSpi: QueryStatusSpi,
+    private val queryTypeSpi: QueryTypeSpi,
 ) : AdminApi {
 
     override fun updateStudentStatusOfClass(request: DomainUpdateStudentStatusOfClassRequest) {
@@ -77,5 +80,15 @@ class AdminUseCase(
             }
         }
         statusCommandTeacherSpi.saveAllStatus(changeStatusList)
+    }
+
+    override fun getTypeByDate(date: LocalDate): QueryTypeResponse {
+        val type = queryTypeSpi.queryTypeByDate(date)
+            ?: throw StatusNotFoundException
+
+        return QueryTypeResponse(
+            date = type.date,
+            type = type.type,
+        )
     }
 }

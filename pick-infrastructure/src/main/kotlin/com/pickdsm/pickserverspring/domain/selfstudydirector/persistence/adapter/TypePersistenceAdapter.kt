@@ -35,4 +35,11 @@ class TypePersistenceAdapter(
             .where(typeEntity.date.eq(LocalDate.now()))
             .fetchOne()
             ?.let(typeMapper::entityToDomain)
+
+    override fun queryTypeByDate(date: LocalDate): Type? =
+        jpaQueryFactory
+            .selectFrom(typeEntity)
+            .where(typeEntity.date.eq(date))
+            .fetchOne()
+            ?.let(typeMapper::entityToDomain)
 }
