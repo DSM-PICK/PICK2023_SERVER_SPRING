@@ -87,7 +87,7 @@ class ClassroomUseCase(
         val teacherId = userSpi.getCurrentUserId()
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)
             ?: throw FloorNotFoundException
-        val todayType = queryTypeSpi.queryTypeByToday(LocalDate.now())
+        val todayType = queryTypeSpi.queryTypeByToday()
         val classrooms = mutableListOf<ClassroomElement>()
 
         when (todayType?.type?.name) {
