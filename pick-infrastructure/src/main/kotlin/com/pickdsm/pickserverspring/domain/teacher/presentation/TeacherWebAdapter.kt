@@ -90,5 +90,4 @@ class TeacherWebAdapter(
     ): QueryStudentStatusList {
         return applicationApi.queryAllStudentStatusByClassroomAndType(classroomId, type)
     }
-
 }
