@@ -13,7 +13,6 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFo
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
-import java.time.LocalDate
 
 @ReadOnlyUseCase
 class ClassroomUseCase(
