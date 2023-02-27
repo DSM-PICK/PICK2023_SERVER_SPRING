@@ -101,8 +101,7 @@ class SelfStudyDirectorUseCase(
         val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorByTeacherId(teacherId)
 
         commandSelfStudyDirectorSpi.setRestrictionMovementTrue(teacher)
-        // val statusList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now()) TODO 이동 제한시 동아리, 자습일 떄 구분해서 이동한 학생 상태 지우기 추가해야함 
-        //commandStatusSpi.deleteAllMovementStudent(statusList)
+        // TODO 이동 제한시 동아리, 자습일 떄 구분해서 이동한 학생 상태 지우기 추가해야함
     }
 
     override fun changeSelfStudyDirector(requset: DomainChangeSelfStudyDirectorRequest) {
