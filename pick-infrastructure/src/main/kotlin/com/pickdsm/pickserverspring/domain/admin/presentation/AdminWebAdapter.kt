@@ -91,7 +91,6 @@ class AdminWebAdapter(
         adminApi.updateStudentStatusOfClass(domainRequest)
     }
 
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{after-school-id}")
     fun createAfterSchoolStudent(
