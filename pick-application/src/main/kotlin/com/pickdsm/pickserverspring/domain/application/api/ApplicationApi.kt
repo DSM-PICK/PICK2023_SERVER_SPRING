@@ -7,12 +7,13 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
 import java.util.UUID
+import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 
 interface ApplicationApi {
 
     fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest)
 
-    fun queryPicnicApplicationListByGradeAndClassNum(grade: String, classNum: String): QueryPicnicApplicationList
+    fun queryPicnicApplicationListByGradeAndClassNum(grade: String?, classNum: String?, floor: Int?, type: DirectorType): QueryPicnicApplicationList
 
     fun queryPicnicStudentListByToday(): QueryPicnicStudentList
 

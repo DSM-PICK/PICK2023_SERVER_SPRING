@@ -74,6 +74,15 @@ class AfterSchoolPersistenceAdapter(
             ?.let(afterSchoolMapper::entityToDomain)
     }
 
+    override fun queryAfterSchoolStudentIdByFloor(floor: Int?): List<UUID> =
+        jpaQueryFactory
+            .select(afterSchoolEntity.studentId)
+            .from(afterSchoolEntity)
+            .innerJoin(afterSchoolEntity.classroomEntity, classroomEntity)
+            .on(afterSchoolEntity.classroomEntity.id.eq(classroomEntity.id))
+            .where(afterSchoolEntity.classroomEntity.floor.eq(floor))
+            .fetch()
+
     override fun saveAll(afterSchools: List<AfterSchool>) {
         afterSchoolRepository.saveAll(
             afterSchools.map(afterSchoolMapper::domainToEntity),

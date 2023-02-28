@@ -40,7 +40,7 @@ class ClubPersistenceAdapter(
             .where(clubEntity.id.eq(clubId))
             .fetchOne()
             ?.let(clubMapper::entityToDomain)
-
+            
     override fun queryClubListByClassroomId(classroomId: UUID): List<Club> =
         jpaQueryFactory
             .selectFrom(clubEntity)
@@ -55,6 +55,14 @@ class ClubPersistenceAdapter(
             .select(clubEntity.studentId)
             .from(clubEntity)
             .where(clubEntity.id.eq(clubId))
+            
+    override fun queryClubStudentIdListByFloor(floor: Int?): List<UUID> =
+        jpaQueryFactory
+            .select(clubEntity.studentId)
+            .from(clubEntity)
+            .innerJoin(clubEntity.classroomEntity, classroomEntity)
+            .on(clubEntity.classroomEntity.id.eq(classroomEntity.id))
+            .where(clubEntity.classroomEntity.floor.eq(floor))
             .fetch()
 
     override fun saveClub(club: Club) {
