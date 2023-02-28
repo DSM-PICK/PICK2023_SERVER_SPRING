@@ -37,6 +37,13 @@ class ClassPersistenceAdapter(
             .where(checkClassroomType(classroomType), classroomEntity.floor.eq(floor))
             .fetch()
 
+    override fun queryClassroomGradeByFloor(floor: Int): Int? =
+        jpaQueryFactory
+            .select(classroomEntity.grade)
+            .from(classroomEntity)
+            .where(classroomEntity.floor.eq(floor))
+            .fetchOne()
+
     private fun checkClassroomType(classroomType: String): BooleanExpression? {
         if (classroomType == ClassroomType.SELF_STUDY.name) {
             return classroomEntity.grade.isNotNull

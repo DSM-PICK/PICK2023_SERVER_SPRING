@@ -6,6 +6,7 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
+import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
@@ -74,10 +75,12 @@ class TeacherWebAdapter(
 
     @GetMapping
     fun queryPicnicApplicationListByGradeAndClassNum(
-        @RequestParam grade: String,
-        @RequestParam classNum: String,
+        @RequestParam grade: String?,
+        @RequestParam classNum: String?,
+        @RequestParam floor: Int?,
+        @RequestParam type: DirectorType,
     ): QueryPicnicApplicationList {
-        return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum)
+        return applicationApi.queryPicnicApplicationListByGradeAndClassNum(grade, classNum, floor, type)
     }
 
     @GetMapping("/responsible")
