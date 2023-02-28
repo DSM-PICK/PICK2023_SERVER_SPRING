@@ -21,6 +21,7 @@ import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequ
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -178,5 +179,10 @@ class AdminWebAdapter(
         date: LocalDate,
     ): QueryTypeResponse {
         return adminApi.getTypeByDate(date)
+    }
+
+    @GetMapping("/director")
+    fun getSelfStudyDirector(@RequestParam("month") month: String): SelfStudyListResponse {
+        return selfStudyDirectorApi.getSelfStudyTeacher(month)
     }
 }
