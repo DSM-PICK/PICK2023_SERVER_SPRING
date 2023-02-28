@@ -3,7 +3,6 @@ package com.pickdsm.pickserverspring.domain.afterschool.persistence.adapter
 import com.pickdsm.pickserverspring.domain.afterschool.AfterSchool
 import com.pickdsm.pickserverspring.domain.afterschool.mapper.AfterSchoolMapper
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.AfterSchoolRepository
-import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.AfterSchoolEntity
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.QAfterSchoolEntity.afterSchoolEntity
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.vo.QQueryAfterSchoolRoomVO
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.vo.QueryAfterSchoolRoomVO
@@ -74,7 +73,6 @@ class AfterSchoolPersistenceAdapter(
             .on(afterSchoolEntity.classroomEntity.id.eq(classroomEntity.id))
             .where(afterSchoolEntity.classroomEntity.floor.eq(floor))
             .fetch()
-
 
     override fun saveAll(afterSchools: List<AfterSchool>) {
         afterSchoolRepository.saveAll(

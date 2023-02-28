@@ -100,8 +100,7 @@ class ApplicationUseCase(
                                 studentGrade == 0 -> false
                                 else -> (studentGrade == user.grade && studentClassNum == user.classNum)
                             }
-                        }.map {
-                                status ->
+                        }.map { status ->
                             val user = userList.find { user -> user.id == status.studentId }
                                 ?: throw UserNotFoundException
                             val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
@@ -129,8 +128,7 @@ class ApplicationUseCase(
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
                             val classroomGrade = queryClassroomSpi.queryClassroomGradeByFloor(floor)
                             classroomGrade == user.grade
-                        }.map {
-                                status ->
+                        }.map { status ->
                             val user = userList.find { user -> user.id == status.studentId }
                                 ?: throw UserNotFoundException
                             val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
@@ -152,7 +150,6 @@ class ApplicationUseCase(
                             outing.add(picnicApplication)
                         }
                     }
-
                 }
             }
 
@@ -290,9 +287,7 @@ class ApplicationUseCase(
                         }
                     }
                 }
-
             }
-            
         }
 
         outing.sortedWith(
