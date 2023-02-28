@@ -3,6 +3,7 @@ package com.pickdsm.pickserverspring.domain.admin.presentation
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
@@ -10,8 +11,8 @@ import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.Delete
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.UpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
-import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainCreateAfterSchoolStudentRequest
-import com.pickdsm.pickserverspring.domain.afterschool.api.dto.DomainDeleteAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainCreateAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainDeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.presentation.dto.requset.CreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
@@ -30,9 +31,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.RequestParam
 import java.time.LocalDate
 import java.util.UUID
 import javax.validation.Valid
@@ -59,6 +60,38 @@ class AdminWebAdapter(
             studentId = request.studentId,
         )
         afterSchoolApi.deleteAfterSchoolStudent(domainRequest)
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{after-school-id}")
+    fun createAfterSchoolStudent(
+        @PathVariable("after-school-id")
+        afterSchoolId: UUID,
+        @RequestBody
+        @Valid
+        request: CreateAfterSchoolStudentRequest,
+    ) {
+        val domainRequest = DomainCreateAfterSchoolStudentRequest(
+            afterSchoolId = afterSchoolId,
+            studentIds = request.userIdList,
+        )
+        afterSchoolApi.createAfterSchoolStudent(domainRequest)
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/picnic")
+    fun savePassIssued(
+        @RequestBody
+        @Valid
+        request: PicnicPassRequest,
+    ) {
+        val domainRequest = DomainPicnicPassRequest(
+            userIdList = request.userIdList,
+            reason = request.reason,
+            startPeriod = request.startPeriod,
+            endPeriod = request.endPeriod,
+        )
+        applicationApi.savePicnicPass(domainRequest)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -93,43 +126,6 @@ class AdminWebAdapter(
         adminApi.updateStudentStatusOfClass(domainRequest)
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{after-school-id}")
-    fun createAfterSchoolStudent(
-        @PathVariable("after-school-id")
-        afterSchoolId: UUID,
-        @RequestBody
-        @Valid
-        request: CreateAfterSchoolStudentRequest,
-    ) {
-        val domainRequest = DomainCreateAfterSchoolStudentRequest(
-            afterSchoolId = afterSchoolId,
-            studentIds = request.userIdList,
-        )
-        afterSchoolApi.createAfterSchoolStudent(domainRequest)
-    }
-
-    @GetMapping("/state")
-    fun getSelfStudyState(): SelfStudyStateResponse {
-        return selfStudyDirectorApi.getSelfStudyState()
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/picnic")
-    fun savePassIssued(
-        @RequestBody
-        @Valid
-        request: PicnicPassRequest,
-    ) {
-        val domainRequest = DomainPicnicPassRequest(
-            userIdList = request.userIdList,
-            reason = request.reason,
-            startPeriod = request.startPeriod,
-            endPeriod = request.endPeriod,
-        )
-        applicationApi.savePicnicPass(domainRequest)
-    }
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/club")
     fun changeClubStudent(
@@ -143,7 +139,7 @@ class AdminWebAdapter(
         )
         clubApi.changeClubStudent(domainRequest)
     }
-    
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/teacher")
     fun changeSelfStudyDirector(
@@ -157,6 +153,22 @@ class AdminWebAdapter(
             date = request.date,
         )
         selfStudyDirectorApi.changeSelfStudyDirector(domainRequest)
+    }
+
+    @GetMapping("/attendance/{classroom-id}")
+    fun getStudentAttendanceList(
+        @PathVariable("classroom-id")
+        classroomId: UUID,
+        @RequestParam
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate,
+    ): QueryStudentAttendanceList {
+        return adminApi.getStudentAttendanceList(classroomId, date)
+    }
+
+    @GetMapping("/state")
+    fun getSelfStudyState(): SelfStudyStateResponse {
+        return selfStudyDirectorApi.getSelfStudyState()
     }
 
     @GetMapping

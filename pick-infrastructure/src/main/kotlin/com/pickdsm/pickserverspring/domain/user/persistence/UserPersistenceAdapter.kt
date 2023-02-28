@@ -37,7 +37,7 @@ class UserPersistenceAdapter(
                 }
         }
 
-    override fun queryUserInfoByGradeAndClassNum(grade: Int, classNum: Int): List<UserInfo> =
+    override fun queryUserInfoByGradeAndClassNum(grade: Int?, classNum: Int?): List<UserInfo> =
         userClient.getUserInfoByGradeAndClassNum(grade, classNum)
             .response
             .map {

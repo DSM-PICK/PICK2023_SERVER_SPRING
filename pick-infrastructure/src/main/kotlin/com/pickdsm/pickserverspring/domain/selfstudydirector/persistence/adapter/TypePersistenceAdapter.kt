@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.adapter
 
+import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.mapper.TypeMapper
@@ -35,6 +36,13 @@ class TypePersistenceAdapter(
             .where(typeEntity.date.eq(LocalDate.now()))
             .fetchOne()
             ?.let(typeMapper::entityToDomain)
+
+    override fun queryDirectorTypeByDate(date: LocalDate): DirectorType? =
+        jpaQueryFactory
+            .select(typeEntity.type)
+            .from(typeEntity)
+            .where(typeEntity.date.eq(date))
+            .fetchOne()
 
     override fun queryTypeByDate(date: LocalDate): Type? =
         jpaQueryFactory

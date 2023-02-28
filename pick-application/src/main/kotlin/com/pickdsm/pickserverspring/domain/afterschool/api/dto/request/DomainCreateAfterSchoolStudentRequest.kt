@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.domain.afterschool.api.dto
+package com.pickdsm.pickserverspring.domain.afterschool.api.dto.request
 
 import java.util.UUID
 

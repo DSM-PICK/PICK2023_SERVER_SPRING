@@ -15,7 +15,7 @@ interface UserClient {
 
     @GetMapping("/class")
     fun getUserInfoByGradeAndClassNum(
-        @RequestParam("grade") grade: Int,
-        @RequestParam("classNum") classNum: Int,
+        @RequestParam("grade") grade: Int?,
+        @RequestParam("classNum") classNum: Int?,
     ): UserResponse
 }

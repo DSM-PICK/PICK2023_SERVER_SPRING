@@ -1,9 +1,9 @@
 package com.pickdsm.pickserverspring.domain.club.persistence.adapter
 
+import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.club.Club
 import com.pickdsm.pickserverspring.domain.club.mapper.ClubMapper
 import com.pickdsm.pickserverspring.domain.club.persistence.ClubRepository
-import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.club.persistence.entity.QClubEntity.clubEntity
 import com.pickdsm.pickserverspring.domain.club.persistence.vo.QQueryClubRoomVO
 import com.pickdsm.pickserverspring.domain.club.persistence.vo.QueryClubRoomVO
@@ -40,6 +40,22 @@ class ClubPersistenceAdapter(
             .where(clubEntity.id.eq(clubId))
             .fetchOne()
             ?.let(clubMapper::entityToDomain)
+
+    override fun queryClubListByClassroomId(classroomId: UUID): List<Club> =
+        jpaQueryFactory
+            .selectFrom(clubEntity)
+            .innerJoin(clubEntity.classroomEntity, classroomEntity)
+            .on(clubEntity.classroomEntity.id.eq(classroomEntity.id))
+            .where(clubEntity.classroomEntity.id.eq(classroomId))
+            .fetch()
+            .map(clubMapper::entityToDomain)
+
+    override fun queryStudentIdListByClubId(clubId: UUID): List<UUID> =
+        jpaQueryFactory
+            .select(clubEntity.studentId)
+            .from(clubEntity)
+            .where(clubEntity.id.eq(clubId))
+            .fetch()
 
     override fun queryClubStudentIdListByFloor(floor: Int?): List<UUID> =
         jpaQueryFactory

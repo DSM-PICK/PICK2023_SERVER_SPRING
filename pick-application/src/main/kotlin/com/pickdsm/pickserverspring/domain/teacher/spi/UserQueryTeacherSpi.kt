@@ -8,5 +8,5 @@ interface UserQueryTeacherSpi {
 
     fun queryUserInfo(ids: List<UUID>): List<User>
 
-    fun queryUserInfoByGradeAndClassNum(grade: Int, classNum: Int): List<UserInfo>
+    fun queryUserInfoByGradeAndClassNum(grade: Int?, classNum: Int?): List<UserInfo>
 }

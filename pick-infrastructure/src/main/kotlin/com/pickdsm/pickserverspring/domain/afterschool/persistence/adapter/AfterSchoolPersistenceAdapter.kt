@@ -35,6 +35,15 @@ class AfterSchoolPersistenceAdapter(
             .where(afterSchoolEntity.classroomEntity.floor.eq(floor))
             .fetch()
 
+    override fun queryAfterSchoolListByClassroomId(classroomId: UUID): List<AfterSchool> =
+        jpaQueryFactory
+            .selectFrom(afterSchoolEntity)
+            .innerJoin(afterSchoolEntity.classroomEntity, classroomEntity)
+            .on(afterSchoolEntity.classroomEntity.id.eq(classroomEntity.id))
+            .where(afterSchoolEntity.classroomEntity.id.eq(classroomId))
+            .fetch()
+            .map(afterSchoolMapper::entityToDomain)
+
     override fun deleteByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID) {
         jpaQueryFactory
             .delete(afterSchoolEntity)

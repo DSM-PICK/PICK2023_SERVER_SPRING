@@ -1,6 +1,6 @@
 package com.pickdsm.pickserverspring.domain.application.api.dto.response
 
-import java.util.*
+import java.util.UUID
 
 data class QueryStudentStatusElement(
     val studentId: UUID,
