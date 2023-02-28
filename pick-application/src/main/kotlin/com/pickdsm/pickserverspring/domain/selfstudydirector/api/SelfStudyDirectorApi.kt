@@ -13,5 +13,7 @@ interface SelfStudyDirectorApi {
 
     fun getSelfStudyState(): SelfStudyStateResponse
 
+    fun blockMoveClassroom()
+
     fun changeSelfStudyDirector(request: DomainChangeSelfStudyDirectorRequest)
 }

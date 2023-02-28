@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface SelfStudyDirectorRepository : CrudRepository<SelfStudyDirectorEntity, UUID>
+interface SelfStudyDirectorRepository : CrudRepository<SelfStudyDirectorEntity, UUID> {
+    fun findSelfStudyDirectorEntityById(id: UUID): SelfStudyDirectorEntity?
+}

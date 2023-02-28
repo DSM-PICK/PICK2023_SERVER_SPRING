@@ -1,3 +1,7 @@
 package com.pickdsm.pickserverspring.domain.application.spi
 
-interface CommandStatusSpi
+import com.pickdsm.pickserverspring.domain.application.Status
+
+interface CommandStatusSpi {
+    fun deleteAllMovementStudent(statusList: List<Status>)
+}

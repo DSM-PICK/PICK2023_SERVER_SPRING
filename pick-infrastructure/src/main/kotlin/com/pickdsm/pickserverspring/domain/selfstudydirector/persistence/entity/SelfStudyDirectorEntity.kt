@@ -5,9 +5,9 @@ import org.hibernate.annotations.ColumnDefault
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.ManyToOne
 import javax.persistence.FetchType
 import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Table(name = "tbl_selfstudy_director")
@@ -26,8 +26,16 @@ class SelfStudyDirectorEntity(
     @JoinColumn(name = "type_id", columnDefinition = "BINARY(16)", nullable = false)
     val typeEntity: TypeEntity,
 
+    restrictionMovement: Boolean,
+
+) : BaseUUIDEntity(id) {
+
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     @ColumnDefault("false")
-    val restrictionMovement: Boolean,
+    var restrictionMovement = restrictionMovement
+        protected set
 
-) : BaseUUIDEntity(id)
+    fun setRestrictionMovementTrue() {
+        this.restrictionMovement = true
+    }
+}

@@ -1,6 +1,8 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
+import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
+import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
@@ -27,6 +29,9 @@ class SelfStudyDirectorUseCase(
     private val queryTypeSpi: QueryTypeSpi,
     private val userSpi: UserSpi,
     private val commandSelfStudyDirectorSpi: CommandSelfStudyDirectorSpi,
+    private val queryStatusSpi: QueryStatusSpi,
+    private val commandStatusSpi: CommandStatusSpi,
+    private val userQueryApplicationSpi: UserQuerySelfStudyDirectorSpi,
 ) : SelfStudyDirectorApi {
 
     override fun getSelfStudyTeacher(month: String): SelfStudyListResponse {
@@ -89,6 +94,14 @@ class SelfStudyDirectorUseCase(
             name = teacher.name,
             floor = selfStudy.map(SelfStudyDirector::floor),
         )
+    }
+
+    override fun blockMoveClassroom() {
+        val teacherId = userSpi.getCurrentUserId()
+        val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorByTeacherId(teacherId)
+
+        commandSelfStudyDirectorSpi.setRestrictionMovementTrue(teacher)
+        // TODO 이동 제한시 동아리, 자습일 떄 구분해서 이동한 학생 상태 지우기 추가해야함
     }
 
     override fun changeSelfStudyDirector(requset: DomainChangeSelfStudyDirectorRequest) {

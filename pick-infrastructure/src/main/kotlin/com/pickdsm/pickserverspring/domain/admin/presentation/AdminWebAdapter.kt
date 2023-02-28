@@ -131,6 +131,15 @@ class AdminWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping
+    fun blockMoveClassroom() {
+        selfStudyDirectorApi.blockMoveClassroom()
+    }
+
+    @GetMapping("/state")
+    fun getSelfStudyState(): SelfStudyStateResponse {
+        return selfStudyDirectorApi.getSelfStudyState()
+
     @PatchMapping("/club")
     fun changeClubStudent(
         @RequestBody
