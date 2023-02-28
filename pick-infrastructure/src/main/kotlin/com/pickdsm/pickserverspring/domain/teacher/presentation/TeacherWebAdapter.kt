@@ -11,7 +11,6 @@ import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest.DomainUpdateStudentStatusElement
-import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.ComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.PicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.UpdateStudentStatusRequest
@@ -68,9 +67,18 @@ class TeacherWebAdapter(
         teacherApi.comebackStudent(domainRequest)
     }
 
-    @GetMapping("/students/count")
-    fun getStudentStatusCount(): QueryStudentStatusCountResponse {
-        return teacherApi.getStudentStatusCount()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/status")
+    fun picnicAcceptOrRefuse(
+        @RequestBody
+        @Valid
+        request: PicnicAcceptOrRefuseRequest,
+    ) {
+        val domainRequest = DomainPicnicAcceptOrRefuseRequest(
+            type = request.type,
+            userIdList = request.userIdList,
+        )
+        applicationApi.savePicnicAcceptOrRefuse(domainRequest)
     }
 
     @GetMapping
@@ -94,19 +102,5 @@ class TeacherWebAdapter(
         @RequestParam type: String,
     ): QueryStudentStatusList {
         return applicationApi.queryAllStudentStatusByClassroomAndType(classroomId, type)
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/status")
-    fun picnicAcceptOrRefuse(
-        @RequestBody
-        @Valid
-        request: PicnicAcceptOrRefuseRequest,
-    ) {
-        val domainRequest = DomainPicnicAcceptOrRefuseRequest(
-            type = request.type,
-            userIdList = request.userIdList,
-        )
-        applicationApi.savePicnicAcceptOrRefuse(domainRequest)
     }
 }

@@ -23,6 +23,8 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirect
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
+import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
+import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -44,9 +46,10 @@ import javax.validation.Valid
 class AdminWebAdapter(
     private val adminApi: AdminApi,
     private val afterSchoolApi: AfterSchoolApi,
+    private val applicationApi: ApplicationApi,
     private val clubApi: ClubApi,
     private val selfStudyDirectorApi: SelfStudyDirectorApi,
-    private val applicationApi: ApplicationApi,
+    private val teacherApi: TeacherApi,
 ) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -184,5 +187,10 @@ class AdminWebAdapter(
     @GetMapping("/director")
     fun getSelfStudyDirector(@RequestParam("month") month: String): SelfStudyListResponse {
         return selfStudyDirectorApi.getSelfStudyTeacher(month)
+    }
+
+    @GetMapping("/students/count")
+    fun getStudentStatusCount(): QueryStudentStatusCountResponse {
+        return teacherApi.getStudentStatusCount()
     }
 }
