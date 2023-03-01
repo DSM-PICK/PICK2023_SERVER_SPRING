@@ -5,10 +5,6 @@ import java.util.UUID
 
 data class DomainUpdateStudentStatusRequest(
     val period: Int,
-    val userList: List<DomainUpdateStudentStatusElement>,
-) {
-    data class DomainUpdateStudentStatusElement(
-        val userId: UUID,
-        val status: StatusType,
-    )
-}
+    val userId: UUID,
+    val status: StatusType,
+)
