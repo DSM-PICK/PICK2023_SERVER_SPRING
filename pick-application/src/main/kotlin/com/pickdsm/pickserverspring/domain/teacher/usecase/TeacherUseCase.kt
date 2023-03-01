@@ -33,7 +33,7 @@ class TeacherUseCase(
         val userList = userQueryTeacherSpi.queryUserInfo(userIdList)
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
 
-        val statusList = request.userList.map {
+        val statusList = request.userList.map { // TODO: request 노션 명세서 바뀐대로 바꾸기
             val user = userList.find { user -> user.id == it.userId }
                 ?: throw UserNotFoundException
             val time = timeList.timeList.find { time -> time.period == request.period }
