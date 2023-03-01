@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 data class PicnicAcceptOrRefuseRequest(
-    @field:NotBlank
+    @field:NotNull
     val type: StatusType,
 
     @field:NotNull
