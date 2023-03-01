@@ -10,7 +10,6 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
-import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest.DomainUpdateStudentStatusElement
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.ComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.PicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.UpdateStudentStatusRequest
@@ -42,15 +41,12 @@ class TeacherWebAdapter(
         @Valid
         request: UpdateStudentStatusRequest,
     ) {
-        val domainRequest = request.userList.map {
-            DomainUpdateStudentStatusElement(userId = it.userId, status = it.status)
-        }
-        teacherApi.updateStudentStatus(
-            DomainUpdateStudentStatusRequest(
-                period = request.period,
-                userList = domainRequest,
-            ),
+        val domainRequest = DomainUpdateStudentStatusRequest(
+            period = request.period,
+            userId = request.userId,
+            status = request.status,
         )
+        teacherApi.updateStudentStatus(domainRequest)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

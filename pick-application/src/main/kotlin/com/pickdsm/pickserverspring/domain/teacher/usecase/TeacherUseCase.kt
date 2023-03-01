@@ -29,25 +29,22 @@ class TeacherUseCase(
 
     override fun updateStudentStatus(request: DomainUpdateStudentStatusRequest) {
         val teacherId = userSpi.getCurrentUserId()
-        val userIdList = request.userList.map { it.userId }
-        val userList = userQueryTeacherSpi.queryUserInfo(userIdList)
+        val userInfo = userQueryTeacherSpi.queryUserInfo(listOf(request.userId))
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
+        val user = userInfo.find { user -> user.id == request.userId }
+            ?: throw UserNotFoundException
+        val time = timeList.timeList.find { time -> time.period == request.period }
+            ?: throw TimeNotFoundException
 
-        val statusList = request.userList.map { // TODO: request 노션 명세서 바뀐대로 바꾸기
-            val user = userList.find { user -> user.id == it.userId }
-                ?: throw UserNotFoundException
-            val time = timeList.timeList.find { time -> time.period == request.period }
-                ?: throw TimeNotFoundException
-
+        statusCommandTeacherSpi.saveStatus(
             Status(
                 studentId = user.id,
                 teacherId = teacherId,
                 startPeriod = time.period,
                 endPeriod = time.period,
-                type = it.status,
+                type = request.status,
             )
-        }
-        statusCommandTeacherSpi.saveAllStatus(statusList)
+        )
     }
 
     override fun getStudentStatusCount(): QueryStudentStatusCountResponse {

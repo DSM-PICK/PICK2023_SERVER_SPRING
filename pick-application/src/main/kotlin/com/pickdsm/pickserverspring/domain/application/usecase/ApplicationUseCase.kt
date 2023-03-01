@@ -389,7 +389,6 @@ class ApplicationUseCase(
     override fun savePicnicPass(request: DomainPicnicPassRequest) {
         val teacherId = userSpi.getCurrentUserId()
         val userList = userSpi.queryUserInfo(request.userIdList)
-        val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
 
         val statusList = request.userIdList.map {
             val user = userList.find { user -> user.id == it }
