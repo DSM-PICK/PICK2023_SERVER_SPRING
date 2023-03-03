@@ -1,6 +1,13 @@
 package com.pickdsm.pickserverspring.domain.classroom.api.dto.response
 
-data class QueryClassroomList(
+import java.util.UUID
 
+data class QueryClassroomList(
     val classroomList: List<ClassroomElement>,
-)
+) {
+    data class ClassroomElement(
+        val id: UUID,
+        val name: String,
+        val description: String,
+    )
+}
