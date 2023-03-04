@@ -4,15 +4,19 @@ import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomType
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
-import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.ClassroomElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList.ClassroomElement
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryResponsibleClassroomList
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryResponsibleClassroomList.ResponsibleClassroomElement
 import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
+import java.time.LocalDate
 
 @ReadOnlyUseCase
 class ClassroomUseCase(
@@ -82,18 +86,19 @@ class ClassroomUseCase(
         return QueryClassroomList(classrooms)
     }
 
-    override fun queryResponsibleClassroomList(): QueryClassroomList {
+    override fun queryResponsibleClassroomList(): QueryResponsibleClassroomList {
         val teacherId = userSpi.getCurrentUserId()
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)
             ?: throw FloorNotFoundException
-        val todayType = queryTypeSpi.queryTypeByToday()
-        val classrooms = mutableListOf<ClassroomElement>()
+        val todayType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now())
+            ?: DirectorType.SELF_STUDY
+        val classrooms = mutableListOf<ResponsibleClassroomElement>()
 
-        when (todayType?.type?.name) {
+        when (todayType.name) {
             ClassroomType.AFTER_SCHOOL.name -> {
                 val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
                 afterSchoolList.map {
-                    val afterSchoolRooms = ClassroomElement(
+                    val afterSchoolRooms = ResponsibleClassroomElement(
                         id = it.classroomId,
                         name = it.name,
                         description = it.description,
@@ -105,7 +110,7 @@ class ClassroomUseCase(
             ClassroomType.CLUB.name -> {
                 val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
                 clubRoomList.map {
-                    val clubRooms = ClassroomElement(
+                    val clubRooms = ResponsibleClassroomElement(
                         id = it.classroomId,
                         name = it.name,
                         description = it.description,
@@ -115,9 +120,9 @@ class ClassroomUseCase(
             }
 
             ClassroomType.SELF_STUDY.name -> {
-                val selfStudyClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, todayType.type.name)
+                val selfStudyClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, todayType.name)
                 selfStudyClassroomList.map {
-                    val selfStudyRooms = ClassroomElement(
+                    val selfStudyRooms = ResponsibleClassroomElement(
                         id = it.id,
                         name = it.name,
                         description = "",
@@ -129,6 +134,9 @@ class ClassroomUseCase(
             else -> throw TypeNotFoundException
         }
 
-        return QueryClassroomList(classrooms)
+        return QueryResponsibleClassroomList(
+            floor = floor,
+            responsibleClassroomList = classrooms,
+        )
     }
 }
