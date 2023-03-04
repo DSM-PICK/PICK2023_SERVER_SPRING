@@ -10,10 +10,10 @@ import java.util.UUID
 @FeignClient(name = "UserClient", url = "\${service.scheme}://\${service.user.host}")
 interface UserClient {
 
-    @GetMapping("users/id")
+    @GetMapping("/users/id")
     fun getUserInfo(@RequestParam("userId") ids: List<UUID>): UserInfoResponse
 
-    @GetMapping("users/class")
+    @GetMapping("/users/class")
     fun getUserInfoByGradeAndClassNum(
         @RequestParam("grade") grade: Int?,
         @RequestParam("classNum") classNum: Int?,
