@@ -348,7 +348,7 @@ class ApplicationUseCase(
                 classroomStudentList
                     .map { user ->
                         val status = todayStudentStatusList.find { user.id == it.studentId }
-                        val studentNumber = "${classroom.grade}${classroom.classNum}${checkUserNumLessThanTen(user.num)}"
+                        val studentNumber = user.num
                         val studentName = user.name
                         val movementClassroomName = movementStudent(status)
                         val studentStatus = QueryStudentStatusElement(

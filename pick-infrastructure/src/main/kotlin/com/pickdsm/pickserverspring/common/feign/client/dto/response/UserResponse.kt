@@ -11,7 +11,7 @@ data class UserResponse(
         val id: UUID,
         @JsonProperty("profile_file_name")
         val profileFileName: String?,
-        val num: Int,
+        val num: String,
         val name: String,
     )
 }
