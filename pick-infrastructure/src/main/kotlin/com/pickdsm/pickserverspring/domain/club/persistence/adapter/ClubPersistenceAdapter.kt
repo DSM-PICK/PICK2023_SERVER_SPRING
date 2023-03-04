@@ -32,6 +32,7 @@ class ClubPersistenceAdapter(
             .innerJoin(clubEntity.classroomEntity, classroomEntity)
             .on(clubEntity.classroomEntity.id.eq(classroomEntity.id))
             .where(clubEntity.classroomEntity.floor.eq(floor))
+            .orderBy(clubEntity.name.asc())
             .fetch()
 
     override fun queryClubByClubId(clubId: UUID): Club? =

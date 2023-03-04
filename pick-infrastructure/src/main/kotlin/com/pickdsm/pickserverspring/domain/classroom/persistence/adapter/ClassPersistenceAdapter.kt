@@ -35,6 +35,7 @@ class ClassPersistenceAdapter(
             )
             .from(classroomEntity)
             .where(checkClassroomType(classroomType), classroomEntity.floor.eq(floor))
+            .orderBy(classroomEntity.name.asc())
             .fetch()
 
     override fun queryClassroomGradeByFloor(floor: Int): Int? =

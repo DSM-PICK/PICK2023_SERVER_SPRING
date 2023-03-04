@@ -33,6 +33,7 @@ class AfterSchoolPersistenceAdapter(
             .innerJoin(afterSchoolEntity.classroomEntity, classroomEntity)
             .on(afterSchoolEntity.classroomEntity.id.eq(classroomEntity.id))
             .where(afterSchoolEntity.classroomEntity.floor.eq(floor))
+            .orderBy(afterSchoolEntity.classroomEntity.name.asc())
             .fetch()
 
     override fun queryAfterSchoolListByClassroomId(classroomId: UUID): List<AfterSchool> =
