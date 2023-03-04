@@ -80,4 +80,14 @@ class StatusPersistenceAdapter(
             .where(statusEntity.studentId.eq(studentId), statusEntity.type.eq(StatusType.PICNIC))
             .fetchOne()
             ?.let(statusMapper::entityToDomain)
+
+    override fun queryStatusByStudentIdAndTeacherId(studentId: UUID, teacherId: UUID): Status? =
+        jpaQueryFactory
+            .selectFrom(statusEntity)
+            .where(
+                statusEntity.studentId.eq(studentId),
+                statusEntity.teacherId.eq(teacherId)
+            )
+            .fetchOne()
+            ?.let(statusMapper::entityToDomain)
 }

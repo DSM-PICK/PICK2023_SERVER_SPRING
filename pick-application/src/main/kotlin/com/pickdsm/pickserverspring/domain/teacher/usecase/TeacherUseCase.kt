@@ -35,16 +35,21 @@ class TeacherUseCase(
             ?: throw UserNotFoundException
         val time = timeList.timeList.find { time -> time.period == request.period }
             ?: throw TimeNotFoundException
+        val status = queryStatusSpi.queryStatusByStudentIdAndTeacherId(
+            studentId = user.id,
+            teacherId = teacherId
+        )
 
-        statusCommandTeacherSpi.saveStatus(
-            Status(
+        val saveOrUpdateStatus = status?.changeStudentStatus(type = request.status)
+            ?: Status(
                 studentId = user.id,
                 teacherId = teacherId,
                 startPeriod = time.period,
                 endPeriod = time.period,
                 type = request.status,
             )
-        )
+
+        statusCommandTeacherSpi.saveStatus(saveOrUpdateStatus)
     }
 
     override fun getStudentStatusCount(): QueryStudentStatusCountResponse {
