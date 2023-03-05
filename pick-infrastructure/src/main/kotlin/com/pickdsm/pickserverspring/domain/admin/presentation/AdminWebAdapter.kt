@@ -207,9 +207,10 @@ class AdminWebAdapter(
         afterSchoolId: UUID,
     ): QueryAfterSchoolStudentList {
         return afterSchoolApi.getAfterSchoolStudents(afterSchoolId)
+    }
 
     @GetMapping("/club/student")
-    fun getClubStudent(
+    fun getClubStudentList(
         @RequestParam clubId: UUID,
     ): QueryStudentList {
         return clubApi.getClubStudentList(clubId)
