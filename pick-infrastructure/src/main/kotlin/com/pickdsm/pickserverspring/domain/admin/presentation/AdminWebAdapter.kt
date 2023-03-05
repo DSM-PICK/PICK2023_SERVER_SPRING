@@ -13,6 +13,7 @@ import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.Update
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainDeleteAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.afterschool.api.dto.response.QueryAfterSchoolStudentList
 import com.pickdsm.pickserverspring.domain.afterschool.presentation.dto.requset.CreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
@@ -197,5 +198,13 @@ class AdminWebAdapter(
     @GetMapping("/students/count")
     fun getStudentStatusCount(): QueryStudentStatusCountResponse {
         return teacherApi.getStudentStatusCount()
+    }
+
+    @GetMapping("/afterSchool/{after-school-id}")
+    fun getAfterSchoolStudents(
+        @PathVariable("after-school-id")
+        afterSchoolId: UUID,
+    ): QueryAfterSchoolStudentList {
+        return afterSchoolApi.getAfterSchoolStudents(afterSchoolId)
     }
 }
