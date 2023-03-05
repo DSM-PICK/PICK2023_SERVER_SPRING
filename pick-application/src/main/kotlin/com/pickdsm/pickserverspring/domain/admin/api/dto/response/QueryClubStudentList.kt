@@ -2,7 +2,7 @@ package com.pickdsm.pickserverspring.domain.admin.api.dto.response
 
 import java.util.UUID
 
-data class QueryStudentList(
+data class QueryClubStudentList(
     val clubId: UUID,
     val teacherName: String,
     val classroomName: String,
