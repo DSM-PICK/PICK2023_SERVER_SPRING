@@ -56,7 +56,7 @@ class ClassroomUseCase(
                 }
             }
 
-            ClassroomType.ALL.name -> {
+            ClassroomType.ALL.name, ClassroomType.SELF_STUDY.name -> {
                 val allClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
                 allClassroomList.map {
                     val allRooms = ClassroomElement(
@@ -65,18 +65,6 @@ class ClassroomUseCase(
                         description = "",
                     )
                     classrooms.add(allRooms)
-                }
-            }
-
-            ClassroomType.SELF_STUDY.name -> {
-                val selfStudyClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
-                selfStudyClassroomList.map {
-                    val selfStudyRooms = ClassroomElement(
-                        id = it.id,
-                        name = it.name,
-                        description = "",
-                    )
-                    classrooms.add(selfStudyRooms)
                 }
             }
 
