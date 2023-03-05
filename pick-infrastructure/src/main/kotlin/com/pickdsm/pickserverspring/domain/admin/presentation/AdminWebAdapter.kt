@@ -4,6 +4,7 @@ import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
@@ -206,5 +207,12 @@ class AdminWebAdapter(
         afterSchoolId: UUID,
     ): QueryAfterSchoolStudentList {
         return afterSchoolApi.getAfterSchoolStudents(afterSchoolId)
+
+    @GetMapping("/club/student")
+    fun getClubStudent(
+        @RequestParam clubId: UUID,
+    ): QueryStudentList {
+        return clubApi.getClubStudentList(clubId)
+
     }
 }
