@@ -204,7 +204,7 @@ class AdminWebAdapter(
     fun getAfterSchoolStudents(
         @PathVariable ("after-school-id")
         afterSchoolId: UUID,
-    ) : QueryAfterSchoolStudentList {
+    ): QueryAfterSchoolStudentList {
         return afterSchoolApi.getAfterSchoolStudents(afterSchoolId)
     }
 }
