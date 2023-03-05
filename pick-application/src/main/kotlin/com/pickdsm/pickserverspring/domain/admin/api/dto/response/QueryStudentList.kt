@@ -4,10 +4,10 @@ import java.util.UUID
 
 data class QueryStudentList(
     val clubId: UUID,
-    val teacherName: String?,
+    val teacherName: String,
     val classroomName: String,
     val clubName: String,
-    val studentList: List<StudentElement>
+    val studentList: List<StudentElement>,
 ) {
     data class StudentElement(
         val studentId: UUID,

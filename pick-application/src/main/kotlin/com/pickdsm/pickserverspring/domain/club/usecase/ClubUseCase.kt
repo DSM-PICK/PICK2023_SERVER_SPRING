@@ -2,7 +2,6 @@ package com.pickdsm.pickserverspring.domain.club.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentList
-import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
@@ -13,7 +12,7 @@ import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.teacher.exception.TeacherNotFoundException
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
-import java.util.*
+import java.util.UUID
 
 @UseCase
 class ClubUseCase(
@@ -67,13 +66,12 @@ class ClubUseCase(
             )
         }
 
-
         return QueryStudentList(
             clubId = club.id,
             teacherName = teacherInfo.name,
             classroomName = clubClassroom.name,
             clubName = club.name,
-            studentList = clubStudent
+            studentList = clubStudent,
         )
     }
 }

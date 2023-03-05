@@ -1,11 +1,9 @@
 package com.pickdsm.pickserverspring.domain.club.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
-import com.pickdsm.pickserverspring.domain.classroom.vo.ClassroomVO
 import com.pickdsm.pickserverspring.domain.club.Club
 import com.pickdsm.pickserverspring.domain.club.mapper.ClubMapper
 import com.pickdsm.pickserverspring.domain.club.persistence.ClubRepository
-import com.pickdsm.pickserverspring.domain.club.persistence.entity.ClubEntity
 import com.pickdsm.pickserverspring.domain.club.persistence.entity.QClubEntity.clubEntity
 import com.pickdsm.pickserverspring.domain.club.persistence.vo.QQueryClubRoomVO
 import com.pickdsm.pickserverspring.domain.club.persistence.vo.QueryClubRoomVO
