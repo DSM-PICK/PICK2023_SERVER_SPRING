@@ -202,7 +202,7 @@ class AdminWebAdapter(
 
     @GetMapping("/afterSchool/{after-school-id}")
     fun getAfterSchoolStudents(
-        @PathVariable ("after-school-id")
+        @PathVariable("after-school-id")
         afterSchoolId: UUID,
     ): QueryAfterSchoolStudentList {
         return afterSchoolApi.getAfterSchoolStudents(afterSchoolId)
