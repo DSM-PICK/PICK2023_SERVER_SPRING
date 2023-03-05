@@ -84,6 +84,13 @@ class AfterSchoolPersistenceAdapter(
             .where(afterSchoolEntity.classroomEntity.floor.eq(floor))
             .fetch()
 
+    override fun queryAfterSchoolListByAfterSchoolId(afterSchoolId: UUID): List<AfterSchool> =
+        jpaQueryFactory
+            .selectFrom(afterSchoolEntity)
+            .where(afterSchoolEntity.id.eq(afterSchoolId))
+            .fetch()
+            .map(afterSchoolMapper::entityToDomain)
+
     override fun saveAll(afterSchools: List<AfterSchool>) {
         afterSchoolRepository.saveAll(
             afterSchools.map(afterSchoolMapper::domainToEntity),
