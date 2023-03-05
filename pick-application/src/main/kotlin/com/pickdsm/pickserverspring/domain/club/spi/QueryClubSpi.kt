@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.club.spi
 
+import com.pickdsm.pickserverspring.domain.classroom.vo.ClassroomVO
 import com.pickdsm.pickserverspring.domain.club.Club
 import java.util.UUID
 import com.pickdsm.pickserverspring.domain.club.vo.ClubRoomVO
@@ -15,4 +16,6 @@ interface QueryClubSpi {
     fun queryStudentIdListByClubId(clubId: UUID): List<UUID>
 
     fun queryClubStudentIdListByFloor(floor: Int?): List<UUID>
+
+    fun queryClubListByClubId(clubId: UUID): List<Club>
 }
