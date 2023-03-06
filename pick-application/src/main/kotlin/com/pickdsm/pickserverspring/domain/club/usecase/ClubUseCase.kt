@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.club.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStudentList
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStudentList.StudentElement
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
@@ -36,7 +37,11 @@ class ClubUseCase(
             ?: throw ClubNotFoundException
 
         commandClubSpi.saveClub(
-            club.changeClubStudent(clubId = request.clubId, studentId = request.studentId, classroomId = club.classroomId),
+            club.changeClubStudent(
+                clubId = request.clubId,
+                studentId = request.studentId,
+                classroomId = club.classroomId
+            ),
         )
     }
 
@@ -59,7 +64,7 @@ class ClubUseCase(
                 it.studentId == user.id
             } ?: throw UserNotFoundException
 
-            QueryClubStudentList.StudentElement(
+            StudentElement(
                 studentId = user.id,
                 studentNumber = user.num,
                 studentName = user.name,
