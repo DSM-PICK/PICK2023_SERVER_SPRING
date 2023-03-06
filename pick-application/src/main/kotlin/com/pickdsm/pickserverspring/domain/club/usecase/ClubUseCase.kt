@@ -81,9 +81,5 @@ class ClubUseCase(
     }
 
     private fun checkUserNumLessThanTen(userNum: Int) =
-        if (userNum < 10) {
-            "0$userNum"
-        } else {
-            userNum.toString()
-        }
+        userNum.toString().padStart(2, '0')
 }
