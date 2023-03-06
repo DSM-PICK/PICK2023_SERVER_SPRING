@@ -220,7 +220,7 @@ class AdminUseCase(
 
     override fun getStudentStatusListByGradeAndClassNum(
         grade: Int?,
-        classNum: Int?
+        classNum: Int?,
     ): QueryStudentListByGradeAndClassNum {
         val classroomTeacherId = queryClassroomSpi.queryClassroomByGradeAndClassNum(
             grade = grade,
@@ -251,7 +251,7 @@ class AdminUseCase(
                 studentId = user.id,
                 studentNumber = user.num.toInt(),
                 studentName = user.name,
-                status = statusType
+                status = statusType,
             )
         }
 
