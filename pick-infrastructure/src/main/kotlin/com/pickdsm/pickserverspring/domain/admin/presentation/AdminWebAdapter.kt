@@ -3,7 +3,9 @@ package com.pickdsm.pickserverspring.domain.admin.presentation
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStudentList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentListByGradeAndClassNum
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
@@ -219,5 +221,22 @@ class AdminWebAdapter(
         @RequestParam("date") date: LocalDate,
     ): QueryMovementStudentList {
         return classroomMovementApi.queryMovementStudentList(grade, classNum, floor, date)
+}
+@GetMapping("/club/{club-id}")
+    fun getClubStudentList(
+        @PathVariable("club-id")
+        clubId: UUID,
+    ): QueryClubStudentList {
+        return clubApi.getClubStudentList(clubId)
+    }
+
+    @GetMapping("/class/students")
+    fun getStudentStatusListByGradeAndClassNum(
+        @RequestParam
+        grade: Int?,
+        @RequestParam
+        classNum: Int?,
+    ): QueryStudentListByGradeAndClassNum {
+        return adminApi.getStudentStatusListByGradeAndClassNum(grade, classNum)
     }
 }
