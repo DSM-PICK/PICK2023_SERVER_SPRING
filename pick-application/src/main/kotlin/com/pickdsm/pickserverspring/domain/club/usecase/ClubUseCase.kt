@@ -66,7 +66,7 @@ class ClubUseCase(
 
             StudentElement(
                 studentId = user.id,
-                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                studentNumber = "${user.grade}${user.classNum}${user.num.toString().padStart(2, '0')}",
                 studentName = user.name,
             )
         }
@@ -79,7 +79,4 @@ class ClubUseCase(
             studentList = clubStudent,
         )
     }
-
-    private fun checkUserNumLessThanTen(userNum: Int) =
-        userNum.toString().padStart(2, '0')
 }
