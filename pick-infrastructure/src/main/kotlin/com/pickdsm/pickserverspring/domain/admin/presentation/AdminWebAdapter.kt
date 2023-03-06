@@ -3,8 +3,9 @@ package com.pickdsm.pickserverspring.domain.admin.presentation
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest.DomainUpdateStudentElement
-import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStudentList
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentListByGradeAndClassNum
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
@@ -36,9 +37,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestParam
 import java.time.LocalDate
 import java.util.UUID
 import javax.validation.Valid
@@ -215,5 +216,15 @@ class AdminWebAdapter(
         clubId: UUID,
     ): QueryClubStudentList {
         return clubApi.getClubStudentList(clubId)
+    }
+
+    @GetMapping("/class/students")
+    fun getStudentStatusListByGradeAndClassNum(
+        @RequestParam
+        grade: Int?,
+        @RequestParam
+        classNum: Int?
+    ): QueryStudentListByGradeAndClassNum {
+        return adminApi.getStudentStatusListByGradeAndClassNum(grade, classNum)
     }
 }

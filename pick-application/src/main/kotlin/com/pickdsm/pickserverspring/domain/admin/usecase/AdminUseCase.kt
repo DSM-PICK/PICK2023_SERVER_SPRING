@@ -5,6 +5,8 @@ import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.admin.api.dto.request.DomainUpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList.StudentElement
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentListByGradeAndClassNum
+import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentListByGradeAndClassNum.StudentElementByGradeAndClassNum
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.application.Status
@@ -17,6 +19,7 @@ import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
+import com.pickdsm.pickserverspring.domain.teacher.exception.TeacherNotFoundException
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
@@ -212,6 +215,49 @@ class AdminUseCase(
         return QueryTypeResponse(
             date = type.date,
             type = type.type,
+        )
+    }
+
+    override fun getStudentStatusListByGradeAndClassNum(
+        grade: Int?,
+        classNum: Int?
+    ): QueryStudentListByGradeAndClassNum {
+        val classroomTeacherId = queryClassroomSpi.queryClassroomByGradeAndClassNum(
+            grade = grade,
+            classNum = classNum,
+        )?.homeroomTeacherId ?: throw TeacherNotFoundException
+        val studentInfos = userSpi.queryUserInfoByGradeAndClassNum(
+            grade = grade,
+            classNum = classNum,
+        )
+        val homeroomTeacherInfo = userSpi.queryUserInfo(listOf(classroomTeacherId))
+
+        val teacherName = homeroomTeacherInfo.firstOrNull()?.name
+            ?: throw TeacherNotFoundException
+
+        val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
+        val nowPeriod = queryTimeSpi.queryNowPeriod(timeList)
+        val statusList = queryStatusSpi.queryStatusListByDate(LocalDate.now())
+
+        val studentList = studentInfos.map {
+            val user = studentInfos.find { studentInfo -> studentInfo.id == it.id }
+                ?: throw UserNotFoundException
+            val statusType = getStatusByStartPeriodAndEndPeriod(
+                statusList = statusList,
+                statusPeriod = nowPeriod,
+                userId = user.id,
+            )
+            StudentElementByGradeAndClassNum(
+                studentId = user.id,
+                studentNumber = user.num.toInt(),
+                studentName = user.name,
+                status = statusType
+            )
+        }
+
+        return QueryStudentListByGradeAndClassNum(
+            teacherName = teacherName,
+            studentList = studentList,
         )
     }
 
