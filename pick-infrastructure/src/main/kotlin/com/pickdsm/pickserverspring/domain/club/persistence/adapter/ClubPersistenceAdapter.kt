@@ -75,7 +75,6 @@ class ClubPersistenceAdapter(
             .where(clubEntity.studentId.eq(studentId))
             .fetchOne()!!
 
-
     override fun saveClub(club: Club) {
         clubRepository.save(clubMapper.domainToEntity(club))
     }
