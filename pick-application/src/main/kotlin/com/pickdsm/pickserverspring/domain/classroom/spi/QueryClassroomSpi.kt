@@ -11,4 +11,6 @@ interface QueryClassroomSpi {
     fun queryClassroomListByFloorAndByType(floor: Int, classroomType: String): List<ClassroomVO>
 
     fun queryClassroomGradeByFloor(floor: Int): Int?
+
+    fun queryClassroomByGradeAndClassNum(grade: Int?, classNum: Int?): Classroom?
 }
