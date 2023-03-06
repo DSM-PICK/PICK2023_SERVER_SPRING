@@ -216,7 +216,7 @@ class AdminWebAdapter(
         @RequestParam("grade") grade: Int?,
         @RequestParam("classNum") classNum: Int?,
         @RequestParam("floor") floor: Int?,
-        @RequestParam("date") date: LocalDate
+        @RequestParam("date") date: LocalDate,
     ): QueryMovementStudentList {
         return classroomMovementApi.queryMovementStudentList(grade, classNum, floor, date)
     }

@@ -96,8 +96,7 @@ class AfterSchoolPersistenceAdapter(
             .select(afterSchoolEntity.id)
             .from(afterSchoolEntity)
             .where(afterSchoolEntity.studentId.eq(studentId))
-            .fetchOne()
-            ?.let(afterSchoolMapper::entityToDomain)
+            .fetchOne()!!
 
     override fun saveAll(afterSchools: List<AfterSchool>) {
         afterSchoolRepository.saveAll(

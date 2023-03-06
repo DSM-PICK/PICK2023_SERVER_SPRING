@@ -38,7 +38,7 @@ class ClassroomMovementUseCase(
     private val queryClassroomMovementSpi: QueryClassroomMovementSpi,
     private val adminApi: AdminApi,
     private val queryClubSpi: QueryClubSpi,
-    private val queryAfterSchoolSpi: QueryAfterSchoolSpi
+    private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
 
 ) : ClassroomMovementApi {
 
@@ -69,7 +69,7 @@ class ClassroomMovementUseCase(
         grade: Int?,
         classNum: Int?,
         floor: Int?,
-        date: LocalDate
+        date: LocalDate,
     ): QueryMovementStudentList {
         val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
         val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
@@ -90,7 +90,7 @@ class ClassroomMovementUseCase(
                     studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
                     studentName = it.name,
                     before = gradeForMovement,
-                    after = classroom.name
+                    after = classroom.name,
                 )
             }
             movementStudent.addAll(moveList)
@@ -107,7 +107,7 @@ class ClassroomMovementUseCase(
                             studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
                             studentName = it.name,
                             before = gradeForMovement,
-                            after = classroom.name
+                            after = classroom.name,
                         )
                     } else {
                         throw AfterSchoolStudentNotFoundException

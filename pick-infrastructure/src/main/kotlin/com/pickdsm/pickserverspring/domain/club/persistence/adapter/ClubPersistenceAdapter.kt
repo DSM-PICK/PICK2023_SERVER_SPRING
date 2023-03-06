@@ -10,7 +10,7 @@ import com.pickdsm.pickserverspring.domain.club.persistence.vo.QueryClubRoomVO
 import com.pickdsm.pickserverspring.domain.club.spi.ClubSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
-import java.util.UUID
+import java.util.*
 
 @Adapter
 class ClubPersistenceAdapter(
@@ -69,10 +69,12 @@ class ClubPersistenceAdapter(
 
     override fun queryClubIdByStudentId(studentId: UUID): UUID =
         jpaQueryFactory
-            .select(clubEntity.classroomId)
-            .from(clubEntity)
+            .select(classroomEntity.id)
+            .from(classroomEntity)
+            .leftJoin(clubEntity.classroomEntity, classroomEntity)
             .where(clubEntity.studentId.eq(studentId))
-            .fetch()
+            .fetchOne()!!
+
 
     override fun saveClub(club: Club) {
         clubRepository.save(clubMapper.domainToEntity(club))
