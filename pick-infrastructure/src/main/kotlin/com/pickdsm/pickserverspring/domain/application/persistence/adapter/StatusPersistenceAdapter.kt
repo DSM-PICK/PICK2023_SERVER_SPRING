@@ -88,6 +88,10 @@ class StatusPersistenceAdapter(
                 statusEntity.studentId.eq(studentId),
                 statusEntity.teacherId.eq(teacherId)
             )
+    override fun queryMovementStudentByStudentId(studentId: UUID): Status? =
+        jpaQueryFactory
+            .selectFrom(statusEntity)
+            .where(statusEntity.studentId.eq(studentId), statusEntity.type.eq(StatusType.MOVEMENT))
             .fetchOne()
             ?.let(statusMapper::entityToDomain)
 }

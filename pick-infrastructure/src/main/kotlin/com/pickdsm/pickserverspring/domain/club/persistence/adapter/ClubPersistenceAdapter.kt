@@ -67,6 +67,13 @@ class ClubPersistenceAdapter(
             .where(clubEntity.classroomEntity.floor.eq(floor))
             .fetch()
 
+    override fun queryClubByStudentId(studentId: UUID): UUID =
+        jpaQueryFactory
+            .select(clubEntity.classroomId)
+            .from(clubEntity)
+            .where(clubEntity.studentId.eq(studentId))
+            .fetch()
+
     override fun saveClub(club: Club) {
         clubRepository.save(clubMapper.domainToEntity(club))
     }
