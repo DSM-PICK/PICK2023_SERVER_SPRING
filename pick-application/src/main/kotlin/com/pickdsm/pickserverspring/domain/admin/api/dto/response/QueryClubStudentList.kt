@@ -11,7 +11,7 @@ data class QueryClubStudentList(
 ) {
     data class StudentElement(
         val studentId: UUID,
-        val studentNumber: Int,
+        val studentNumber: String,
         val studentName: String,
     )
 }
