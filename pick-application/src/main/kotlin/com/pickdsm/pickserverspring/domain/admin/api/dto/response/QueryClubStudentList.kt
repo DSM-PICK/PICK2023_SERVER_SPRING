@@ -4,6 +4,7 @@ import java.util.UUID
 
 data class QueryClubStudentList(
     val clubId: UUID,
+    val headId: UUID,
     val teacherName: String,
     val classroomName: String,
     val clubName: String,
