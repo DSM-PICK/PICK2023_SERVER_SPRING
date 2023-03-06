@@ -40,7 +40,7 @@ class ClubUseCase(
             club.changeClubStudent(
                 clubId = request.clubId,
                 studentId = request.studentId,
-                classroomId = club.classroomId
+                classroomId = club.classroomId,
             ),
         )
     }
