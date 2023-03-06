@@ -67,7 +67,7 @@ class ClubPersistenceAdapter(
             .where(clubEntity.classroomEntity.floor.eq(floor))
             .fetch()
 
-    override fun queryClubByStudentId(studentId: UUID): UUID =
+    override fun queryClubIdByStudentId(studentId: UUID): UUID =
         jpaQueryFactory
             .select(clubEntity.classroomId)
             .from(clubEntity)

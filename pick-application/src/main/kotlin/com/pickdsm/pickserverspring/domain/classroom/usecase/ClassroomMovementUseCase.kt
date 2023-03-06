@@ -2,6 +2,8 @@ package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
+import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolStudentNotFoundException
+import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
@@ -20,10 +22,9 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
-import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @UseCase
 class ClassroomMovementUseCase(
@@ -37,6 +38,7 @@ class ClassroomMovementUseCase(
     private val queryClassroomMovementSpi: QueryClassroomMovementSpi,
     private val adminApi: AdminApi,
     private val queryClubSpi: QueryClubSpi,
+    private val queryAfterSchoolSpi: QueryAfterSchoolSpi
 
 ) : ClassroomMovementApi {
 
@@ -75,7 +77,6 @@ class ClassroomMovementUseCase(
         val movementStudent = mutableListOf<MovementStudentElement>()
         val studentAttendanceList = adminApi.getTypeByDate(LocalDate.now())
 
-
         if (floor == null) {
             val moveList = userList.filter {
                 it.grade == grade && it.classNum == classNum
@@ -83,13 +84,14 @@ class ClassroomMovementUseCase(
                 val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
                 val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
                 val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
-                val grade =
-                    MovementStudentElement(
-                        studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
-                        studentName = it.name,
-                        before = "$grade-$classNum",
-                        after = classroom.name
-                    )
+                val gradeForMovement = getGrade(studentAttendanceList.type, classroom, it.id)
+
+                MovementStudentElement(
+                    studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
+                    studentName = it.name,
+                    before = gradeForMovement,
+                    after = classroom.name
+                )
             }
             movementStudent.addAll(moveList)
         } else {
@@ -98,15 +100,17 @@ class ClassroomMovementUseCase(
                     val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
                     val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
                     val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+                    val gradeForMovement = getGrade(studentAttendanceList.type, classroom, it.id)
+
                     if (classroom.floor == floor) {
                         MovementStudentElement(
                             studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
                             studentName = it.name,
-                            before = "$grade-$classNum",
+                            before = gradeForMovement,
                             after = classroom.name
                         )
                     } else {
-                          // TODO 없을 땐 빈 배열로 보내야하도록 수정
+                        throw AfterSchoolStudentNotFoundException
                     }
                 }
             movementStudent.addAll(moveList)
@@ -124,14 +128,19 @@ class ClassroomMovementUseCase(
     private fun getGrade(directorType: DirectorType, classroom: Classroom, studentId: UUID): String {
         when (directorType) {
             DirectorType.SELF_STUDY -> {
-                return classroom.grade + "-" + classroom.classNum
+                return classroom.grade.toString() + "-" + classroom.classNum.toString()
             }
             DirectorType.CLUB -> {
-                val classroomId = queryClubSpi.queryClubByStudentId(studentId)
-                val classroom = queryClassroomSpi.queryClassroomById(classroomId)
-                return classroom.name
+                val classroomId = queryClubSpi.queryClubIdByStudentId(studentId)
+                val classroomForClub = queryClassroomSpi.queryClassroomById(classroomId)
+                return classroomForClub.name
             }
-
+            DirectorType.AFTER_SCHOOL -> {
+                val classroomId = queryAfterSchoolSpi.queryAfterSchoolIdByStudentId(studentId)
+                val classroomForAfterSchool = queryClassroomSpi.queryClassroomById(classroomId)
+                return classroomForAfterSchool.name
+            }
+            else -> return ""
         }
     }
 }
