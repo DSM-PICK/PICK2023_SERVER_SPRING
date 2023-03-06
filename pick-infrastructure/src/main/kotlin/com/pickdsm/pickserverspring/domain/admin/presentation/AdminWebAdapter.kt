@@ -223,7 +223,7 @@ class AdminWebAdapter(
         @RequestParam
         grade: Int?,
         @RequestParam
-        classNum: Int?
+        classNum: Int?,
     ): QueryStudentListByGradeAndClassNum {
         return adminApi.getStudentStatusListByGradeAndClassNum(grade, classNum)
     }
