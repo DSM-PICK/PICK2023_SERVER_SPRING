@@ -236,7 +236,7 @@ class AdminUseCase(
             ?: throw TeacherNotFoundException
 
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
-        val nowPeriod = queryTimeSpi.queryNowPeriod(timeList)
+        // val nowPeriod = queryTimeSpi.queryNowPeriod(timeList)
         val statusList = queryStatusSpi.queryStatusListByDate(LocalDate.now())
 
         val studentList = studentInfos.map {
@@ -244,7 +244,7 @@ class AdminUseCase(
                 ?: throw UserNotFoundException
             val statusType = getStatusByStartPeriodAndEndPeriod(
                 statusList = statusList,
-                statusPeriod = nowPeriod,
+                statusPeriod = 8,
                 userId = user.id,
             )
             StudentElementByGradeAndClassNum(
