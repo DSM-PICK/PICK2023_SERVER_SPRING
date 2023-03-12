@@ -17,7 +17,6 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyD
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.UUID
 
 @ReadOnlyUseCase
 class ClassroomUseCase(
