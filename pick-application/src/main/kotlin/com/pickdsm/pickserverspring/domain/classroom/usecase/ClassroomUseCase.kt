@@ -17,6 +17,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyD
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
+import java.util.UUID
 
 @ReadOnlyUseCase
 class ClassroomUseCase(
@@ -37,6 +38,7 @@ class ClassroomUseCase(
                 afterSchoolRoomList.map {
                     val afterSchoolRooms = ClassroomElement(
                         id = it.classroomId,
+                        typeId = it.afterSchoolId,
                         name = it.name,
                         description = it.description,
                     )
@@ -49,6 +51,7 @@ class ClassroomUseCase(
                 clubRoomList.map {
                     val clubRooms = ClassroomElement(
                         id = it.classroomId,
+                        typeId = it.clubId,
                         name = it.name,
                         description = it.description,
                     )
@@ -61,6 +64,7 @@ class ClassroomUseCase(
                 allClassroomList.map {
                     val allRooms = ClassroomElement(
                         id = it.id,
+                        typeId = it.id,
                         name = it.name,
                         description = "",
                     )
