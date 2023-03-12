@@ -25,6 +25,7 @@ class AfterSchoolPersistenceAdapter(
             .select(
                 QQueryAfterSchoolRoomVO(
                     classroomEntity.id,
+                    afterSchoolEntity.id,
                     classroomEntity.name,
                     afterSchoolEntity.afterSchoolName,
                 ),
