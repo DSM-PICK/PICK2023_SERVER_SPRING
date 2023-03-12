@@ -17,4 +17,6 @@ interface QueryClubSpi {
     fun queryClubStudentIdListByFloor(floor: Int?): List<UUID>
 
     fun queryClubListByClubId(clubId: UUID): List<Club>
+
+    fun queryClubByStudentId(studentId: UUID): Club?
 }

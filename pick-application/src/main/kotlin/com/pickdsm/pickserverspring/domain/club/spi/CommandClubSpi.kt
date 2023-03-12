@@ -5,4 +5,6 @@ import com.pickdsm.pickserverspring.domain.club.Club
 interface CommandClubSpi {
 
     fun saveClub(club: Club)
+
+    fun deleteClub(club: Club)
 }
