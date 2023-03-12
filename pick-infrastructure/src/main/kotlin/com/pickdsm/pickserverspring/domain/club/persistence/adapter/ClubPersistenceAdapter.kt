@@ -24,6 +24,7 @@ class ClubPersistenceAdapter(
             .select(
                 QQueryClubRoomVO(
                     classroomEntity.id,
+                    clubEntity.id,
                     classroomEntity.name,
                     clubEntity.name,
                 ),

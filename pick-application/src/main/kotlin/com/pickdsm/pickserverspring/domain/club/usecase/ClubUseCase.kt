@@ -68,8 +68,11 @@ class ClubUseCase(
             val user = studentInfoList.find { user -> it.studentId == user.id }
                 ?: throw UserNotFoundException
 
+            val headStatus = club.headId == user.id
+
             StudentElement(
                 studentId = user.id,
+                headStatus = headStatus,
                 studentNumber = "${user.grade}${user.classNum}${user.num.toString().padStart(2, '0')}",
                 studentName = user.name,
             )
@@ -77,7 +80,6 @@ class ClubUseCase(
 
         return QueryClubStudentList(
             clubId = club.id,
-            headId = club.headId,
             teacherName = teacherInfo.name,
             classroomName = clubClassroom.name,
             clubName = club.name,

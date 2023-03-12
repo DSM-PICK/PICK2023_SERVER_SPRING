@@ -4,7 +4,6 @@ import java.util.UUID
 
 data class QueryClubStudentList(
     val clubId: UUID,
-    val headId: UUID,
     val teacherName: String,
     val classroomName: String,
     val clubName: String,
@@ -12,6 +11,7 @@ data class QueryClubStudentList(
 ) {
     data class StudentElement(
         val studentId: UUID,
+        val headStatus : Boolean,
         val studentNumber: String,
         val studentName: String,
     )
