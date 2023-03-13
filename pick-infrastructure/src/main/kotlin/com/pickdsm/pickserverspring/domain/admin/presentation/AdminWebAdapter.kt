@@ -139,6 +139,7 @@ class AdminWebAdapter(
         selfStudyDirectorApi.blockMoveClassroom()
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/club")
     fun changeClubStudent(
         @RequestBody
