@@ -36,7 +36,7 @@ class ClassroomUseCase(
                 val afterSchoolRoomList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
                 afterSchoolRoomList.map {
                     val afterSchoolRooms = ClassroomElement(
-                        id = it.classroomId,
+                        classroomId = it.classroomId,
                         typeId = it.afterSchoolId,
                         name = it.name,
                         description = it.description,
@@ -49,7 +49,7 @@ class ClassroomUseCase(
                 val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
                 clubRoomList.map {
                     val clubRooms = ClassroomElement(
-                        id = it.classroomId,
+                        classroomId = it.classroomId,
                         typeId = it.clubId,
                         name = it.name,
                         description = it.description,
@@ -62,7 +62,7 @@ class ClassroomUseCase(
                 val allClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
                 allClassroomList.map {
                     val allRooms = ClassroomElement(
-                        id = it.id,
+                        classroomId = it.id,
                         typeId = it.id,
                         name = it.name,
                         description = "",

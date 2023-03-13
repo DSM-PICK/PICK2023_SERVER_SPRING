@@ -6,7 +6,7 @@ data class QueryClassroomList(
     val classroomList: List<ClassroomElement>,
 ) {
     data class ClassroomElement(
-        val id: UUID,
+        val classroomId: UUID,
         val typeId: UUID,
         val name: String,
         val description: String,
