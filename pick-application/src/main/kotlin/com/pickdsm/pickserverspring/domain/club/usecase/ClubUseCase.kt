@@ -13,7 +13,7 @@ import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.teacher.exception.TeacherNotFoundException
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
-import java.util.UUID
+import java.util.*
 
 @UseCase
 class ClubUseCase(
@@ -24,10 +24,10 @@ class ClubUseCase(
 ) : ClubApi {
 
     override fun changeClubHead(request: DomainChangeClubHeadRequest) {
-        val club = queryClubSpi.queryClubByClubId(request.clubId)
+        val club = queryClubSpi.queryClubInfoByClubId(request.clubId)
             ?: throw ClubNotFoundException
 
-        commandClubSpi.saveClub(
+        commandClubSpi.saveClubInfo(
             club.changeClubHead(headId = request.studentId),
         )
     }
@@ -35,47 +35,51 @@ class ClubUseCase(
     override fun changeClubStudent(request: DomainChangeClubStudentRequest) {
         val club = queryClubSpi.queryClubByClubId(request.clubId)
             ?: throw ClubNotFoundException
+        val oldClub = queryClubSpi.queryClubByStudentId(request.studentId)
+
+        if (oldClub != null) {
+            commandClubSpi.deleteClub(oldClub)
+        }
 
         commandClubSpi.saveClub(
             club.changeClubStudent(
                 clubId = request.clubId,
                 studentId = request.studentId,
-                classroomId = club.classroomId,
+                clubInfoId = club.clubInfoId,
             ),
         )
     }
 
     override fun getClubStudentList(clubId: UUID): QueryClubStudentList {
-        val club = queryClubSpi.queryClubByClubId(clubId)
-            ?: throw ClubNotFoundException
+        val clubInfo = queryClubSpi.queryClubInfoByClubId(clubId) ?: throw ClubNotFoundException
         val clubList = queryClubSpi.queryClubListByClubId(clubId)
 
-        val clubClassroom = queryClassroomSpi.queryClassroomById(club.classroomId)
+        val clubClassroom = queryClassroomSpi.queryClassroomById(clubInfo.classroomId)
 
-        val teacherId = clubList.map { it.teacherId }
-        val teacherInfo = userSpi.queryUserInfo(teacherId).firstOrNull()
+        val teacherInfo = userSpi.queryUserInfo(listOf(clubInfo.teacherId)).firstOrNull()
             ?: throw TeacherNotFoundException
 
         val studentIdList = clubList.map { it.studentId }
         val studentInfoList = userSpi.queryUserInfo(studentIdList)
 
         val clubStudent = clubList.map {
-            val user = studentInfoList.find { user -> it.studentId == user.id }
-                ?: throw UserNotFoundException
+            val user = studentInfoList.find { user -> it.studentId == user.id } ?: throw UserNotFoundException
+
+            val headStatus = clubInfo.headId == user.id
 
             StudentElement(
                 studentId = user.id,
+                headStatus = headStatus,
                 studentNumber = "${user.grade}${user.classNum}${user.num.toString().padStart(2, '0')}",
                 studentName = user.name,
             )
         }
 
         return QueryClubStudentList(
-            clubId = club.id,
-            headId = club.headId,
+            clubId = clubInfo.id,
             teacherName = teacherInfo.name,
             classroomName = clubClassroom.name,
-            clubName = club.name,
+            clubName = clubInfo.name,
             studentList = clubStudent,
         )
     }

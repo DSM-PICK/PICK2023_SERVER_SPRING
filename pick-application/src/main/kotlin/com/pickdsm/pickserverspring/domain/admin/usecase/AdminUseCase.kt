@@ -80,7 +80,7 @@ class AdminUseCase(
                     )
                 }
 
-                StatusType.FIELD_TRIP_START, StatusType.HOME -> {
+                StatusType.FIELD_TRIP_START, StatusType.HOME, StatusType.DROPOUT -> {
                     status.changeStatusOfClass(
                         teacherId = teacherId,
                         startPeriod = time.period,

@@ -24,7 +24,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @UseCase
 class ClassroomMovementUseCase(
@@ -51,9 +51,9 @@ class ClassroomMovementUseCase(
 
         val status = Status(
             studentId = studentId,
-            teacherId = studentId, // TODO: 해당 층 자습감독쌤 아이디 넣기
+            teacherId = UUID(0, 0), // TODO: 해당 층 자습감독쌤 아이디 넣기
             startPeriod = time.period,
-            endPeriod = time.period,
+            endPeriod = 10,
             type = StatusType.MOVEMENT,
         )
         val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(status)

@@ -4,6 +4,7 @@ import java.util.UUID
 
 open class ClubRoomVO(
     val classroomId: UUID,
+    val clubId: UUID,
     val name: String,
     val description: String,
 )
