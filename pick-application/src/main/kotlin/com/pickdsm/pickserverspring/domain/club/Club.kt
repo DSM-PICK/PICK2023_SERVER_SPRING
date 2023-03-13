@@ -8,27 +8,16 @@ data class Club(
 
     val id: UUID = UUID.randomUUID(),
 
-    val name: String,
-
-    val headId: UUID,
-
-    val teacherId: UUID,
-
     val studentId: UUID,
 
-    val classroomId: UUID,
+    val clubInfoId: UUID,
 ) {
-    fun changeClubHead(headId: UUID): Club {
-        return copy(
-            headId = headId,
-        )
-    }
 
-    fun changeClubStudent(clubId: UUID, studentId: UUID, classroomId: UUID): Club {
+    fun changeClubStudent(clubId: UUID, studentId: UUID, clubInfoId: UUID): Club {
         return copy(
             id = clubId,
             studentId = studentId,
-            classroomId = classroomId,
+            clubInfoId = clubInfoId,
         )
     }
 }
