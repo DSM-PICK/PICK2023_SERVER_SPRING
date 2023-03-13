@@ -88,7 +88,9 @@ class ClubPersistenceAdapter(
     override fun queryClubListByClubId(clubId: UUID): List<Club> =
         jpaQueryFactory
             .selectFrom(clubEntity)
-            .where(clubEntity.id.eq(clubId))
+            .join(clubInfoEntity)
+            .on(clubEntity.clubInfoEntity.id.eq(clubInfoEntity.id))
+            .where(clubInfoEntity.id.eq(clubId))
             .fetch()
             .map(clubMapper::entityToDomain)
 

@@ -51,8 +51,7 @@ class ClubUseCase(
     }
 
     override fun getClubStudentList(clubId: UUID): QueryClubStudentList {
-        val clubInfo = queryClubSpi.queryClubInfoByClubId(clubId)
-            ?: throw ClubNotFoundException
+        val clubInfo = queryClubSpi.queryClubInfoByClubId(clubId) ?: throw ClubNotFoundException
         val clubList = queryClubSpi.queryClubListByClubId(clubId)
 
         val clubClassroom = queryClassroomSpi.queryClassroomById(clubInfo.classroomId)
@@ -64,8 +63,7 @@ class ClubUseCase(
         val studentInfoList = userSpi.queryUserInfo(studentIdList)
 
         val clubStudent = clubList.map {
-            val user = studentInfoList.find { user -> it.studentId == user.id }
-                ?: throw UserNotFoundException
+            val user = studentInfoList.find { user -> it.studentId == user.id } ?: throw UserNotFoundException
 
             val headStatus = clubInfo.headId == user.id
 
