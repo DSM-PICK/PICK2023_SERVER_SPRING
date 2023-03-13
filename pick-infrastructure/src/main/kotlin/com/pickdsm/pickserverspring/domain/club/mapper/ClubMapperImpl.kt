@@ -18,6 +18,7 @@ class ClubMapperImpl(
 
         return ClubEntity(
             id = club.id,
+            clubId = club.clubId,
             name = club.name,
             teacherId = club.teacherId,
             studentId = club.studentId,
@@ -29,6 +30,7 @@ class ClubMapperImpl(
     override fun entityToDomain(clubEntity: ClubEntity): Club {
         return Club(
             id = clubEntity.id,
+            clubId = clubEntity.clubId,
             name = clubEntity.name,
             teacherId = clubEntity.teacherId,
             studentId = clubEntity.studentId,

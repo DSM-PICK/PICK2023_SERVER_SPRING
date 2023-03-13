@@ -17,6 +17,9 @@ class ClubEntity(
 
     override val id: UUID,
 
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    val clubId: UUID,
+
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     @ColumnDefault("''")
     val name: String,
