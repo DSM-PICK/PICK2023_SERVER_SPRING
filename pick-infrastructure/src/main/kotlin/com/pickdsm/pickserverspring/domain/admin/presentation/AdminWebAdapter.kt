@@ -220,7 +220,7 @@ class AdminWebAdapter(
         @RequestParam("classNum") classNum: Int?,
         @RequestParam("floor") floor: Int?,
     ): QueryMovementStudentList {
-        return classroomMovementApi.queryMovementStudentList(grade, classNum, floor);
+        return classroomMovementApi.queryMovementStudentList(grade, classNum, floor)
     }
     @GetMapping("/club/{club-id}")
     fun getClubStudentList(

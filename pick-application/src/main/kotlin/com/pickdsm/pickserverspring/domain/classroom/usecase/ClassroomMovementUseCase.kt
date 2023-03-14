@@ -42,7 +42,7 @@ class ClassroomMovementUseCase(
     private val queryClubSpi: QueryClubSpi,
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
 
-    ) : ClassroomMovementApi {
+) : ClassroomMovementApi {
 
     override fun saveClassroomMovement(request: DomainClassroomMovementRequest) {
         val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
