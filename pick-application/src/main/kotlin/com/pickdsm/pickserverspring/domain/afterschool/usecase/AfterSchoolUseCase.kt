@@ -26,15 +26,9 @@ class AfterSchoolUseCase(
         val afterSchool = queryAfterSchoolSpi.findByAfterSchoolIdAndStudentId(
             domainDeleteAfterSchoolStudentRequest.afterSchoolId,
             domainDeleteAfterSchoolStudentRequest.studentId,
-        )
+        ) ?: throw AfterSchoolNotFoundException
 
-        require(!afterSchool?.studentId!!.equals(null)) { AfterSchoolStudentNotFoundException }
-        require(!afterSchool.id.equals(null)) { AfterSchoolNotFoundException }
-
-        commandAfterSchoolSpi.deleteByAfterSchoolIdAndStudentId(
-            afterSchool.id,
-            afterSchool.studentId,
-        )
+        commandAfterSchoolSpi.deleteByAfterSchoolIdAndStudentId(afterSchool.id)
     }
 
     override fun createAfterSchoolStudent(request: DomainCreateAfterSchoolStudentRequest) {

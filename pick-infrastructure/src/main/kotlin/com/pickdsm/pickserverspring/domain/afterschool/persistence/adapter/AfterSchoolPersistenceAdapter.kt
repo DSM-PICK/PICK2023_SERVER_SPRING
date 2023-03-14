@@ -52,22 +52,20 @@ class AfterSchoolPersistenceAdapter(
             .fetch()
             .map(afterSchoolMapper::entityToDomain)
 
-    override fun deleteByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID) {
+    override fun deleteByAfterSchoolIdAndStudentId(afterSchoolId: UUID) {
         jpaQueryFactory
             .delete(afterSchoolEntity)
-            .where(
-                afterSchoolEntity.id.eq(afterSchoolId),
-                afterSchoolEntity.studentId.eq(studentId),
-            )
-            .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+            .where(afterSchoolEntity.id.eq(afterSchoolId))
             .execute()
     }
 
     override fun findByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID): AfterSchool? =
         jpaQueryFactory
             .selectFrom(afterSchoolEntity)
+            .innerJoin(afterSchoolEntity.afterSchoolInfoEntity, afterSchoolInfoEntity
+            )
             .where(
-                afterSchoolEntity.id.eq(afterSchoolId),
+                afterSchoolEntity.afterSchoolInfoEntity.id.eq(afterSchoolId),
                 afterSchoolEntity.studentId.eq(studentId),
             )
             .setLockMode(LockModeType.PESSIMISTIC_READ)
