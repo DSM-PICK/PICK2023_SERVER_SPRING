@@ -5,7 +5,6 @@ import java.util.UUID
 
 interface CommandAfterSchoolSpi {
 
-    fun deleteByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID)
-
+    fun deleteByAfterSchoolIdAndStudentId(afterSchoolId: UUID)
     fun saveAll(afterSchools: List<AfterSchool>)
 }
