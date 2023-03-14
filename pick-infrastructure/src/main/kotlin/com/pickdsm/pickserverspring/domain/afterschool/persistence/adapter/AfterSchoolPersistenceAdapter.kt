@@ -29,7 +29,7 @@ class AfterSchoolPersistenceAdapter(
             .select(
                 QQueryAfterSchoolRoomVO(
                     classroomEntity.id,
-                    afterSchoolEntity.id,
+                    afterSchoolInfoEntity.id,
                     classroomEntity.name,
                     afterSchoolInfoEntity.afterSchoolName,
                 ),
