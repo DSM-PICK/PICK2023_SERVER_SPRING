@@ -8,7 +8,6 @@ import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
-import com.pickdsm.pickserverspring.domain.classroom.Classroom
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
@@ -85,7 +84,8 @@ class ClassroomMovementUseCase(
                 val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
                 val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
                 val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
-                val gradeForMovement = getGrade(studentAttendanceList.type, classroom, it.id)
+                val number = it.grade.toString() + "-" + it.classNum
+                val gradeForMovement = getGrade(studentAttendanceList.type, number, it.id)
 
                 MovementStudentElement(
                     studentNumber = "${it.grade}${it.classNum}${checkUserNumLessThanTen(it.num)}",
@@ -101,7 +101,8 @@ class ClassroomMovementUseCase(
                     val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
                     val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
                     val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
-                    val gradeForMovement = getGrade(studentAttendanceList.type, classroom, it.id)
+                    val number = it.grade.toString() + "-" + it.classNum
+                    val gradeForMovement = getGrade(studentAttendanceList.type, number, it.id)
 
                     if (classroom.floor == floor) {
                         MovementStudentElement(
@@ -139,10 +140,10 @@ class ClassroomMovementUseCase(
             userNum.toString()
         }
 
-    private fun getGrade(directorType: DirectorType, classroom: Classroom, studentId: UUID): String {
+    private fun getGrade(directorType: DirectorType, classroom: String, studentId: UUID): String {
         when (directorType) {
             DirectorType.SELF_STUDY -> {
-                return classroom.grade.toString() + "-" + classroom.classNum.toString()
+                return classroom
             }
             DirectorType.CLUB -> {
                 val classroomId = queryClubSpi.queryClubIdByStudentId(studentId)
