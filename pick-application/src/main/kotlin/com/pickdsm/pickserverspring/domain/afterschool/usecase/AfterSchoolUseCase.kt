@@ -60,7 +60,7 @@ class AfterSchoolUseCase(
                 studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
                 studentName = user.name,
             )
-        }
+        }.sortedBy(QueryAfterSchoolStudentElement::studentNumber)
 
         return QueryAfterSchoolStudentList(
             afterSchoolName = afterSchoolInfo.afterSchoolName,
