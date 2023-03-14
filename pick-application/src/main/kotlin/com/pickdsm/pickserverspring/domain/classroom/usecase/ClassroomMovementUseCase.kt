@@ -77,7 +77,7 @@ class ClassroomMovementUseCase(
         val movementStudent = mutableListOf<MovementStudentElement>()
         val studentAttendanceList = adminApi.getTypeByDate(LocalDate.now())
 
-        if (floor == null) {
+        if (floor == 0) {
             val moveList = userList.filter {
                 it.grade == grade && it.classNum == classNum
             }.map {
