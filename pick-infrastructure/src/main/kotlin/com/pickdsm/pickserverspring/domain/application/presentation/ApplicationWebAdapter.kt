@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.application.presentation
 
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicEndTimeResponse
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
@@ -62,7 +63,12 @@ class ApplicationWebAdapter(
         return applicationApi.queryPicnicStudentListByToday()
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/return")
+    fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse {
+        return applicationApi.getMyPicnicEndTime()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
     fun returnClassroom() = classroomMovementApi.returnClassroomMovement()
 }

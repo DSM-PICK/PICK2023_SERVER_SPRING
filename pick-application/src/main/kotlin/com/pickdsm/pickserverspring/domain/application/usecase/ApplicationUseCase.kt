@@ -9,6 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicEndTimeResponse
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentElement
@@ -446,6 +447,22 @@ class ApplicationUseCase(
                 statusCommandTeacherSpi.saveAllStatus(statusList)
             }
         }
+    }
+
+    override fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse {
+        val userId = userSpi.getCurrentUserId()
+        val userInfo = userSpi.queryUserInfo(listOf(userId)).firstOrNull()
+            ?: throw UserNotFoundException
+        val status = queryStatusSpi.queryPicnicStudentByStudentId(userId)
+            ?: throw StatusNotFoundException
+        val endTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
+            .timeList.find { time -> time.period == status.endPeriod }?.endTime
+            ?: throw TimeNotFoundException
+
+        return QueryMyPicnicEndTimeResponse(
+            name = userInfo.name,
+            endTime = endTime,
+        )
     }
 
     private fun movementStudent(status: Status?): String {
