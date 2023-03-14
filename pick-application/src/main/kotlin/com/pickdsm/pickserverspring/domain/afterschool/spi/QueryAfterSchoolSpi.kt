@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.afterschool.spi
 
 import com.pickdsm.pickserverspring.domain.afterschool.AfterSchool
+import com.pickdsm.pickserverspring.domain.afterschool.AfterSchoolInfo
 import com.pickdsm.pickserverspring.domain.afterschool.vo.AfterSchoolRoomVO
 import java.util.UUID
 
@@ -13,6 +14,8 @@ interface QueryAfterSchoolSpi {
     fun findByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID): AfterSchool?
 
     fun findByAfterSchoolId(afterSchoolId: UUID): AfterSchool?
+
+    fun findByAfterSchoolInfoId(afterSchoolId: UUID): AfterSchoolInfo?
 
     fun queryAfterSchoolStudentIdByFloor(floor: Int?): List<UUID>
 

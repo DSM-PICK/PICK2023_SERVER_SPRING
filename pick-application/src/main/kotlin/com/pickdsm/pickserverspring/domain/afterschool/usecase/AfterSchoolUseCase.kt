@@ -13,7 +13,7 @@ import com.pickdsm.pickserverspring.domain.afterschool.spi.CommandAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
-import java.util.UUID
+import java.util.*
 
 @UseCase
 class AfterSchoolUseCase(
@@ -38,22 +38,20 @@ class AfterSchoolUseCase(
     }
 
     override fun createAfterSchoolStudent(request: DomainCreateAfterSchoolStudentRequest) {
-        val afterSchool = queryAfterSchoolSpi.findByAfterSchoolId(request.afterSchoolId)
+        val afterSchoolInfo = queryAfterSchoolSpi.findByAfterSchoolInfoId(request.afterSchoolId)
             ?: throw AfterSchoolNotFoundException
 
         val afterSchools = request.studentIds.map {
             AfterSchool(
-                afterSchoolName = afterSchool.afterSchoolName,
-                teacherId = afterSchool.teacherId,
-                studentId = it,
-                classroomId = afterSchool.classroomId,
+                afterSchoolInfoId = afterSchoolInfo.id,
+                studentId = it
             )
         }
         commandAfterSchoolSpi.saveAll(afterSchools)
     }
 
     override fun getAfterSchoolStudents(afterSchoolId: UUID): QueryAfterSchoolStudentList {
-        val afterSchool = queryAfterSchoolSpi.findByAfterSchoolId(afterSchoolId)
+        val afterSchoolInfo = queryAfterSchoolSpi.findByAfterSchoolInfoId(afterSchoolId)
             ?: throw AfterSchoolNotFoundException
         val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolListByAfterSchoolId(afterSchoolId)
         val afterSchoolStudentIdList = afterSchoolList.map { it.studentId }
@@ -71,7 +69,7 @@ class AfterSchoolUseCase(
         }
 
         return QueryAfterSchoolStudentList(
-            afterSchoolName = afterSchool.afterSchoolName,
+            afterSchoolName = afterSchoolInfo.afterSchoolName,
             afterSchoolUserList = afterSchoolUsers,
         )
     }
