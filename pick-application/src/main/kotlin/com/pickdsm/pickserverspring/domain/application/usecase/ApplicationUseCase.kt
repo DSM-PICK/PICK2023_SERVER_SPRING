@@ -90,7 +90,7 @@ class ApplicationUseCase(
         when (type) {
             DirectorType.SELF_STUDY -> {
                 when {
-                    floor == null -> {
+                    floor == 0 -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
 
@@ -157,7 +157,7 @@ class ApplicationUseCase(
 
             DirectorType.CLUB -> {
                 when {
-                    floor == null -> {
+                    floor == 0 -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
 
@@ -225,7 +225,7 @@ class ApplicationUseCase(
 
             DirectorType.AFTER_SCHOOL -> {
                 when {
-                    floor == null -> {
+                    floor == 0 -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
 
