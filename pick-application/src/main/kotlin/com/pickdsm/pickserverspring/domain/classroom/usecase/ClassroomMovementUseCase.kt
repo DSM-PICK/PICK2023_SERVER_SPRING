@@ -69,7 +69,6 @@ class ClassroomMovementUseCase(
         grade: Int?,
         classNum: Int?,
         floor: Int?,
-        date: LocalDate,
     ): QueryMovementStudentList {
         val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
         val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
