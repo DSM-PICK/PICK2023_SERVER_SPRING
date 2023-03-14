@@ -39,6 +39,12 @@ class StatusPersistenceAdapter(
         statusRepository.deleteAll(statusEntityList)
     }
 
+    override fun deleteStatus(status: Status) {
+        statusRepository.delete(
+            statusMapper.domainToEntity(status),
+        )
+    }
+
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> =
         jpaQueryFactory
             .selectFrom(statusEntity)
