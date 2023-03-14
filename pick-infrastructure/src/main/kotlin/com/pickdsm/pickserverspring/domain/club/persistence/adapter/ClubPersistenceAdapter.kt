@@ -1,6 +1,5 @@
 package com.pickdsm.pickserverspring.domain.club.persistence.adapter
 
-import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.club.Club
 import com.pickdsm.pickserverspring.domain.club.ClubInfo
@@ -98,7 +97,7 @@ class ClubPersistenceAdapter(
             .where(clubEntity.studentId.eq(studentId))
             .fetchOne()!!
 
-override fun queryClubListByClubId(clubId: UUID): List<Club> =
+    override fun queryClubListByClubId(clubId: UUID): List<Club> =
         jpaQueryFactory
             .selectFrom(clubEntity)
             .join(clubInfoEntity)

@@ -222,8 +222,8 @@ class AdminWebAdapter(
         @RequestParam("date") date: LocalDate,
     ): QueryMovementStudentList {
         return classroomMovementApi.queryMovementStudentList(grade, classNum, floor, date)
-}
-@GetMapping("/club/{club-id}")
+    }
+    @GetMapping("/club/{club-id}")
     fun getClubStudentList(
         @PathVariable("club-id")
         clubId: UUID,
