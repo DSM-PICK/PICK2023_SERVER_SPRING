@@ -41,7 +41,7 @@ class ClassPersistenceAdapter(
             .select(classroomEntity.grade)
             .from(classroomEntity)
             .where(classroomEntity.floor.eq(floor))
-            .fetchOne()
+            .fetchFirst()
 
     override fun queryClassroomByGradeAndClassNum(grade: Int?, classNum: Int?): Classroom? =
         jpaQueryFactory

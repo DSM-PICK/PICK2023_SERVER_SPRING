@@ -63,13 +63,11 @@ class ClubUseCase(
         val studentInfoList = userSpi.queryUserInfo(studentIdList)
 
         val clubStudent = clubList.map {
-            val user = studentInfoList.find { user -> it.studentId == user.id } ?: throw UserNotFoundException
-
-            val headStatus = clubInfo.headId == user.id
-
+            val user = studentInfoList.find { user -> it.studentId == user.id }
+                ?: throw UserNotFoundException
             StudentElement(
                 studentId = user.id,
-                headStatus = headStatus,
+                headStatus = clubInfo.headId == user.id,
                 studentNumber = "${user.grade}${user.classNum}${user.num.toString().padStart(2, '0')}",
                 studentName = user.name,
             )

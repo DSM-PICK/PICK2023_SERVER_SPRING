@@ -83,7 +83,7 @@ class ClubPersistenceAdapter(
             .select(clubEntity.studentId)
             .from(clubEntity)
             .join(clubInfoEntity)
-            .on(clubEntity.id.eq(clubInfoEntity.id))
+            .on(clubEntity.clubInfoEntity.id.eq(clubInfoEntity.id))
             .join(classroomEntity)
             .on(clubInfoEntity.classroomEntity.eq(classroomEntity))
             .where(classroomEntity.floor.eq(floor))
