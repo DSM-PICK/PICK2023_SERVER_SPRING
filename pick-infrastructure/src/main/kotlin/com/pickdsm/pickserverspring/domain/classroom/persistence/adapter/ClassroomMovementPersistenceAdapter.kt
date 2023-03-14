@@ -21,6 +21,12 @@ class ClassroomMovementPersistenceAdapter(
         )
     }
 
+    override fun deleteClassroomMovement(classroomMovement: ClassroomMovement) {
+        classroomMovementRepository.delete(
+            classroomMovementMapper.domainToEntity(classroomMovement),
+        )
+    }
+
     override fun queryClassroomMovementByStatus(status: Status): ClassroomMovement {
         val statusEntity = statusMapper.domainToEntity(status)
         val classroomMovementEntity = classroomMovementRepository.findByStatusEntity(statusEntity)

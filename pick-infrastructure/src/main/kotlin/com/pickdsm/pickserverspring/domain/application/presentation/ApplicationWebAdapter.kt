@@ -8,6 +8,7 @@ import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
 import com.pickdsm.pickserverspring.domain.classroom.presentation.dto.request.ClassroomMovementRequest
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -60,4 +61,8 @@ class ApplicationWebAdapter(
     fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
         return applicationApi.queryPicnicStudentListByToday()
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @DeleteMapping
+    fun returnClassroom() = classroomMovementApi.returnClassroomMovement()
 }

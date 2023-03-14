@@ -1,7 +1,6 @@
 package com.pickdsm.pickserverspring.domain.afterschool.mapper
 
 import com.pickdsm.pickserverspring.domain.afterschool.AfterSchoolInfo
-import com.pickdsm.pickserverspring.domain.afterschool.persistence.AfterSchoolInfoRepository
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.AfterSchoolInfoEntity
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomRepository
