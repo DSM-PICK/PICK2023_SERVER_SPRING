@@ -23,7 +23,7 @@ class ClassroomMovementPersistenceAdapter(
 
     override fun deleteClassroomMovement(classroomMovement: ClassroomMovement) {
         classroomMovementRepository.delete(
-            classroomMovementMapper.domainToEntity(classroomMovement)
+            classroomMovementMapper.domainToEntity(classroomMovement),
         )
     }
 

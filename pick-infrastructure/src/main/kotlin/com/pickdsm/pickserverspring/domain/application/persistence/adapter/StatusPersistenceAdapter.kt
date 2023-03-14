@@ -41,7 +41,7 @@ class StatusPersistenceAdapter(
 
     override fun deleteStatus(status: Status) {
         statusRepository.delete(
-            statusMapper.domainToEntity(status)
+            statusMapper.domainToEntity(status),
         )
     }
 
