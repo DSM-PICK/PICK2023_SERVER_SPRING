@@ -9,4 +9,6 @@ interface ClassroomMovementApi {
     fun saveClassroomMovement(request: DomainClassroomMovementRequest)
 
     fun queryMovementStudentList(grade: Int?, classNum: Int?, floor: Int?): QueryMovementStudentList
+
+    fun returnClassroomMovement()
 }

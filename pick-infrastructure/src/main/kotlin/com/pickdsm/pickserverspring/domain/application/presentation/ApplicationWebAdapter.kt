@@ -60,4 +60,8 @@ class ApplicationWebAdapter(
     fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
         return applicationApi.queryPicnicStudentListByToday()
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/return")
+    fun returnClassroom() = classroomMovementApi.returnClassroomMovement()
 }

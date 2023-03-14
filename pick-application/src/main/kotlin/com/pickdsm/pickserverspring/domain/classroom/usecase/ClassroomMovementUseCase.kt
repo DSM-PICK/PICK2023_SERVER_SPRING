@@ -2,10 +2,10 @@ package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
-import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
+import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.classroom.Classroom
@@ -14,6 +14,7 @@ import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementStudentElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
+import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
@@ -31,6 +32,7 @@ class ClassroomMovementUseCase(
     private val queryClassroomSpi: QueryClassroomSpi,
     private val userSpi: UserSpi,
     private val commandClassroomMovementSpi: CommandClassroomMovementSpi,
+    private val commandStatusSpi: CommandStatusSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val queryStatusSpi: QueryStatusSpi,
@@ -40,7 +42,7 @@ class ClassroomMovementUseCase(
     private val queryClubSpi: QueryClubSpi,
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
 
-) : ClassroomMovementApi {
+    ) : ClassroomMovementApi {
 
     override fun saveClassroomMovement(request: DomainClassroomMovementRequest) {
         val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
@@ -86,7 +88,7 @@ class ClassroomMovementUseCase(
                 val gradeForMovement = getGrade(studentAttendanceList.type, classroom, it.id)
 
                 MovementStudentElement(
-                    studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
+                    studentNumber = "${it.grade}${it.classNum}${checkUserNumLessThanTen(it.num)}",
                     studentName = it.name,
                     before = gradeForMovement,
                     after = classroom.name,
@@ -103,18 +105,31 @@ class ClassroomMovementUseCase(
 
                     if (classroom.floor == floor) {
                         MovementStudentElement(
-                            studentNumber = "${grade}${classNum}${checkUserNumLessThanTen(it.num)}",
+                            studentNumber = "${it.grade}${it.classNum}${checkUserNumLessThanTen(it.num)}",
                             studentName = it.name,
                             before = gradeForMovement,
                             after = classroom.name,
                         )
                     } else {
-                        throw AfterSchoolStudentNotFoundException
+                        throw ClassroomMovementStudentNotFoundException
                     }
                 }
             movementStudent.addAll(moveList)
         }
         return QueryMovementStudentList(movementStudent)
+    }
+
+    override fun returnClassroomMovement() {
+        val currentStudentId = userSpi.getCurrentUserId()
+        val status = queryStatusSpi.queryMovementStudentByStudentId(currentStudentId)
+        val classroom = status?.let { queryClassroomMovementSpi.queryClassroomMovementByStatus(it) }
+
+        if (classroom != null) {
+            commandClassroomMovementSpi.deleteClassroomMovement(classroom)
+        }
+        if (status != null) {
+            commandStatusSpi.deleteStatus(status)
+        }
     }
 
     private fun checkUserNumLessThanTen(userNum: Int) =
