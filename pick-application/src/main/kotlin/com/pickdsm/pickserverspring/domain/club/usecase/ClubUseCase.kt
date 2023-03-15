@@ -3,6 +3,7 @@ package com.pickdsm.pickserverspring.domain.club.usecase
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStudentList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStudentList.StudentElement
+import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
@@ -55,6 +56,7 @@ class ClubUseCase(
         val clubList = queryClubSpi.queryClubListByClubId(clubId)
 
         val clubClassroom = queryClassroomSpi.queryClassroomById(clubInfo.classroomId)
+            ?: throw ClassroomNotFoundException
 
         val teacherInfo = userSpi.queryUserInfo(listOf(clubInfo.teacherId)).firstOrNull()
             ?: throw TeacherNotFoundException

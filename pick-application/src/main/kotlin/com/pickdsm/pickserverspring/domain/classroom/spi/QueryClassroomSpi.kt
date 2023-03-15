@@ -6,7 +6,7 @@ import java.util.UUID
 
 interface QueryClassroomSpi {
 
-    fun queryClassroomById(classroomId: UUID): Classroom
+    fun queryClassroomById(classroomId: UUID): Classroom?
 
     fun queryClassroomListByFloorAndByType(floor: Int, classroomType: String): List<ClassroomVO>
 

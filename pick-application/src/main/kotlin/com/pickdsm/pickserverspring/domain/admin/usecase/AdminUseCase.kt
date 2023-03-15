@@ -14,6 +14,7 @@ import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.exception.CannotChangeEmploymentException
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
+import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
@@ -100,6 +101,7 @@ class AdminUseCase(
         val dateStatusList = queryStatusSpi.queryStatusListByDate(date)
         val timeList = timeQueryTeacherSpi.queryTime(date)
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
+            ?: throw ClassroomNotFoundException
         val startPeriod = timeList.timeList.firstOrNull { it.periodType == dateType.name }?.period ?: 8
         val students = mutableListOf<StudentElement>()
 
