@@ -83,8 +83,11 @@ class StatusPersistenceAdapter(
     override fun queryPicnicStudentByStudentId(studentId: UUID): Status? =
         jpaQueryFactory
             .selectFrom(statusEntity)
-            .where(statusEntity.studentId.eq(studentId), statusEntity.type.eq(StatusType.PICNIC))
-            .fetchOne()
+            .where(
+                statusEntity.studentId.eq(studentId),
+                statusEntity.type.eq(StatusType.PICNIC),
+            )
+            .fetchFirst()
             ?.let(statusMapper::entityToDomain)
 
     override fun queryStatusByStudentIdAndTeacherId(studentId: UUID, teacherId: UUID): Status? =
@@ -102,5 +105,12 @@ class StatusPersistenceAdapter(
             .selectFrom(statusEntity)
             .where(statusEntity.studentId.eq(studentId), statusEntity.type.eq(StatusType.MOVEMENT))
             .fetchOne()
+            ?.let(statusMapper::entityToDomain)
+
+    override fun queryStatusByStudentId(studentId: UUID): Status? =
+        jpaQueryFactory
+            .selectFrom(statusEntity)
+            .where(statusEntity.studentId.eq(studentId))
+            .fetchFirst()
             ?.let(statusMapper::entityToDomain)
 }

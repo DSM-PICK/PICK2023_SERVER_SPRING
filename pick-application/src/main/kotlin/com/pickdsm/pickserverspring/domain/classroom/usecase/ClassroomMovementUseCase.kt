@@ -5,6 +5,7 @@ import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
+import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
@@ -14,6 +15,7 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClass
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementStudentElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
+import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
@@ -40,11 +42,11 @@ class ClassroomMovementUseCase(
     private val adminApi: AdminApi,
     private val queryClubSpi: QueryClubSpi,
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
-
 ) : ClassroomMovementApi {
 
     override fun saveClassroomMovement(request: DomainClassroomMovementRequest) {
         val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
+            ?: throw ClassroomNotFoundException
         val studentId = userSpi.getCurrentUserId()
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val time = timeList.timeList.find { time -> time.period == request.period }
@@ -83,7 +85,9 @@ class ClassroomMovementUseCase(
             }.map {
                 val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
                 val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
+                    ?: throw ClassroomMovementStudentNotFoundException
                 val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+                    ?: throw ClassroomNotFoundException
                 val number = it.grade.toString() + "-" + it.classNum
                 val gradeForMovement = getGrade(studentAttendanceList.type, number, it.id)
 
@@ -99,8 +103,11 @@ class ClassroomMovementUseCase(
             val moveList = userList
                 .map {
                     val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
-                    val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
+                        ?: throw StatusNotFoundException
+                    val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status)
+                        ?: throw ClassroomMovementStudentNotFoundException
                     val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+                        ?: throw ClassroomNotFoundException
                     val number = it.grade.toString() + "-" + it.classNum
                     val gradeForMovement = getGrade(studentAttendanceList.type, number, it.id)
 
@@ -148,11 +155,13 @@ class ClassroomMovementUseCase(
             DirectorType.CLUB -> {
                 val classroomId = queryClubSpi.queryClubIdByStudentId(studentId)
                 val classroomForClub = queryClassroomSpi.queryClassroomById(classroomId)
+                    ?: throw ClassroomNotFoundException
                 return classroomForClub.name
             }
             DirectorType.AFTER_SCHOOL -> {
                 val classroomId = queryAfterSchoolSpi.queryAfterSchoolIdByStudentId(studentId)
                 val classroomForAfterSchool = queryClassroomSpi.queryClassroomById(classroomId)
+                    ?: throw ClassroomNotFoundException
                 return classroomForAfterSchool.name
             }
             else -> return ""

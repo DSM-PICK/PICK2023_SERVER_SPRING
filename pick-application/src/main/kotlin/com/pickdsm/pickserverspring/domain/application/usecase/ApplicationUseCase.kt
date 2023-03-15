@@ -9,6 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicResponse
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentElement
@@ -332,6 +333,7 @@ class ApplicationUseCase(
     override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID, type: String): QueryStudentStatusList {
         val todayStudentStatusList = queryStatusSpi.queryStatusListByToday()
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
+            ?: throw ClassroomNotFoundException
         val grade = classroom.grade ?: throw ClassroomNotFoundException // TODO grade랑 classNum으로 학생 리스트를 가져와서 에러처리했습니다.
         val classNum = classroom.classNum ?: throw ClassroomNotFoundException // TODO 우선 에러처리
 
@@ -445,14 +447,35 @@ class ApplicationUseCase(
 
                 statusCommandTeacherSpi.saveAllStatus(statusList)
             }
+
+            else -> throw StatusNotFoundException
         }
+    }
+
+    override fun getMyPicnicEndTime(): QueryMyPicnicResponse {
+        val userId = userSpi.getCurrentUserId()
+        val userInfo = userSpi.queryUserInfo(listOf(userId)).firstOrNull() // TODO: userId 하나만 조회하는거로 바꾸기
+            ?: throw UserNotFoundException
+        val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentId(userId)
+            ?: throw StatusNotFoundException
+        val endTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
+            .timeList.find { time -> time.period == picnicUserStatus.endPeriod }?.endTime
+            ?: throw TimeNotFoundException
+
+        return QueryMyPicnicResponse(
+            userId = userInfo.id,
+            name = userInfo.name,
+            endTime = endTime,
+        )
     }
 
     private fun movementStudent(status: Status?): String {
         var moveClassroomName = ""
         if (status?.type == StatusType.MOVEMENT) {
             val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status)
+                ?: throw StatusNotFoundException
             val moveClassroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+                ?: throw ClassroomNotFoundException
             moveClassroomName = moveClassroom.name
         }
         return moveClassroomName
