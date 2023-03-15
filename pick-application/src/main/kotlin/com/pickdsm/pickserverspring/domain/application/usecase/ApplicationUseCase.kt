@@ -9,7 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
-import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicOrMovementResponse
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicResponse
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentElement
@@ -22,7 +22,6 @@ import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
-import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
@@ -448,38 +447,25 @@ class ApplicationUseCase(
 
                 statusCommandTeacherSpi.saveAllStatus(statusList)
             }
+
+            else -> throw StatusNotFoundException
         }
     }
 
-    override fun getMyPicnicEndTime(): QueryMyPicnicOrMovementResponse {
+    override fun getMyPicnicEndTime(): QueryMyPicnicResponse {
         val userId = userSpi.getCurrentUserId()
         val userInfo = userSpi.queryUserInfo(listOf(userId)).firstOrNull()
             ?: throw UserNotFoundException
-        val userStatusType = queryStatusSpi.queryStatusByStudentId(userId)
-            ?.type ?: throw StatusNotFoundException
-        val userStatus = when (userStatusType) {
-            StatusType.PICNIC -> {
-                queryStatusSpi.queryPicnicStudentByStudentId(userId)
-                    ?: throw StatusNotFoundException
-            }
-            StatusType.MOVEMENT -> {
-                queryStatusSpi.queryMovementStudentByStudentId(userId)
-                    ?: throw StatusNotFoundException
-            }
-            else -> throw StatusNotFoundException
-        }
-        val moveClassroom = queryClassroomMovementSpi.queryClassroomMovementByStatus(userStatus)
-            ?: throw ClassroomMovementStudentNotFoundException
-        val classroomName = queryClassroomSpi.queryClassroomById(moveClassroom.classroomId)
-            ?.name ?: throw ClassroomNotFoundException
+        val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentId(userId)
+            ?: throw StatusNotFoundException
         val endTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
-            .timeList.find { time -> time.period == userStatus.endPeriod }?.endTime
+            .timeList.find { time -> time.period == picnicUserStatus.endPeriod }?.endTime
             ?: throw TimeNotFoundException
 
-        return QueryMyPicnicOrMovementResponse(
+        return QueryMyPicnicResponse(
+            userId = userInfo.id,
             name = userInfo.name,
             endTime = endTime,
-            classroomName = classroomName,
         )
     }
 
