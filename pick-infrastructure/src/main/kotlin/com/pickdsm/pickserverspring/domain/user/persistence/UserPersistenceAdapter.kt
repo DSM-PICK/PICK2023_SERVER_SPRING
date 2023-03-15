@@ -6,7 +6,7 @@ import com.pickdsm.pickserverspring.domain.user.dto.UserInfo
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import org.springframework.security.core.context.SecurityContextHolder
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class UserPersistenceAdapter(
@@ -48,4 +48,20 @@ class UserPersistenceAdapter(
                     name = it.name,
                 )
             }
+
+    override fun queryUserInfoByUserId(userId: UUID): User {
+        val user = userClient.getUserInfoByUserId(userId)
+
+        return User(
+            id = user.id,
+            accountId = user.accountId,
+            password = user.password,
+            name = user.name,
+            grade = user.grade,
+            classNum = user.classNum,
+            num = user.num,
+            birthDay = user.birthDay,
+            profileFileName = user.profileFileName,
+        )
+    }
 }
