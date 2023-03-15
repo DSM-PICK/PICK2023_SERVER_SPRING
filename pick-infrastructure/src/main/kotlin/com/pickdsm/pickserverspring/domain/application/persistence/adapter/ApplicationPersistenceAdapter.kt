@@ -36,4 +36,13 @@ class ApplicationPersistenceAdapter(
             .on(applicationEntity.statusEntity.date.eq(date))
             .fetch()
             .map(applicationMapper::entityToDomain)
+
+    override fun queryApplicationByStudentIdAndStatusId(studentId: UUID, statusId: UUID): Application? =
+        jpaQueryFactory
+            .selectFrom(applicationEntity)
+            .innerJoin(applicationEntity.statusEntity, statusEntity)
+            .on(applicationEntity.statusEntity.id.eq(statusId))
+            .where(statusEntity.studentId.eq(studentId))
+            .fetchFirst()
+            ?.let(applicationMapper::entityToDomain)
 }
