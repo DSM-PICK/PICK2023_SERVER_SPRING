@@ -454,7 +454,7 @@ class ApplicationUseCase(
 
     override fun getMyPicnicEndTime(): QueryMyPicnicResponse {
         val userId = userSpi.getCurrentUserId()
-        val userInfo = userSpi.queryUserInfo(listOf(userId)).firstOrNull()
+        val userInfo = userSpi.queryUserInfo(listOf(userId)).firstOrNull() // TODO: userId 하나만 조회하는거로 바꾸기
             ?: throw UserNotFoundException
         val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentId(userId)
             ?: throw StatusNotFoundException
