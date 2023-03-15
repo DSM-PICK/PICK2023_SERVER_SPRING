@@ -7,5 +7,5 @@ import java.util.UUID
 
 @Repository
 interface SelfStudyDirectorRepository : CrudRepository<SelfStudyDirectorEntity, UUID> {
-    fun findSelfStudyDirectorEntityById(id: UUID): SelfStudyDirectorEntity?
+    fun findSelfStudyDirectorEntityByTeacherId(teacherId: UUID): SelfStudyDirectorEntity?
 }
