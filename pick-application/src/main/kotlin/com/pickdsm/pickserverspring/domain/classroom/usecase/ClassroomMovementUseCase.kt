@@ -150,7 +150,7 @@ class ClassroomMovementUseCase(
             ?: throw ClassroomMovementStudentNotFoundException
         val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
             ?: throw ClassroomNotFoundException
-        
+
         return QueryClassroomMovementLocationResponse(
             name = userInfo.name,
             locationClassroom = classroom.name,
