@@ -9,6 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
+import java.util.UUID
 
 @Adapter
 class ApplicationPersistenceAdapter(

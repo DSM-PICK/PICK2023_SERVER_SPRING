@@ -489,6 +489,7 @@ class ApplicationUseCase(
             ?: throw TimeNotFoundException
 
         return QueryMyPicnicInfoResponse(
+            profileFileName = userInfo.profileFileName,
             studentNumber = "${userInfo.grade}${userInfo.classNum}${checkUserNumLessThanTen(userInfo.num)}",
             studentName = userInfo.name,
             startTime = startTime,
