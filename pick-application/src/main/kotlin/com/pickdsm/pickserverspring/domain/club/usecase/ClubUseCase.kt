@@ -58,8 +58,7 @@ class ClubUseCase(
         val clubClassroom = queryClassroomSpi.queryClassroomById(clubInfo.classroomId)
             ?: throw ClassroomNotFoundException
 
-        val teacherInfo = userSpi.queryUserInfo(listOf(clubInfo.teacherId)).firstOrNull()
-            ?: throw TeacherNotFoundException
+        val teacherInfo = userSpi.queryUserInfoByUserId(clubInfo.teacherId)
 
         val studentIdList = clubList.map { it.studentId }
         val studentInfoList = userSpi.queryUserInfo(studentIdList)
