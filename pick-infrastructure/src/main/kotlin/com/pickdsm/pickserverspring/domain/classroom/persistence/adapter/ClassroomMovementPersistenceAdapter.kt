@@ -1,11 +1,9 @@
 package com.pickdsm.pickserverspring.domain.classroom.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.application.Status
-import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMovementMapper
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomMovementRepository
-import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity.classroomMovementEntity
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
@@ -14,7 +12,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 @Adapter
 class ClassroomMovementPersistenceAdapter(
     private val classroomMovementRepository: ClassroomMovementRepository,
-    private val statusMapper: StatusMapper,
     private val classroomMovementMapper: ClassroomMovementMapper,
     private val jpaQueryFactory: JPAQueryFactory,
 ) : ClassroomMovementSpi {
