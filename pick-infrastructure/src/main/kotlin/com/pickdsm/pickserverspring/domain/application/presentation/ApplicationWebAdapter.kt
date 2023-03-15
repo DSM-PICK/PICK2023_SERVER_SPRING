@@ -2,7 +2,7 @@ package com.pickdsm.pickserverspring.domain.application.presentation
 
 import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
-import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicEndTimeResponse
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicOrMovementResponse
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.presentation.dto.request.ApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
@@ -64,7 +64,7 @@ class ApplicationWebAdapter(
     }
 
     @GetMapping("/return")
-    fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse {
+    fun getMyPicnicEndTime(): QueryMyPicnicOrMovementResponse {
         return applicationApi.getMyPicnicEndTime()
     }
 

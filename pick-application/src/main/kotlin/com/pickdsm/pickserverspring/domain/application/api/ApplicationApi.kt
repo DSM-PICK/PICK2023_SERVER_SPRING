@@ -3,7 +3,7 @@ package com.pickdsm.pickserverspring.domain.application.api
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
-import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicEndTimeResponse
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicOrMovementResponse
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
@@ -24,5 +24,5 @@ interface ApplicationApi {
 
     fun savePicnicAcceptOrRefuse(request: DomainPicnicAcceptOrRefuseRequest)
 
-    fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse
+    fun getMyPicnicEndTime(): QueryMyPicnicOrMovementResponse
 }
