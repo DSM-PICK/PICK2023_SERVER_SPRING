@@ -13,6 +13,7 @@ import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementStudentElement
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementLocationResponse
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
@@ -138,6 +139,22 @@ class ClassroomMovementUseCase(
         if (status != null) {
             commandStatusSpi.deleteStatus(status)
         }
+    }
+
+    override fun getClassroomMovementLocation(): QueryClassroomMovementLocationResponse {
+        val userId = userSpi.getCurrentUserId()
+        val userInfo = userSpi.queryUserInfoByUserId(userId)
+        val status = queryStatusSpi.queryMovementStudentByStudentId(userId)
+            ?: throw StatusNotFoundException
+        val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status)
+            ?: throw ClassroomMovementStudentNotFoundException
+        val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+            ?: throw ClassroomNotFoundException
+        
+        return QueryClassroomMovementLocationResponse(
+            name = userInfo.name,
+            locationClassroom = classroom.name,
+        )
     }
 
     private fun checkUserNumLessThanTen(userNum: Int) =
