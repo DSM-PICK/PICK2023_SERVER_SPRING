@@ -454,7 +454,7 @@ class ApplicationUseCase(
 
     override fun getMyPicnicEndTime(): QueryMyPicnicResponse {
         val userId = userSpi.getCurrentUserId()
-        val userInfo = userSpi.queryUserInfoByUserId(userId) 
+        val userInfo = userSpi.queryUserInfoByUserId(userId)
         val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentId(userId)
             ?: throw StatusNotFoundException
         val endTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
