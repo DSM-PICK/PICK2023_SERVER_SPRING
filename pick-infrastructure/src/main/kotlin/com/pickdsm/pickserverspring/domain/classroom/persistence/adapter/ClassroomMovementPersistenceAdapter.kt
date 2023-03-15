@@ -5,14 +5,18 @@ import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMovementMapper
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomMovementRepository
+import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity
+import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity.classroomMovementEntity
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.querydsl.jpa.impl.JPAQueryFactory
 
 @Adapter
 class ClassroomMovementPersistenceAdapter(
     private val classroomMovementRepository: ClassroomMovementRepository,
     private val statusMapper: StatusMapper,
     private val classroomMovementMapper: ClassroomMovementMapper,
+    private val jpaQueryFactory: JPAQueryFactory,
 ) : ClassroomMovementSpi {
 
     override fun saveClassroomMovement(classroomMovement: ClassroomMovement) {
@@ -27,9 +31,10 @@ class ClassroomMovementPersistenceAdapter(
         )
     }
 
-    override fun queryClassroomMovementByStatus(status: Status): ClassroomMovement {
-        val statusEntity = statusMapper.domainToEntity(status)
-        val classroomMovementEntity = classroomMovementRepository.findByStatusEntity(statusEntity)
-        return classroomMovementMapper.entityToDomain(classroomMovementEntity)
-    }
+    override fun queryClassroomMovementByStatus(status: Status): ClassroomMovement? =
+        jpaQueryFactory
+            .selectFrom(classroomMovementEntity)
+            .where(classroomMovementEntity.statusEntity.id.eq(status.id))
+            .fetchFirst()
+            ?.let(classroomMovementMapper::entityToDomain)
 }
