@@ -29,9 +29,6 @@ class SelfStudyDirectorUseCase(
     private val queryTypeSpi: QueryTypeSpi,
     private val userSpi: UserSpi,
     private val commandSelfStudyDirectorSpi: CommandSelfStudyDirectorSpi,
-    private val queryStatusSpi: QueryStatusSpi,
-    private val commandStatusSpi: CommandStatusSpi,
-    private val userQueryApplicationSpi: UserQuerySelfStudyDirectorSpi,
 ) : SelfStudyDirectorApi {
 
     override fun getSelfStudyTeacher(month: String): SelfStudyListResponse {
@@ -87,7 +84,7 @@ class SelfStudyDirectorUseCase(
     override fun getSelfStudyState(): SelfStudyStateResponse {
         val date = LocalDate.now()
         val teacherId = userSpi.getCurrentUserId()
-        val teacher = userQuerySelfStudyDirectorSpi.queryUserInfo(listOf(teacherId)).first()
+        val teacher = userSpi.queryUserInfoByUserId(teacherId)
         val selfStudy = querySelfStudyDirectorSpi.queryAllSelfStudyDirectorByTeacherIdAndDate(teacher.id, date)
         return SelfStudyStateResponse(
             date = date,

@@ -20,7 +20,6 @@ import java.time.LocalDate
 @UseCase
 class TeacherUseCase(
     private val userSpi: UserSpi,
-    private val userQueryTeacherSpi: UserQueryTeacherSpi,
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
@@ -29,20 +28,18 @@ class TeacherUseCase(
 
     override fun updateStudentStatus(request: DomainUpdateStudentStatusRequest) {
         val teacherId = userSpi.getCurrentUserId()
-        val userInfo = userQueryTeacherSpi.queryUserInfo(listOf(request.userId))
+        val userInfo = userSpi.queryUserInfoByUserId(request.userId)
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
-        val user = userInfo.find { user -> user.id == request.userId }
-            ?: throw UserNotFoundException
         val time = timeList.timeList.find { time -> time.period == request.period }
             ?: throw TimeNotFoundException
         val status = queryStatusSpi.queryStatusByStudentIdAndTeacherId(
-            studentId = user.id,
+            studentId = userInfo.id,
             teacherId = teacherId
         )
 
         val saveOrUpdateStatus = status?.changeStudentStatus(type = request.status)
             ?: Status(
-                studentId = user.id,
+                studentId = userInfo.id,
                 teacherId = teacherId,
                 startPeriod = time.period,
                 endPeriod = time.period,

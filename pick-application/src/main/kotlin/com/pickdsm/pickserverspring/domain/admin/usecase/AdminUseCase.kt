@@ -232,10 +232,9 @@ class AdminUseCase(
             grade = grade,
             classNum = classNum,
         )
-        val homeroomTeacherInfo = userSpi.queryUserInfo(listOf(classroomTeacherId))
+        val homeroomTeacherInfo = userSpi.queryUserInfoByUserId(classroomTeacherId)
 
-        val teacherName = homeroomTeacherInfo.firstOrNull()?.name
-            ?: throw TeacherNotFoundException
+        val teacherName = homeroomTeacherInfo.name
 
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val nowPeriod = queryTimeSpi.queryNowPeriod(timeList)
