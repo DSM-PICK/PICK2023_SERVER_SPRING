@@ -9,7 +9,8 @@ import com.pickdsm.pickserverspring.domain.application.api.ApplicationApi
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainApplicationGoOutRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.application.api.dto.request.DomainPicnicPassRequest
-import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicResponse
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicEndTimeResponse
+import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryMyPicnicInfoResponse
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicApplicationList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentElement
@@ -452,7 +453,7 @@ class ApplicationUseCase(
         }
     }
 
-    override fun getMyPicnicEndTime(): QueryMyPicnicResponse {
+    override fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse {
         val userId = userSpi.getCurrentUserId()
         val userInfo = userSpi.queryUserInfoByUserId(userId)
         val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentId(userId)
@@ -461,10 +462,39 @@ class ApplicationUseCase(
             .timeList.find { time -> time.period == picnicUserStatus.endPeriod }?.endTime
             ?: throw TimeNotFoundException
 
-        return QueryMyPicnicResponse(
+        return QueryMyPicnicEndTimeResponse(
             userId = userInfo.id,
             name = userInfo.name,
             endTime = endTime,
+        )
+    }
+
+    override fun getMyPicnicInfo(): QueryMyPicnicInfoResponse {
+        val userId = userSpi.getCurrentUserId()
+        val userInfo = userSpi.queryUserInfoByUserId(userId)
+        val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentId(userId)
+            ?: throw StatusNotFoundException
+        val teacherName = userSpi.queryUserInfoByUserId(picnicUserStatus.teacherId).name
+
+        val application = queryApplicationSpi.queryApplicationByStudentIdAndStatusId(
+            studentId = userInfo.id,
+            statusId = picnicUserStatus.id,
+        ) ?: throw ApplicationNotFoundException
+
+        val startTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
+            .timeList.find { time -> time.period == picnicUserStatus.startPeriod }?.startTime
+            ?: throw TimeNotFoundException
+        val endTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
+            .timeList.find { time -> time.period == picnicUserStatus.endPeriod }?.endTime
+            ?: throw TimeNotFoundException
+
+        return QueryMyPicnicInfoResponse(
+            studentNumber = "${userInfo.grade}${userInfo.classNum}${checkUserNumLessThanTen(userInfo.num)}",
+            studentName = userInfo.name,
+            startTime = startTime,
+            endTime = endTime,
+            reason = application.reason,
+            teacherName = teacherName,
         )
     }
 
