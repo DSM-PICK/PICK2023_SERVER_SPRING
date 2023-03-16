@@ -1,17 +1,13 @@
 package com.pickdsm.pickserverspring.domain.classroom.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.application.Status
-import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMovementMapper
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomMovementRepository
-import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity.classroomMovementEntity
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
-import java.time.LocalDate
-import java.util.UUID
 
 @Adapter
 class ClassroomMovementPersistenceAdapter(

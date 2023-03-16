@@ -39,10 +39,10 @@ class TeacherUseCase(
             ?: throw TimeNotFoundException
 
         val status = queryStatusSpi.queryStatusByStudentIdAndStartPeriodAndEndPeriod(
-                studentId = userInfo.id,
-                startPeriod = time.period,
-                endPeriod = time.period,
-            )
+            studentId = userInfo.id,
+            startPeriod = time.period,
+            endPeriod = time.period,
+        )
 
         val saveOrUpdateStatus = status?.changeStudentStatus(request.status)
             ?: Status(

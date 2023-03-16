@@ -11,7 +11,7 @@ import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassro
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class StatusPersistenceAdapter(
@@ -95,7 +95,7 @@ class StatusPersistenceAdapter(
     override fun queryStatusByStudentIdAndStartPeriodAndEndPeriod(
         studentId: UUID,
         startPeriod: Int,
-        endPeriod: Int
+        endPeriod: Int,
     ): Status? =
         jpaQueryFactory
             .selectFrom(statusEntity)
