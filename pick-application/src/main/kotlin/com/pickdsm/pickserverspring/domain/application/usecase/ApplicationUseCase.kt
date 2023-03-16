@@ -331,7 +331,7 @@ class ApplicationUseCase(
         return QueryPicnicStudentList(outing)
     }
 
-    override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID, type: String): QueryStudentStatusList {
+    override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID): QueryStudentStatusList {
         val todayStudentStatusList = queryStatusSpi.queryStatusListByToday()
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
             ?: throw ClassroomNotFoundException
@@ -346,45 +346,21 @@ class ApplicationUseCase(
 
         val students = mutableListOf<QueryStudentStatusElement>()
 
-        when (type) {
-            ALL -> {
-                classroomStudentList
-                    .map { user ->
-                        val status = todayStudentStatusList.find { user.id == it.studentId }
-                        val studentNumber = user.num
-                        val studentName = user.name
-                        val movementClassroomName = movementStudent(status)
-                        val studentStatus = QueryStudentStatusElement(
-                            studentId = user.id,
-                            studentNumber = studentNumber,
-                            studentName = studentName,
-                            type = status?.type?.name ?: StatusType.ATTENDANCE.name,
-                            classroomName = movementClassroomName,
-                        )
-                        students.add(studentStatus)
-                    }
+        classroomStudentList
+            .map { user ->
+                val status = todayStudentStatusList.find { user.id == it.studentId }
+                val studentNumber = user.num
+                val studentName = user.name
+                val movementClassroomName = movementStudent(status)
+                val studentStatus = QueryStudentStatusElement(
+                    studentId = user.id,
+                    studentNumber = studentNumber,
+                    studentName = studentName,
+                    type = status?.type?.name ?: StatusType.ATTENDANCE.name,
+                    classroomName = movementClassroomName,
+                    )
+                students.add(studentStatus)
             }
-
-            MOVEMENT -> {
-                userList
-                    .map { user ->
-                        if (user.grade == classroom.grade && user.classNum == classroom.classNum) {
-                            val studentNumber = "${classroom.grade}${classroom.classNum}${checkUserNumLessThanTen(user.num)}"
-                            val status = todayStudentStatusList.find { user.id == it.studentId }
-                            val studentName = user.name
-                            val movementClassroomName = movementStudent(status)
-                            val studentStatus = QueryStudentStatusElement(
-                                studentId = user.id,
-                                studentNumber = studentNumber,
-                                studentName = studentName,
-                                type = status?.type?.name ?: StatusType.ATTENDANCE.name,
-                                classroomName = movementClassroomName,
-                            )
-                            students.add(studentStatus)
-                        }
-                    }
-            }
-        }
 
         return QueryStudentStatusList(students)
     }
