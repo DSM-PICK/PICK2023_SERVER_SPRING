@@ -6,10 +6,12 @@ import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
 import com.pickdsm.pickserverspring.domain.application.spi.StatusSpi
+import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
+import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity.classroomMovementEntity
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class StatusPersistenceAdapter(
@@ -90,7 +92,11 @@ class StatusPersistenceAdapter(
             .fetchFirst()
             ?.let(statusMapper::entityToDomain)
 
-    override fun queryStatusByStudentIdAndStartPeriodAndEndPeriod(studentId: UUID, startPeriod: Int, endPeriod: Int): Status? =
+    override fun queryStatusByStudentIdAndStartPeriodAndEndPeriod(
+        studentId: UUID,
+        startPeriod: Int,
+        endPeriod: Int,
+    ): Status? =
         jpaQueryFactory
             .selectFrom(statusEntity)
             .where(
@@ -114,4 +120,16 @@ class StatusPersistenceAdapter(
             .where(statusEntity.studentId.eq(studentId))
             .fetchFirst()
             ?.let(statusMapper::entityToDomain)
+
+    override fun queryMovementStatusListByTodayAndClassroomId(classroomId: UUID): List<Status> =
+        jpaQueryFactory
+            .selectFrom(statusEntity)
+            .distinct()
+            .join(classroomMovementEntity)
+            .on(statusEntity.id.eq(classroomMovementEntity.statusEntity.id))
+            .join(classroomEntity)
+            .on(classroomMovementEntity.classroomEntity.id.eq(classroomId))
+            .where(statusEntity.date.eq(LocalDate.now()))
+            .fetch()
+            .map(statusMapper::entityToDomain)
 }

@@ -23,4 +23,6 @@ interface QueryStatusSpi {
     fun queryMovementStudentByStudentId(studentId: UUID): Status?
 
     fun queryStatusByStudentId(studentId: UUID): Status?
+
+    fun queryMovementStatusListByTodayAndClassroomId(classroomId: UUID): List<Status>
 }

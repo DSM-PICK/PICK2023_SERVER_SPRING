@@ -169,18 +169,21 @@ class ClassroomMovementUseCase(
             DirectorType.SELF_STUDY -> {
                 return classroom
             }
+
             DirectorType.CLUB -> {
                 val classroomId = queryClubSpi.queryClubIdByStudentId(studentId)
                 val classroomForClub = queryClassroomSpi.queryClassroomById(classroomId)
                     ?: throw ClassroomNotFoundException
                 return classroomForClub.name
             }
+
             DirectorType.AFTER_SCHOOL -> {
                 val classroomId = queryAfterSchoolSpi.queryAfterSchoolIdByStudentId(studentId)
                 val classroomForAfterSchool = queryClassroomSpi.queryClassroomById(classroomId)
                     ?: throw ClassroomNotFoundException
                 return classroomForAfterSchool.name
             }
+
             else -> return ""
         }
     }

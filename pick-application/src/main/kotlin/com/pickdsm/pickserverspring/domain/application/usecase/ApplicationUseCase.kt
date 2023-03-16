@@ -51,11 +51,6 @@ class ApplicationUseCase(
     private val queryAfterSchool: QueryAfterSchoolSpi,
 ) : ApplicationApi {
 
-    companion object {
-        const val ALL = "all"
-        const val MOVEMENT = "movement"
-    }
-
     override fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest) {
         val studentId = userSpi.getCurrentUserId()
         val status = Status(
@@ -333,7 +328,7 @@ class ApplicationUseCase(
         return QueryPicnicStudentList(outing)
     }
 
-    override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID, type: String): QueryStudentStatusList {
+    override fun getAllStudentStatusByClassroomId(classroomId: UUID): QueryStudentStatusList {
         val todayStudentStatusList = queryStatusSpi.queryStatusListByToday()
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
             ?: throw ClassroomNotFoundException
@@ -342,51 +337,22 @@ class ApplicationUseCase(
 
         val classroomStudentList = userSpi.queryUserInfoByGradeAndClassNum(grade, classNum)
 
-        val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
-        val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
-        val userList = userQueryApplicationSpi.queryUserInfo(todayMovementStudentIdList)
-
         val students = mutableListOf<QueryStudentStatusElement>()
 
-        when (type) {
-            ALL -> {
-                classroomStudentList
-                    .map { user ->
-                        val status = todayStudentStatusList.find { user.id == it.studentId }
-                        val studentNumber = user.num
-                        val studentName = user.name
-                        val movementClassroomName = movementStudent(status)
-                        val studentStatus = QueryStudentStatusElement(
-                            studentId = user.id,
-                            studentNumber = studentNumber,
-                            studentName = studentName,
-                            type = status?.type?.name ?: StatusType.ATTENDANCE.name,
-                            classroomName = movementClassroomName,
-                        )
-                        students.add(studentStatus)
-                    }
-            }
+        classroomStudentList
+            .map { user ->
+                val status = todayStudentStatusList.find { user.id == it.studentId }
+                val movementClassroomName = movementStudent(status)
 
-            MOVEMENT -> {
-                userList
-                    .map { user ->
-                        if (user.grade == classroom.grade && user.classNum == classroom.classNum) {
-                            val studentNumber = "${classroom.grade}${classroom.classNum}${checkUserNumLessThanTen(user.num)}"
-                            val status = todayStudentStatusList.find { user.id == it.studentId }
-                            val studentName = user.name
-                            val movementClassroomName = movementStudent(status)
-                            val studentStatus = QueryStudentStatusElement(
-                                studentId = user.id,
-                                studentNumber = studentNumber,
-                                studentName = studentName,
-                                type = status?.type?.name ?: StatusType.ATTENDANCE.name,
-                                classroomName = movementClassroomName,
-                            )
-                            students.add(studentStatus)
-                        }
-                    }
+                val studentStatus = QueryStudentStatusElement(
+                    studentId = user.id,
+                    studentNumber = user.num,
+                    studentName = user.name,
+                    type = status?.type?.name ?: StatusType.ATTENDANCE.name,
+                    classroomName = movementClassroomName,
+                )
+                students.add(studentStatus)
             }
-        }
 
         return QueryStudentStatusList(students)
     }
