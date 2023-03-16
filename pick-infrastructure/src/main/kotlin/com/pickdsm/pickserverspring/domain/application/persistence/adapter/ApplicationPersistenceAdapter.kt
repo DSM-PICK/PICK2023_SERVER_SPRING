@@ -9,6 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
+import java.util.UUID
 
 @Adapter
 class ApplicationPersistenceAdapter(
@@ -36,4 +37,13 @@ class ApplicationPersistenceAdapter(
             .on(applicationEntity.statusEntity.date.eq(date))
             .fetch()
             .map(applicationMapper::entityToDomain)
+
+    override fun queryApplicationByStudentIdAndStatusId(studentId: UUID, statusId: UUID): Application? =
+        jpaQueryFactory
+            .selectFrom(applicationEntity)
+            .innerJoin(applicationEntity.statusEntity, statusEntity)
+            .on(applicationEntity.statusEntity.id.eq(statusId))
+            .where(statusEntity.studentId.eq(studentId))
+            .fetchFirst()
+            ?.let(applicationMapper::entityToDomain)
 }
