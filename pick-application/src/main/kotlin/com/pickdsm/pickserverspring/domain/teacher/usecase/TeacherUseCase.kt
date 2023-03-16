@@ -37,7 +37,7 @@ class TeacherUseCase(
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val time = timeList.timeList.find { time -> time.period == request.period }
             ?: throw TimeNotFoundException
-        
+
         val status = queryStatusSpi.queryStatusByStudentIdAndStartPeriodAndEndPeriod(
                 studentId = userInfo.id,
                 startPeriod = time.period,
