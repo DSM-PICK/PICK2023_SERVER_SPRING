@@ -51,11 +51,6 @@ class ApplicationUseCase(
     private val queryAfterSchool: QueryAfterSchoolSpi,
 ) : ApplicationApi {
 
-    companion object {
-        const val ALL = "all"
-        const val MOVEMENT = "movement"
-    }
-
     override fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest) {
         val studentId = userSpi.getCurrentUserId()
         val status = Status(
@@ -331,7 +326,7 @@ class ApplicationUseCase(
         return QueryPicnicStudentList(outing)
     }
 
-    override fun queryAllStudentStatusByClassroomAndType(classroomId: UUID): QueryStudentStatusList {
+    override fun getAllStudentStatusByClassroomId(classroomId: UUID): QueryStudentStatusList {
         val todayStudentStatusList = queryStatusSpi.queryStatusListByToday()
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
             ?: throw ClassroomNotFoundException
@@ -339,10 +334,6 @@ class ApplicationUseCase(
         val classNum = classroom.classNum ?: throw ClassroomNotFoundException // TODO 우선 에러처리
 
         val classroomStudentList = userSpi.queryUserInfoByGradeAndClassNum(grade, classNum)
-
-        val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
-        val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
-        val userList = userQueryApplicationSpi.queryUserInfo(todayMovementStudentIdList)
 
         val students = mutableListOf<QueryStudentStatusElement>()
 

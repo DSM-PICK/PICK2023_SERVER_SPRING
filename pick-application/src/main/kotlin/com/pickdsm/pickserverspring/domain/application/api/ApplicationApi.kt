@@ -19,7 +19,7 @@ interface ApplicationApi {
 
     fun queryPicnicStudentListByToday(): QueryPicnicStudentList
 
-    fun queryAllStudentStatusByClassroomAndType(classroomId: UUID): QueryStudentStatusList
+    fun getAllStudentStatusByClassroomId(classroomId: UUID): QueryStudentStatusList
 
     fun savePicnicPass(request: DomainPicnicPassRequest)
 

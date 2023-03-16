@@ -96,9 +96,8 @@ class TeacherWebAdapter(
     @GetMapping("/students/{classroom-id}")
     fun queryStudentStatusByToday(
         @PathVariable("classroom-id") classroomId: UUID,
-        @RequestParam type: String,
     ): QueryStudentStatusList {
-        return applicationApi.queryAllStudentStatusByClassroomAndType(classroomId, type)
+        return applicationApi.getAllStudentStatusByClassroomId(classroomId)
     }
 
     @GetMapping("/{classroom-id}")
