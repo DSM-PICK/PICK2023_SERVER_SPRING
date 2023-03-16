@@ -41,6 +41,7 @@ class ClassPersistenceAdapter(
             .select(classroomEntity.grade)
             .from(classroomEntity)
             .where(classroomEntity.floor.eq(floor))
+            .where(classroomEntity.grade.isNotNull)
             .fetchFirst()
 
     override fun queryClassroomByGradeAndClassNum(grade: Int?, classNum: Int?): Classroom? =

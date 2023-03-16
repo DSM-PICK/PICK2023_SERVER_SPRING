@@ -127,7 +127,7 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != null -> {
+                    floor != 0 && floor != null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
                             val classroomGrade = queryClassroomSpi.queryClassroomGradeByFloor(floor)
@@ -194,10 +194,11 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != null -> {
+                    floor != 0 && floor != null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
-                            val clubStudentIdList = queryClubSpi.queryClubStudentIdListByFloor(floor).find { user.id == it }
+                            val clubStudentIdList =
+                                queryClubSpi.queryClubStudentIdListByFloor(floor).find { user.id == it }
 
                             clubStudentIdList == user.id
                         }.map { status ->
@@ -262,10 +263,11 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != null -> {
+                    floor != 0 && floor != null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
-                            val afterSchoolStudentList = queryAfterSchool.queryAfterSchoolStudentIdByFloor(floor).find { user.id == it }
+                            val afterSchoolStudentList =
+                                queryAfterSchool.queryAfterSchoolStudentIdByFloor(floor).find { user.id == it }
 
                             afterSchoolStudentList == user.id
                         }.map { status ->
