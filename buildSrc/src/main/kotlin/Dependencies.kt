@@ -2,6 +2,9 @@ object Dependencies {
     // ktlint
     const val KTLINT = "com.pinterest:ktlint:${DependencyVersions.KTLINT_VERSION}"
 
+    // transaction
+    const val SPRING_TRANSACTION = "org.springframework:spring-tx:${DependencyVersions.SPRING_TRANSACTION}"
+
     // validation
     const val VALIDATION = "org.springframework.boot:spring-boot-starter-validation"
 
