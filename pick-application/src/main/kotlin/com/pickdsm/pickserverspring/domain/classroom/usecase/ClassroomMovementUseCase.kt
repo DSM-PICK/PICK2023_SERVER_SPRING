@@ -14,7 +14,6 @@ import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementStudentElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementLocationResponse
-import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
@@ -28,7 +27,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @UseCase
 class ClassroomMovementUseCase(

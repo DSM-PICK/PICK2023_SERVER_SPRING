@@ -102,7 +102,7 @@ class TeacherWebAdapter(
 
     @GetMapping("/{classroom-id}")
     fun getMovementStatus(
-        @PathVariable("classroom-id") classroomId: UUID
+        @PathVariable("classroom-id") classroomId: UUID,
     ): QueryMovementStudentList {
         return teacherApi.getMovementStudents(classroomId)
     }
