@@ -14,6 +14,7 @@ import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementStudentElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementLocationResponse
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
@@ -155,6 +156,25 @@ class ClassroomMovementUseCase(
             name = userInfo.name,
             locationClassroom = classroom.name,
         )
+    }
+
+    override fun getClassroomMovementStudentList(classroomId: UUID): QueryClassroomMovementStudentList {
+        val todayStudentStatusList = queryStatusSpi.queryStatusListByToday()
+        val classroom = queryClassroomSpi.queryClassroomById(classroomId)
+            ?: throw ClassroomNotFoundException
+        val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
+        val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
+        val userInfoList = userQueryApplicationSpi.queryUserInfo(todayMovementStudentIdList)
+
+        userInfoList.map { user ->
+            if (user.grade == classroom.grade && user.classNum == classroom.classNum) {
+                val studentNumber = "${classroom.grade}${classroom.classNum}${checkUserNumLessThanTen(user.num)}"
+                val status = todayStudentStatusList.find { user.id == it.studentId }
+                val studentName = user.name
+                
+            }
+        }
+
     }
 
     private fun checkUserNumLessThanTen(userNum: Int) =

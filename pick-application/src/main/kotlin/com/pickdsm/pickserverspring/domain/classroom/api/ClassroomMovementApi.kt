@@ -2,7 +2,9 @@ package com.pickdsm.pickserverspring.domain.classroom.api
 
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementLocationResponse
+import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
+import java.util.UUID
 
 interface ClassroomMovementApi {
 
@@ -13,4 +15,6 @@ interface ClassroomMovementApi {
     fun returnClassroomMovement()
 
     fun getClassroomMovementLocation(): QueryClassroomMovementLocationResponse
+
+    fun getClassroomMovementStudentList(classroomId: UUID): QueryClassroomMovementStudentList
 }
