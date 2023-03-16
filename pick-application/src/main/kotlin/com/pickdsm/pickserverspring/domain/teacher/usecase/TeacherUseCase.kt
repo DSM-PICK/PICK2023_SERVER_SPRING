@@ -11,9 +11,7 @@ import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateS
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
-import com.pickdsm.pickserverspring.domain.teacher.spi.UserQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
-import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 
@@ -30,14 +28,10 @@ class TeacherUseCase(
         val teacherId = userSpi.getCurrentUserId()
         val userInfo = userSpi.queryUserInfoByUserId(request.userId)
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
-        val time = timeList.timeList.find { time -> time.period == request.period }
-            ?: throw TimeNotFoundException
-        val status = queryStatusSpi.queryStatusByStudentIdAndTeacherId(
-            studentId = userInfo.id,
-            teacherId = teacherId
-        )
+        val time = timeList.timeList.find { time -> time.period == request.period } ?: throw TimeNotFoundException
+        val status = queryStatusSpi.queryStatusByStudentIdAndStartPeriodAndEndPeriod(userInfo.id, time.period, time.period)
 
-        val saveOrUpdateStatus = status?.changeStudentStatus(type = request.status)
+        val saveOrUpdateStatus = status?.changeStudentStatus(request.status)
             ?: Status(
                 studentId = userInfo.id,
                 teacherId = teacherId,
@@ -45,7 +39,6 @@ class TeacherUseCase(
                 endPeriod = time.period,
                 type = request.status,
             )
-
         statusCommandTeacherSpi.saveStatus(saveOrUpdateStatus)
     }
 

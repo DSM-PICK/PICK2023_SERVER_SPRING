@@ -90,12 +90,13 @@ class StatusPersistenceAdapter(
             .fetchFirst()
             ?.let(statusMapper::entityToDomain)
 
-    override fun queryStatusByStudentIdAndTeacherId(studentId: UUID, teacherId: UUID): Status? =
+    override fun queryStatusByStudentIdAndStartPeriodAndEndPeriod(studentId: UUID, startPeriod: Int, endPeriod: Int): Status? =
         jpaQueryFactory
             .selectFrom(statusEntity)
             .where(
                 statusEntity.studentId.eq(studentId),
-                statusEntity.teacherId.eq(teacherId)
+                statusEntity.startPeriod.eq(startPeriod),
+                statusEntity.endPeriod.eq(endPeriod)
             )
             .fetchOne()
             ?.let(statusMapper::entityToDomain)

@@ -47,8 +47,6 @@ data class Status(
     }
 
     fun changeStudentStatus(type: StatusType): Status {
-        return copy(
-            type = type
-        )
+        return copy(type = type)
     }
 }
