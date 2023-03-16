@@ -342,13 +342,12 @@ class ApplicationUseCase(
         classroomStudentList
             .map { user ->
                 val status = todayStudentStatusList.find { user.id == it.studentId }
-                val studentNumber = user.num
-                val studentName = user.name
                 val movementClassroomName = movementStudent(status)
+
                 val studentStatus = QueryStudentStatusElement(
                     studentId = user.id,
-                    studentNumber = studentNumber,
-                    studentName = studentName,
+                    studentNumber = user.num,
+                    studentName = user.name,
                     type = status?.type?.name ?: StatusType.ATTENDANCE.name,
                     classroomName = movementClassroomName,
                 )
