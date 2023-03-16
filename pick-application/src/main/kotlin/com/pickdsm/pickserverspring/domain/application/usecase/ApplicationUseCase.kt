@@ -87,7 +87,7 @@ class ApplicationUseCase(
         when (type) {
             DirectorType.SELF_STUDY -> {
                 when {
-                    floor == 0 -> {
+                    floor == null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
 
@@ -122,7 +122,7 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != 0 && floor != null -> {
+                    floor != null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
                             val classroomGrade = queryClassroomSpi.queryClassroomGradeByFloor(floor)
@@ -154,7 +154,7 @@ class ApplicationUseCase(
 
             DirectorType.CLUB -> {
                 when {
-                    floor == 0 -> {
+                    floor == null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
 
@@ -189,7 +189,7 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != 0 && floor != null -> {
+                    floor != null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
                             val clubStudentIdList =
@@ -223,7 +223,7 @@ class ApplicationUseCase(
 
             DirectorType.AFTER_SCHOOL -> {
                 when {
-                    floor == 0 -> {
+                    floor == null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
 
@@ -258,7 +258,7 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != 0 && floor != null -> {
+                    floor != null -> {
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
                             val afterSchoolStudentList =
