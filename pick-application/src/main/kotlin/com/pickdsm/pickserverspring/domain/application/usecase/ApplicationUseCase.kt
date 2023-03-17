@@ -348,9 +348,9 @@ class ApplicationUseCase(
                 if (status?.type == StatusType.AWAIT || status?.type == StatusType.PICNIC_REJECT) {
                     type = StatusType.ATTENDANCE.name
                 } else {
-                    type = status?.type?.name.toString()
+                    type = status?.type?.name ?: StatusType.ATTENDANCE.name
                 }
-2
+
                 val studentStatus = QueryStudentStatusElement(
                     studentId = user.id,
                     studentNumber = user.num,
