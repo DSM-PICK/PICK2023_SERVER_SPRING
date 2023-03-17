@@ -343,12 +343,19 @@ class ApplicationUseCase(
             .map { user ->
                 val status = todayStudentStatusList.find { user.id == it.studentId }
                 val movementClassroomName = movementStudent(status)
+                var type = ""
 
+                if (status?.type == StatusType.AWAIT || status?.type == StatusType.PICNIC_REJECT) {
+                    type = StatusType.ATTENDANCE.name
+                } else {
+                    type = status?.type?.name.toString()
+                }
+2
                 val studentStatus = QueryStudentStatusElement(
                     studentId = user.id,
                     studentNumber = user.num,
                     studentName = user.name,
-                    type = status?.type?.name ?: StatusType.ATTENDANCE.name,
+                    type = type,
                     classroomName = movementClassroomName,
                 )
                 students.add(studentStatus)
