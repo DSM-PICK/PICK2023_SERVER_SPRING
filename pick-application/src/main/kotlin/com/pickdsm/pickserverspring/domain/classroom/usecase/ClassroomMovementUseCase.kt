@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
+import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
@@ -20,6 +21,7 @@ import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFound
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
+import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
@@ -80,12 +82,13 @@ class ClassroomMovementUseCase(
         val movementStudent = mutableListOf<MovementStudentElement>()
         val studentAttendanceList = adminApi.getTypeByDate(LocalDate.now())
 
-        if (floor == 0) {
+        if (floor == null) {
             val moveList = userList.filter {
                 it.grade == grade && it.classNum == classNum
             }.map {
                 val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
-                val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status!!)
+                    ?: throw StatusNotFoundException
+                val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status)
                     ?: throw ClassroomMovementStudentNotFoundException
                 val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
                     ?: throw ClassroomNotFoundException
@@ -171,15 +174,17 @@ class ClassroomMovementUseCase(
             }
 
             DirectorType.CLUB -> {
-                val classroomId = queryClubSpi.queryClubIdByStudentId(studentId)
-                val classroomForClub = queryClassroomSpi.queryClassroomById(classroomId)
+                val clubClassroomId = queryClubSpi.queryClubIdByStudentId(studentId)
+                    ?: throw ClubNotFoundException
+                val classroomForClub = queryClassroomSpi.queryClassroomById(clubClassroomId)
                     ?: throw ClassroomNotFoundException
                 return classroomForClub.name
             }
 
             DirectorType.AFTER_SCHOOL -> {
-                val classroomId = queryAfterSchoolSpi.queryAfterSchoolIdByStudentId(studentId)
-                val classroomForAfterSchool = queryClassroomSpi.queryClassroomById(classroomId)
+                val afterSchoolClassroomId = queryAfterSchoolSpi.queryAfterSchoolIdByStudentId(studentId)
+                    ?: throw AfterSchoolNotFoundException
+                val classroomForAfterSchool = queryClassroomSpi.queryClassroomById(afterSchoolClassroomId)
                     ?: throw ClassroomNotFoundException
                 return classroomForAfterSchool.name
             }

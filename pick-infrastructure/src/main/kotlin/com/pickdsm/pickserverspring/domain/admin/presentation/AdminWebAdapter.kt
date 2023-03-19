@@ -222,6 +222,7 @@ class AdminWebAdapter(
     ): QueryMovementStudentList {
         return classroomMovementApi.queryMovementStudentList(grade, classNum, floor)
     }
+
     @GetMapping("/club/{club-id}")
     fun getClubStudentList(
         @PathVariable("club-id")

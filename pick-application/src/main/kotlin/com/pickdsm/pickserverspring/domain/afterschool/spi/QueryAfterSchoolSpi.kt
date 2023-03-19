@@ -21,5 +21,5 @@ interface QueryAfterSchoolSpi {
 
     fun queryAfterSchoolListByAfterSchoolId(afterSchoolId: UUID): List<AfterSchool>
 
-    fun queryAfterSchoolIdByStudentId(studentId: UUID): UUID
+    fun queryAfterSchoolIdByStudentId(studentId: UUID): UUID?
 }
