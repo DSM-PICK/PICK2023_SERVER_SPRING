@@ -28,6 +28,7 @@ import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementS
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
@@ -48,7 +49,8 @@ class ApplicationUseCase(
     private val queryClassroomSpi: QueryClassroomSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val queryClubSpi: QueryClubSpi,
-    private val queryAfterSchool: QueryAfterSchoolSpi,
+    private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
+    private val queryTypeSpi: QueryTypeSpi,
 ) : ApplicationApi {
 
     override fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest) {
@@ -262,7 +264,7 @@ class ApplicationUseCase(
                         todayStatusList.filter { status ->
                             val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
                             val afterSchoolStudentList =
-                                queryAfterSchool.queryAfterSchoolStudentIdByFloor(floor).find { user.id == it }
+                                queryAfterSchoolSpi.queryAfterSchoolStudentIdByFloor(floor).find { user.id == it }
 
                             afterSchoolStudentList == user.id
                         }.map { status ->
@@ -329,38 +331,73 @@ class ApplicationUseCase(
     }
 
     override fun getAllStudentStatusByClassroomId(classroomId: UUID): QueryStudentStatusList {
+        val dateType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now()) ?: DirectorType.SELF_STUDY
         val todayStudentStatusList = queryStatusSpi.queryStatusListByToday()
-        val classroom = queryClassroomSpi.queryClassroomById(classroomId)
-            ?: throw ClassroomNotFoundException
-        val grade = classroom.grade ?: throw ClassroomNotFoundException // TODO grade랑 classNum으로 학생 리스트를 가져와서 에러처리했습니다.
-        val classNum = classroom.classNum ?: throw ClassroomNotFoundException // TODO 우선 에러처리
-
-        val classroomStudentList = userSpi.queryUserInfoByGradeAndClassNum(grade, classNum)
-
+        val classroom = queryClassroomSpi.queryClassroomById(classroomId) ?: throw ClassroomNotFoundException
         val students = mutableListOf<QueryStudentStatusElement>()
 
-        classroomStudentList
-            .map { user ->
-                val status = todayStudentStatusList.find { user.id == it.studentId }
-                val movementClassroomName = movementStudent(status)
-                var type = ""
+        when (dateType) {
+            DirectorType.AFTER_SCHOOL -> {
+                val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolListByClassroomId(classroomId)
+                val afterSchoolStudentIdList = afterSchoolList.map { it.studentId }
+                val afterSchoolUserInfos = userSpi.queryUserInfo(afterSchoolStudentIdList)
 
-                if (status?.type == StatusType.AWAIT || status?.type == StatusType.PICNIC_REJECT) {
-                    type = StatusType.ATTENDANCE.name
-                } else {
-                    type = status?.type?.name ?: StatusType.ATTENDANCE.name
+                afterSchoolUserInfos.map { user ->
+                    val status = todayStudentStatusList.find { user.id == it.studentId }
+                    val movementClassroomName = movementStudent(status)
+
+                    val studentStatus = QueryStudentStatusElement(
+                        studentId = user.id,
+                        studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                        studentName = user.name,
+                        type = status?.type?.name ?: StatusType.ATTENDANCE.name,
+                        classroomName = movementClassroomName,
+                    )
+                    students.add(studentStatus)
                 }
-
-                val studentStatus = QueryStudentStatusElement(
-                    studentId = user.id,
-                    studentNumber = user.num,
-                    studentName = user.name,
-                    type = type,
-                    classroomName = movementClassroomName,
-                )
-                students.add(studentStatus)
             }
 
+            DirectorType.CLUB -> {
+                val clubList = queryClubSpi.queryClubListByClassroomId(classroomId)
+                val clubStudentIdList = clubList.map { it.studentId }
+                val clubUserInfos = userSpi.queryUserInfo(clubStudentIdList)
+
+                clubUserInfos.map { user ->
+                    val status = todayStudentStatusList.find { user.id == it.studentId }
+                    val movementClassroomName = movementStudent(status)
+
+                    val studentStatus = QueryStudentStatusElement(
+                        studentId = user.id,
+                        studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                        studentName = user.name,
+                        type = status?.type?.name ?: StatusType.ATTENDANCE.name,
+                        classroomName = movementClassroomName,
+                    )
+                    students.add(studentStatus)
+                }
+            }
+
+            DirectorType.SELF_STUDY -> {
+                val classroomUserInfos = userSpi.queryUserInfoByGradeAndClassNum(
+                    grade = classroom.grade,
+                    classNum = classroom.classNum,
+                )
+
+                classroomUserInfos.map { user ->
+                    val status = todayStudentStatusList.find { user.id == it.studentId }
+                    val movementClassroomName = movementStudent(status)
+
+                    val studentStatus = QueryStudentStatusElement(
+                        studentId = user.id,
+                        studentNumber = user.num,
+                        studentName = user.name,
+                        type = status?.type?.name ?: StatusType.ATTENDANCE.name,
+                        classroomName = movementClassroomName,
+                    )
+                    students.add(studentStatus)
+                }
+            }
+        }
         return QueryStudentStatusList(students)
     }
 
