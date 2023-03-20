@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.classroom.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMovementMapper
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomMovementRepository
@@ -31,7 +32,8 @@ class ClassroomMovementPersistenceAdapter(
     override fun queryClassroomMovementByStatus(status: Status): ClassroomMovement? =
         jpaQueryFactory
             .selectFrom(classroomMovementEntity)
-            .where(classroomMovementEntity.statusEntity.id.eq(status.id))
+            .join(statusEntity)
+            .on(classroomMovementEntity.statusEntity.id.eq(statusEntity.id))
             .fetchFirst()
             ?.let(classroomMovementMapper::entityToDomain)
 }
