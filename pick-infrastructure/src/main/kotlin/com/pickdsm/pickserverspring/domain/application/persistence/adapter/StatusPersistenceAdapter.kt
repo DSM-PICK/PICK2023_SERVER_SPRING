@@ -127,7 +127,7 @@ class StatusPersistenceAdapter(
             .from(statusEntity)
             .where(
                 statusEntity.studentId.eq(studentId),
-                statusEntity.endPeriod.lt(period) // 상태의 endPeriod < period면
+                statusEntity.endPeriod.lt(period), // 상태의 endPeriod < period면
             )
             .fetch()
 
