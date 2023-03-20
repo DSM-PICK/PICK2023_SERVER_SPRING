@@ -121,11 +121,14 @@ class StatusPersistenceAdapter(
             .fetchFirst()
             ?.let(statusMapper::entityToDomain)
 
-    override fun queryStatusTypesByStudentId(studentId: UUID): List<StatusType> =
+    override fun queryStatusTypesByStudentIdAndEndPeriod(studentId: UUID, period: Int): List<StatusType> =
         jpaQueryFactory
             .select(statusEntity.type)
             .from(statusEntity)
-            .where(statusEntity.studentId.eq(studentId))
+            .where(
+                statusEntity.studentId.eq(studentId),
+                statusEntity.endPeriod.lt(period) // 상태의 endPeriod < period면
+            )
             .fetch()
 
     override fun queryMovementStatusListByTodayAndClassroomId(classroomId: UUID): List<Status> =
