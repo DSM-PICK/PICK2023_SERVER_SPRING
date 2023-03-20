@@ -270,15 +270,15 @@ class AdminUseCase(
         commandTypeSpi.saveType(
             Type(
                 date = date,
-                type = type
-            )
+                type = type,
+            ),
         )
     }
 
     override fun updateType(typeId: UUID, date: LocalDate, type: DirectorType) {
         val currentType = queryTypeSpi.queryTypeById(typeId)
         commandTypeSpi.saveType(
-            currentType.changeType(date, type)
+            currentType.changeType(date, type),
         )
     }
 

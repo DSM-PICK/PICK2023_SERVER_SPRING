@@ -16,7 +16,7 @@ data class Type(
     fun changeType(date: LocalDate, type: DirectorType): Type {
         return copy(
             date = date,
-            type = type
+            type = type,
         )
     }
 }
