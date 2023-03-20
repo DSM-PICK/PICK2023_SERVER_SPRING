@@ -5,6 +5,7 @@ import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAt
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentListByGradeAndClassNum
 import java.util.UUID
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
+import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import java.time.LocalDate
 
 interface AdminApi {
@@ -16,4 +17,8 @@ interface AdminApi {
     fun getTypeByDate(date: LocalDate): QueryTypeResponse
 
     fun getStudentStatusListByGradeAndClassNum(grade: Int?, classNum: Int?): QueryStudentListByGradeAndClassNum
+
+    fun saveType(date: LocalDate, type: DirectorType)
+
+    fun updateType(typeId: UUID, date: LocalDate, type: DirectorType)
 }

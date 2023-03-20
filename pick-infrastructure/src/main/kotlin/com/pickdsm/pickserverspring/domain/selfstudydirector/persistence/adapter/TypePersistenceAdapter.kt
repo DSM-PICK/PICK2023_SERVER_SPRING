@@ -50,4 +50,9 @@ class TypePersistenceAdapter(
             .where(typeEntity.date.eq(date))
             .fetchOne()
             ?.let(typeMapper::entityToDomain)
+
+    override fun saveType(type: Type) {
+        val typeEntity = typeMapper.domainToEntity(type)
+        typeRepository.save(typeEntity)
+    }
 }

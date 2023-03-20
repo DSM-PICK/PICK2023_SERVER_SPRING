@@ -24,6 +24,7 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovem
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
@@ -239,5 +240,29 @@ class AdminWebAdapter(
         classNum: Int?,
     ): QueryStudentListByGradeAndClassNum {
         return adminApi.getStudentStatusListByGradeAndClassNum(grade, classNum)
+    }
+
+    @PostMapping("/type")
+    fun saveTypeByLocalDate(
+        @RequestParam
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate,
+        @RequestParam
+        type: DirectorType,
+    ) {
+        adminApi.saveType(date, type)
+    }
+
+    @PatchMapping("/type/{type-id}")
+    fun updateType(
+        @PathVariable("type-id")
+        typeId: UUID,
+        @RequestParam
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate,
+        @RequestParam
+        type: DirectorType,
+    ) {
+        adminApi.updateType(typeId, date, type)
     }
 }

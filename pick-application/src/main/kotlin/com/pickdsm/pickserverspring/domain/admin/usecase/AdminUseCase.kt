@@ -18,7 +18,9 @@ import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFound
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
+import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.CommandTypeSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.exception.TeacherNotFoundException
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
@@ -41,6 +43,7 @@ class AdminUseCase(
     private val queryTypeSpi: QueryTypeSpi,
     private val queryTimeSpi: QueryTimeSpi,
     private val queryStatusSpi: QueryStatusSpi,
+    private val commandTypeSpi: CommandTypeSpi,
 ) : AdminApi {
 
     override fun updateStudentStatusOfClass(request: DomainUpdateStudentStatusOfClassRequest) {
@@ -215,6 +218,7 @@ class AdminUseCase(
             ?: throw StatusNotFoundException
 
         return QueryTypeResponse(
+            id = type.id,
             date = type.date,
             type = type.type,
         )
@@ -259,6 +263,22 @@ class AdminUseCase(
         return QueryStudentListByGradeAndClassNum(
             teacherName = teacherName,
             studentList = studentList,
+        )
+    }
+
+    override fun saveType(date: LocalDate, type: DirectorType) {
+        commandTypeSpi.saveType(
+            Type(
+                date = date,
+                type = type
+            )
+        )
+    }
+
+    override fun updateType(typeId: UUID, date: LocalDate, type: DirectorType) {
+        val currentType = queryTypeSpi.queryTypeById(typeId)
+        commandTypeSpi.saveType(
+            currentType.changeType(date, type)
         )
     }
 

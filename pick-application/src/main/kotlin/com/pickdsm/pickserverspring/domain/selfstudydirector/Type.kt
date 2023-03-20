@@ -12,4 +12,11 @@ data class Type(
     val date: LocalDate = LocalDate.now(),
 
     val type: DirectorType,
-)
+) {
+    fun changeType(date: LocalDate, type: DirectorType): Type {
+        return copy(
+            date = date,
+            type = type
+        )
+    }
+}
