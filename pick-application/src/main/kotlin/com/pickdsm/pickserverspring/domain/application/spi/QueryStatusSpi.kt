@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.application.spi
 
 import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.StatusType
 import java.time.LocalDate
 import java.util.UUID
 
@@ -23,6 +24,8 @@ interface QueryStatusSpi {
     fun queryMovementStudentByStudentId(studentId: UUID): Status?
 
     fun queryStatusByStudentId(studentId: UUID): Status?
+
+    fun queryStatusTypesByStudentIdAndEndPeriod(studentId: UUID, period: Int): List<StatusType>
 
     fun queryMovementStatusListByTodayAndClassroomId(classroomId: UUID): List<Status>
 }
