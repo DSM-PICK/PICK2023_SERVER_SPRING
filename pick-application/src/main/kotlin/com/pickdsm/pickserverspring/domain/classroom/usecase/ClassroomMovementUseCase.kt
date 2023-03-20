@@ -16,6 +16,7 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClass
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementStudentElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementLocationResponse
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
+import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
@@ -54,6 +55,14 @@ class ClassroomMovementUseCase(
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val time = timeList.timeList.find { time -> time.period == request.period }
             ?: throw TimeNotFoundException
+        val statusTypes = queryStatusSpi.queryStatusTypesByStudentIdAndEndPeriod(
+            studentId = studentId,
+            period = request.period,
+        )
+
+        if (statusTypes.contains(StatusType.PICNIC)) {
+            throw CannotMovementException
+        }
 
         val status = Status(
             studentId = studentId,
