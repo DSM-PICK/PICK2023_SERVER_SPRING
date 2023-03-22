@@ -275,8 +275,9 @@ class AdminUseCase(
         )
     }
 
-    override fun updateType(typeId: UUID, date: LocalDate, type: DirectorType) {
-        val currentType = queryTypeSpi.queryTypeById(typeId)
+    override fun updateType(date: LocalDate, type: DirectorType) {
+        val currentType = queryTypeSpi.queryTypeByDate(date)
+            ?: throw TypeNotFoundException
         commandTypeSpi.saveType(
             currentType.changeType(date, type),
         )
