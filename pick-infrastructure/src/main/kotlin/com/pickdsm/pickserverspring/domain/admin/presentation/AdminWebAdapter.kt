@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 import javax.validation.Valid
 
 @RequestMapping("/admin")
@@ -242,6 +242,7 @@ class AdminWebAdapter(
         return adminApi.getStudentStatusListByGradeAndClassNum(grade, classNum)
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/type")
     fun saveTypeByLocalDate(
         @RequestParam
@@ -253,16 +254,15 @@ class AdminWebAdapter(
         adminApi.saveType(date, type)
     }
 
-    @PatchMapping("/type/{type-id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/type")
     fun updateType(
-        @PathVariable("type-id")
-        typeId: UUID,
         @RequestParam
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         date: LocalDate,
         @RequestParam
         type: DirectorType,
     ) {
-        adminApi.updateType(typeId, date, type)
+        adminApi.updateType(date, type)
     }
 }
