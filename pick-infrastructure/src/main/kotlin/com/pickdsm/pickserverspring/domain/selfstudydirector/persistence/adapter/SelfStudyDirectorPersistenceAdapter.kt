@@ -20,6 +20,7 @@ class SelfStudyDirectorPersistenceAdapter(
 ) : SelfStudyDirectorSpi {
     override fun setRestrictionMovementTrue(selfStudyDirector: SelfStudyDirector) {
         val selfStudyDirectorEntity = selfStudyDirectorMapper.domainToEntity(selfStudyDirector)
+
         selfStudyDirectorEntity.setRestrictionMovementTrue()
     }
 
@@ -80,6 +81,14 @@ class SelfStudyDirectorPersistenceAdapter(
             .update(selfStudyDirectorEntity)
             .set(selfStudyDirectorEntity.teacherId, selfStudyDirector.teacherId)
             .where(selfStudyDirectorEntity.floor.eq(selfStudyDirector.floor))
+            .execute()
+    }
+
+    override fun setRestrictionMovementFalse(selfStudyDirector: SelfStudyDirector) {
+        jpaQueryFactory
+            .update(selfStudyDirectorEntity)
+            .set(selfStudyDirectorEntity.restrictionMovement, selfStudyDirector.restrictionMovement)
+            .where(selfStudyDirectorEntity.teacherId.eq(selfStudyDirector.teacherId))
             .execute()
     }
 }

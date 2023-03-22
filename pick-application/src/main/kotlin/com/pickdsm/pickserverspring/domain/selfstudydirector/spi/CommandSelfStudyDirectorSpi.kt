@@ -6,4 +6,6 @@ interface CommandSelfStudyDirectorSpi {
     fun setRestrictionMovementTrue(selfStudyDirector: SelfStudyDirector)
 
     fun updateSelfStudyDirector(selfStudyDirector: SelfStudyDirector)
+
+    fun setRestrictionMovementFalse(selfStudyDirector: SelfStudyDirector)
 }
