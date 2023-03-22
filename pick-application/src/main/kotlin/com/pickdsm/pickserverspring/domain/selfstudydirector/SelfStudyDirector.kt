@@ -21,4 +21,10 @@ data class SelfStudyDirector(
             teacherId = teacherId,
         )
     }
+
+    fun setBlockClassroomMovementFalse(): SelfStudyDirector {
+        return copy(
+            restrictionMovement = false
+        )
+    }
 }
