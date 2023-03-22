@@ -114,7 +114,7 @@ class SelfStudyDirectorUseCase(
         val teacherId = userSpi.getCurrentUserId()
         val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorByTeacherId(teacherId)
 
-        commandSelfStudyDirectorSpi.setRestrictionNMovementFalse(
+        commandSelfStudyDirectorSpi.setRestrictionMovementFalse(
             teacher.setBlockClassroomMovementFalse()
         )
 
