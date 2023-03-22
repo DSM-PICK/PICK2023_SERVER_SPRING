@@ -24,7 +24,7 @@ data class SelfStudyDirector(
 
     fun setBlockClassroomMovementFalse(): SelfStudyDirector {
         return copy(
-            restrictionMovement = false
+            restrictionMovement = false,
         )
     }
 }
