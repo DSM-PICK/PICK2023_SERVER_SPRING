@@ -265,4 +265,10 @@ class AdminWebAdapter(
     ) {
         adminApi.updateType(typeId, date, type)
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/movement/unlock")
+    fun blockUnlockMoveClassroom() {
+        selfStudyDirectorApi.blockUnlockMoveClassroom()
+    }
 }

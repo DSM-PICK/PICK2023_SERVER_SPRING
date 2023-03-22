@@ -109,4 +109,14 @@ class SelfStudyDirectorUseCase(
             selfStudyDirector.changeSelfStudyDirector(teacherId = request.teacherId),
         )
     }
+
+    override fun blockUnlockMoveClassroom() {
+        val teacherId = userSpi.getCurrentUserId()
+        val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorByTeacherId(teacherId)
+
+        commandSelfStudyDirectorSpi.setRestrictionNMovementFalse(
+            teacher.setBlockClassroomMovementFalse()
+        )
+
+    }
 }
