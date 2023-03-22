@@ -20,5 +20,5 @@ interface AdminApi {
 
     fun saveType(date: LocalDate, type: DirectorType)
 
-    fun updateType(typeId: UUID, date: LocalDate, type: DirectorType)
+    fun updateType(date: LocalDate, type: DirectorType)
 }
