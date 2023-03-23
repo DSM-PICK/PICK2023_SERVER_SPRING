@@ -82,4 +82,10 @@ class SelfStudyDirectorPersistenceAdapter(
             .where(selfStudyDirectorEntity.floor.eq(selfStudyDirector.floor))
             .execute()
     }
+
+    override fun saveSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
+        selfStudyDirectorRepository.save(
+            selfStudyDirectorMapper.domainToEntity(selfStudyDirector)
+        )
+    }
 }

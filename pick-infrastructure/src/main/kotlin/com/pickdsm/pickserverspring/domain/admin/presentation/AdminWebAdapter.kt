@@ -7,11 +7,7 @@ import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStude
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentListByGradeAndClassNum
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequset
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.UpdateStudentStatusOfClassRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.*
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainDeleteAfterSchoolStudentRequest
@@ -26,7 +22,8 @@ import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequ
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
-import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainRegisterSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
@@ -162,7 +159,7 @@ class AdminWebAdapter(
     fun changeSelfStudyDirector(
         @RequestBody
         @Valid
-        request: ChangeSelfStudyDirectorRequset,
+        request: ChangeSelfStudyDirectorRequest,
     ) {
         val domainRequest = DomainChangeSelfStudyDirectorRequest(
             teacherId = request.teacherId,
@@ -264,5 +261,19 @@ class AdminWebAdapter(
         type: DirectorType,
     ) {
         adminApi.updateType(date, type)
+    }
+
+    @PostMapping("/director")
+    fun registerSelfDirector(
+        @RequestBody
+        @Valid
+        request: RegisterSelfStudyDirectorRequest,
+    ) {
+        val domainRequest = DomainRegisterSelfStudyDirectorRequest(
+            teacherId = request.teacherId,
+            floor = request.floor,
+            date = request.date,
+        )
+        selfStudyDirectorApi.registerSelfStudyDirector(domainRequest)
     }
 }
