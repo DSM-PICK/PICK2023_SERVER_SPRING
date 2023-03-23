@@ -4,7 +4,8 @@ import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
-import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainRegisterSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyElement
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
@@ -99,6 +100,20 @@ class SelfStudyDirectorUseCase(
 
         commandSelfStudyDirectorSpi.updateSelfStudyDirector(
             selfStudyDirector.changeSelfStudyDirector(teacherId = request.teacherId),
+        )
+    }
+
+    override fun registerSelfStudyDirector(request: DomainRegisterSelfStudyDirectorRequest) {
+        val type = queryTypeSpi.queryTypeByDate(request.date)
+            ?: throw TypeNotFoundException
+        val selfStudyDirector = SelfStudyDirector(
+            floor = request.floor,
+            teacherId = request.teacherId,
+            typeId = type.id,
+        )
+
+        commandSelfStudyDirectorSpi.saveSelfStudyDirector(
+            selfStudyDirector,
         )
     }
 }
