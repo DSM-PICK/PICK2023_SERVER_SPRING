@@ -7,7 +7,7 @@ import java.util.UUID
 
 interface QueryTypeSpi {
 
-    fun queryTypeListByToday(): List<Type>
+    fun queryTypeListByDate(startDate: LocalDate): List<Type>
 
     fun queryTypeById(typeId: UUID): Type
 

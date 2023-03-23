@@ -1,11 +1,8 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
-import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
-import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
-import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.requst.DomainChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyElement
@@ -36,23 +33,17 @@ class SelfStudyDirectorUseCase(
         val selfStudyDirectorList = querySelfStudyDirectorSpi.querySelfStudyDirectorByDate(startDate)
         val teacherIdList = selfStudyDirectorList.map { it.teacherId }
         val userInfoList = userQuerySelfStudyDirectorSpi.queryUserInfo(teacherIdList)
-        val typeList = queryTypeSpi.queryTypeListByToday()
+        val typeList = queryTypeSpi.queryTypeListByDate(startDate)
 
         // 해당 달의 1일부터 마지막일까지 반복문을 돌면서 값 가공
         val selfStudyDirectorResponseList = (1..startDate.lengthOfMonth())
-            .filter { i ->
-                selfStudyDirectorList.find {
-                    val type = typeList.find { type -> type.id == it.typeId } ?: throw TypeNotFoundException
-                    type.date != LocalDate.of(startDate.year, startDate.month, i)
-                } == null
-            }
             .map { i ->
                 val date = LocalDate.of(startDate.year, startDate.month, i)
-                val directorType: DirectorType = typeList.find { it.date == date }?.type ?: DirectorType.SELF_STUDY
+                val directorType = typeList.find { it.date == date }?.type ?: DirectorType.SELF_STUDY
                 val teacher = MutableList(5) { "" }
 
                 selfStudyDirectorList.filter {
-                    val type: Type = typeList.find { type -> type.id == it.typeId } ?: throw TypeNotFoundException
+                    val type = typeList.find { type -> type.id == it.typeId } ?: throw TypeNotFoundException
                     type.date == date
                 }.map { selfStudy ->
                     teacher[selfStudy.floor - 1] = userInfoList.find { it.id == selfStudy.teacherId }?.name ?: ""
@@ -102,8 +93,9 @@ class SelfStudyDirectorUseCase(
     }
 
     override fun changeSelfStudyDirector(request: DomainChangeSelfStudyDirectorRequest) {
-        val selfStudyDirector = querySelfStudyDirectorSpi.querySelfStudyDirectorByDateAndFloor(request.date, request.floor)
-            ?: throw SelfStudyDirectorNotFoundException
+        val selfStudyDirector =
+            querySelfStudyDirectorSpi.querySelfStudyDirectorByDateAndFloor(request.date, request.floor)
+                ?: throw SelfStudyDirectorNotFoundException
 
         commandSelfStudyDirectorSpi.updateSelfStudyDirector(
             selfStudyDirector.changeSelfStudyDirector(teacherId = request.teacherId),

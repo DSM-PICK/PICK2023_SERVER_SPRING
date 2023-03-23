@@ -26,7 +26,7 @@ class SelfStudyDirectorPersistenceAdapter(
     override fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector> =
         jpaQueryFactory
             .selectFrom(selfStudyDirectorEntity)
-            .innerJoin(selfStudyDirectorEntity.typeEntity, typeEntity)
+            .join(typeEntity)
             .on(selfStudyDirectorEntity.typeEntity.id.eq(typeEntity.id))
             .where(typeEntity.date.between(date, date.plusMonths(1)))
             .fetch()
