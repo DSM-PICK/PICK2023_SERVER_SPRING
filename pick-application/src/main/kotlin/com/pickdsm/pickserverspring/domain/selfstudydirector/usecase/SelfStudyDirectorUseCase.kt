@@ -111,7 +111,7 @@ class SelfStudyDirectorUseCase(
 
     override fun registerSelfStudyDirector(request: DomainRegisterSelfStudyDirectorRequest) {
         val type = queryTypeSpi.queryTypeByDate(request.date)
-            ?:throw TypeNotFoundException
+            ?: throw TypeNotFoundException
         val selfStudyDirector = SelfStudyDirector(
             floor = request.floor,
             teacherId = request.teacherId,
@@ -119,7 +119,7 @@ class SelfStudyDirectorUseCase(
         )
 
         commandSelfStudyDirectorSpi.saveSelfStudyDirector(
-            selfStudyDirector
+            selfStudyDirector,
         )
     }
 }

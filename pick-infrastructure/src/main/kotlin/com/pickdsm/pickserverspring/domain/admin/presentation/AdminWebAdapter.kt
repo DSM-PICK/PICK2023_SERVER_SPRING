@@ -7,7 +7,12 @@ import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStude
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentListByGradeAndClassNum
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.*
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.UpdateStudentStatusOfClassRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.RegisterSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainDeleteAfterSchoolStudentRequest
