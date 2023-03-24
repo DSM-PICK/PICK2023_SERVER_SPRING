@@ -75,6 +75,15 @@ class SelfStudyDirectorPersistenceAdapter(
         return selfStudyDirectorEntity?.let(selfStudyDirectorMapper::entityToDomain)
     }
 
+    override fun querySelfStudyDirectorByToday(): List<SelfStudyDirector> =
+        jpaQueryFactory
+            .selectFrom(selfStudyDirectorEntity)
+            .join(typeEntity)
+            .on(selfStudyDirectorEntity.typeEntity.id.eq(typeEntity.id))
+            .where(typeEntity.date.eq(LocalDate.now()))
+            .fetch()
+            .map(selfStudyDirectorMapper::entityToDomain)
+
     override fun updateSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
         jpaQueryFactory
             .update(selfStudyDirectorEntity)

@@ -15,4 +15,6 @@ interface QuerySelfStudyDirectorSpi {
     fun querySelfStudyDirectorByTeacherId(teacherId: UUID): SelfStudyDirector
 
     fun querySelfStudyDirectorByDateAndFloor(date: LocalDate, floor: Int): SelfStudyDirector?
+
+    fun querySelfStudyDirectorByToday(): List<SelfStudyDirector>
 }

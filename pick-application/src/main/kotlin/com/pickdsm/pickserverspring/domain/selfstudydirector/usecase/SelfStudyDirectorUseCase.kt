@@ -57,7 +57,7 @@ class SelfStudyDirectorUseCase(
     }
 
     override fun getTodaySelfStudyTeacher(): TodaySelfStudyTeacherResponse {
-        val selfStudyList = querySelfStudyDirectorSpi.querySelfStudyDirectorByDate(LocalDate.now())
+        val selfStudyList = querySelfStudyDirectorSpi.querySelfStudyDirectorByToday()
         val teacherIdList = selfStudyList.map { it.teacherId }
         val teacherList = userQuerySelfStudyDirectorSpi.queryUserInfo(teacherIdList)
 
