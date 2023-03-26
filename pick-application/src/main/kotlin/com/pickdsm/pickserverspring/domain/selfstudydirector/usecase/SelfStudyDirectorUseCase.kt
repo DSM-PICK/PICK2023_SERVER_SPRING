@@ -107,9 +107,7 @@ class SelfStudyDirectorUseCase(
         val teacherId = userSpi.getCurrentUserId()
         val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorByTeacherId(teacherId)
 
-        commandSelfStudyDirectorSpi.setRestrictionMovementFalse(
-            teacher.setBlockClassroomMovementFalse(),
-        )
+        commandSelfStudyDirectorSpi.saveSelfStudyDirector(teacher.setBlockClassroomMovementFalse())
     }
 
     override fun registerSelfStudyDirector(request: DomainRegisterSelfStudyDirectorRequest) {
