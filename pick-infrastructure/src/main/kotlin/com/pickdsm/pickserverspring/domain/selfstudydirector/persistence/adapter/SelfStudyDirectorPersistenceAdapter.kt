@@ -24,6 +24,8 @@ class SelfStudyDirectorPersistenceAdapter(
         selfStudyDirectorEntity.setRestrictionMovementTrue()
     }
 
+
+
     override fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector> =
         jpaQueryFactory
             .selectFrom(selfStudyDirectorEntity)
@@ -93,17 +95,7 @@ class SelfStudyDirectorPersistenceAdapter(
             .execute()
     }
 
-    override fun setRestrictionMovementFalse(selfStudyDirector: SelfStudyDirector) {
-        jpaQueryFactory
-            .update(selfStudyDirectorEntity)
-            .set(selfStudyDirectorEntity.restrictionMovement, selfStudyDirector.restrictionMovement)
-            .where(selfStudyDirectorEntity.teacherId.eq(selfStudyDirector.teacherId))
-            .execute()
-    }
-
     override fun saveSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
-        selfStudyDirectorRepository.save(
-            selfStudyDirectorMapper.domainToEntity(selfStudyDirector),
-        )
+        selfStudyDirectorRepository.save(selfStudyDirectorMapper.domainToEntity(selfStudyDirector))
     }
 }
