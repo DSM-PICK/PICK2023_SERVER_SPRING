@@ -35,7 +35,7 @@ class AfterSchoolUseCase(
         val afterSchoolInfo = queryAfterSchoolSpi.findByAfterSchoolInfoId(request.afterSchoolId)
             ?: throw AfterSchoolNotFoundException
 
-        if (queryAfterSchoolSpi.existsByStudentIds(request.studentIds)) {
+        queryAfterSchoolSpi.queryAfterSchoolIdListByStudentIds(request.studentIds)?.let {
             throw AfterSchoolStudentExistsException
         }
 
