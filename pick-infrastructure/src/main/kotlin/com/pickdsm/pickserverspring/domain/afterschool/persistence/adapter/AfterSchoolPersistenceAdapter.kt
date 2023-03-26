@@ -5,6 +5,7 @@ import com.pickdsm.pickserverspring.domain.afterschool.AfterSchoolInfo
 import com.pickdsm.pickserverspring.domain.afterschool.mapper.AfterSchoolInfoMapper
 import com.pickdsm.pickserverspring.domain.afterschool.mapper.AfterSchoolMapper
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.AfterSchoolRepository
+import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.AfterSchoolEntity
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.QAfterSchoolEntity.afterSchoolEntity
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.entity.QAfterSchoolInfoEntity.afterSchoolInfoEntity
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.vo.QQueryAfterSchoolRoomVO
@@ -12,6 +13,7 @@ import com.pickdsm.pickserverspring.domain.afterschool.persistence.vo.QueryAfter
 import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.*
 import javax.persistence.LockModeType
@@ -119,5 +121,14 @@ class AfterSchoolPersistenceAdapter(
         afterSchoolRepository.saveAll(
             afterSchools.map(afterSchoolMapper::domainToEntity),
         )
+    }
+    override fun existsByStudentIds(afterSchoolStudentIds: List<UUID>): Boolean {
+        val result = jpaQueryFactory
+            .select(afterSchoolEntity)
+            .from(afterSchoolEntity)
+            .where(afterSchoolEntity.studentId.`in`(afterSchoolStudentIds))
+            .fetchOne()
+
+        return result != null
     }
 }
