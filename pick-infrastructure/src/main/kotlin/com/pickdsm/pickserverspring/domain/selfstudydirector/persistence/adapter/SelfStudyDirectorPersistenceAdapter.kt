@@ -24,8 +24,6 @@ class SelfStudyDirectorPersistenceAdapter(
         selfStudyDirectorEntity.setRestrictionMovementTrue()
     }
 
-
-
     override fun querySelfStudyDirectorByDate(date: LocalDate): List<SelfStudyDirector> =
         jpaQueryFactory
             .selectFrom(selfStudyDirectorEntity)
