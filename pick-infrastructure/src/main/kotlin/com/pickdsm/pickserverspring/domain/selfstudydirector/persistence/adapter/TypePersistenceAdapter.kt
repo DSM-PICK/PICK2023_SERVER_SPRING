@@ -19,10 +19,10 @@ class TypePersistenceAdapter(
     private val typeRepository: TypeRepository,
 ) : TypeSpi {
 
-    override fun queryTypeListByToday(): List<Type> =
+    override fun queryTypeListByDate(startDate: LocalDate): List<Type> =
         jpaQueryFactory
             .selectFrom(typeEntity)
-            .where(typeEntity.date.eq(LocalDate.now()))
+            .where(typeEntity.date.between(startDate, startDate.plusMonths(1)))
             .fetch()
             .map(typeMapper::entityToDomain)
 
