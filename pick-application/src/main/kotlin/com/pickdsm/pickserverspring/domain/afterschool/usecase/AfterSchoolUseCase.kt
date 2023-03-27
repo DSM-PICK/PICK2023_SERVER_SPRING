@@ -37,7 +37,7 @@ class AfterSchoolUseCase(
 
         val studentIdList = request.studentIds.distinct()
 
-        if(queryAfterSchoolSpi.queryAfterSchoolIdListByStudentIds(studentIdList)?.isNotEmpty() == true) {
+        if (queryAfterSchoolSpi.queryAfterSchoolIdListByStudentIds(studentIdList)?.isNotEmpty() == true) {
             throw AfterSchoolStudentExistsException
         }
 
