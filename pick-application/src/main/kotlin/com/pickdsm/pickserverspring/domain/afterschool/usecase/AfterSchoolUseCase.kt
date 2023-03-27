@@ -37,10 +37,6 @@ class AfterSchoolUseCase(
 
         val studentIdList = request.studentIds.distinct()
 
-        if(userSpi.queryUserInfo(studentIdList).isEmpty()) {
-            throw UserNotFoundException
-        }
-
         if(queryAfterSchoolSpi.queryAfterSchoolIdListByStudentIds(studentIdList) != null) {
             throw AfterSchoolStudentExistsException
         }
