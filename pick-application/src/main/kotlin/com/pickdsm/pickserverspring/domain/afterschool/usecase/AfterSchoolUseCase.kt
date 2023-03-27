@@ -37,11 +37,11 @@ class AfterSchoolUseCase(
 
         val studentIdList = request.studentIds.distinct()
 
-        if(queryAfterSchoolSpi.queryAfterSchoolIdListByStudentIds(studentIdList) != null) {
+        if(queryAfterSchoolSpi.queryAfterSchoolIdListByStudentIds(studentIdList)?.isNotEmpty() == true) {
             throw AfterSchoolStudentExistsException
         }
 
-        val afterSchools = request.studentIds.map {
+        val afterSchools = studentIdList.map {
             AfterSchool(
                 afterSchoolInfoId = afterSchoolInfo.id,
                 studentId = it
