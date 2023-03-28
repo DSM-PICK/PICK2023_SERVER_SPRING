@@ -120,4 +120,11 @@ class AfterSchoolPersistenceAdapter(
             afterSchools.map(afterSchoolMapper::domainToEntity),
         )
     }
+
+    override fun existsAfterSchoolByStudentIds(afterSchoolStudentIds: List<UUID>): Boolean =
+        jpaQueryFactory
+            .selectOne()
+            .from(afterSchoolEntity)
+            .where(afterSchoolEntity.studentId.`in`(afterSchoolStudentIds))
+            .fetchFirst() != null
 }
