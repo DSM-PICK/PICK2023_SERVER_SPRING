@@ -103,6 +103,13 @@ class SelfStudyDirectorUseCase(
         )
     }
 
+    override fun blockUnlockMoveClassroom() {
+        val teacherId = userSpi.getCurrentUserId()
+        val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorByTeacherId(teacherId)
+
+        commandSelfStudyDirectorSpi.saveSelfStudyDirector(teacher.setBlockClassroomMovementFalse())
+    }
+
     override fun registerSelfStudyDirector(request: DomainRegisterSelfStudyDirectorRequest) {
         val type = queryTypeSpi.queryTypeByDate(request.date)
             ?: throw TypeNotFoundException

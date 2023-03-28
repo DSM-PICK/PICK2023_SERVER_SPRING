@@ -281,4 +281,10 @@ class AdminWebAdapter(
         )
         selfStudyDirectorApi.registerSelfStudyDirector(domainRequest)
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/movement/unlock")
+    fun blockUnlockMoveClassroom() {
+        selfStudyDirectorApi.blockUnlockMoveClassroom()
+    }
 }

@@ -18,5 +18,7 @@ interface SelfStudyDirectorApi {
 
     fun changeSelfStudyDirector(request: DomainChangeSelfStudyDirectorRequest)
 
+    fun blockUnlockMoveClassroom()
+
     fun registerSelfStudyDirector(request: DomainRegisterSelfStudyDirectorRequest)
 }

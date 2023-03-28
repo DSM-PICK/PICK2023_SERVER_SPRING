@@ -20,6 +20,7 @@ class SelfStudyDirectorPersistenceAdapter(
 ) : SelfStudyDirectorSpi {
     override fun setRestrictionMovementTrue(selfStudyDirector: SelfStudyDirector) {
         val selfStudyDirectorEntity = selfStudyDirectorMapper.domainToEntity(selfStudyDirector)
+
         selfStudyDirectorEntity.setRestrictionMovementTrue()
     }
 
@@ -93,8 +94,6 @@ class SelfStudyDirectorPersistenceAdapter(
     }
 
     override fun saveSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
-        selfStudyDirectorRepository.save(
-            selfStudyDirectorMapper.domainToEntity(selfStudyDirector),
-        )
+        selfStudyDirectorRepository.save(selfStudyDirectorMapper.domainToEntity(selfStudyDirector))
     }
 }
