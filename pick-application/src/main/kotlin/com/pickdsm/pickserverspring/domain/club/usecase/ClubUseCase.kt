@@ -11,10 +11,9 @@ import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentR
 import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.spi.CommandClubSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
-import com.pickdsm.pickserverspring.domain.teacher.exception.TeacherNotFoundException
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
-import java.util.*
+import java.util.UUID
 
 @UseCase
 class ClubUseCase(
@@ -72,7 +71,7 @@ class ClubUseCase(
                 studentNumber = "${user.grade}${user.classNum}${user.num.toString().padStart(2, '0')}",
                 studentName = user.name,
             )
-        }
+        }.sortedWith(compareBy(StudentElement::studentNumber))
 
         return QueryClubStudentList(
             clubId = clubInfo.id,
