@@ -23,5 +23,5 @@ interface QueryAfterSchoolSpi {
 
     fun queryAfterSchoolIdByStudentId(studentId: UUID): UUID?
 
-    fun queryAfterSchoolIdListByStudentIds(afterSchoolStudentIds: List<UUID>): List<UUID>?
+    fun existsAfterSchoolByStudentIds(afterSchoolStudentIds: List<UUID>): Boolean
 }
