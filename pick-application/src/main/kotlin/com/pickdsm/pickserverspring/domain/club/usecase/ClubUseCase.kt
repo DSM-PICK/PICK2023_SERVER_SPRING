@@ -51,27 +51,32 @@ class ClubUseCase(
     }
 
     override fun getClubStudentList(clubId: UUID): QueryClubStudentList {
-        val clubInfo = queryClubSpi.queryClubInfoByClubId(clubId) ?: throw ClubNotFoundException
+        val clubInfo = queryClubSpi.queryClubInfoByClubId(clubId)
+            ?: throw ClubNotFoundException
         val clubList = queryClubSpi.queryClubListByClubId(clubId)
 
         val clubClassroom = queryClassroomSpi.queryClassroomById(clubInfo.classroomId)
             ?: throw ClassroomNotFoundException
 
         val teacherInfo = userSpi.queryUserInfoByUserId(clubInfo.teacherId)
+        val allStudentInfos = userSpi.getAllUserInfo()
 
-        val studentIdList = clubList.map { it.studentId }
-        val studentInfoList = userSpi.queryUserInfo(studentIdList)
+        val clubStudentInfos = allStudentInfos.filter {
+            val clubUser = clubList.find { club -> club.studentId == it.id }
+            clubUser?.studentId == it.id
+        }
 
-        val clubStudent = clubList.map {
-            val user = studentInfoList.find { user -> it.studentId == user.id }
-                ?: throw UserNotFoundException
-            StudentElement(
-                studentId = user.id,
-                headStatus = clubInfo.headId == user.id,
-                studentNumber = "${user.grade}${user.classNum}${user.num.toString().padStart(2, '0')}",
-                studentName = user.name,
-            )
-        }.sortedWith(compareBy(StudentElement::studentNumber))
+        val clubStudent = clubList
+            .map {
+                val user = clubStudentInfos.find { user -> it.studentId == user.id }
+
+                StudentElement(
+                    studentId = user?.id,
+                    headStatus = clubInfo.headId == user?.id,
+                    studentNumber = "${user?.grade}${user?.classNum}${user?.num.toString().padStart(2, '0')}",
+                    studentName = user?.name,
+                )
+            }.sortedBy(StudentElement::studentNumber)
 
         return QueryClubStudentList(
             clubId = clubInfo.id,
