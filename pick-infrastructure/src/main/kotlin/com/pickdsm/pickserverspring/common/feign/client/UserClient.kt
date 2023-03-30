@@ -23,4 +23,7 @@ interface UserClient {
 
     @GetMapping("/users/id/{userId}")
     fun getUserInfoByUserId(@PathVariable("userId") userId: UUID): UserInfoElement
+
+    @GetMapping("/users/all")
+    fun getAllUserInfo(): UserInfoResponse
 }

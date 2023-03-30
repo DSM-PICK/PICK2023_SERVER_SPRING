@@ -64,4 +64,21 @@ class UserPersistenceAdapter(
             profileFileName = user.profileFileName,
         )
     }
+
+    override fun getAllUserInfo(): List<User> =
+        userClient.getAllUserInfo()
+            .users
+            .map {
+                User(
+                    id = it.id,
+                    accountId = it.accountId,
+                    password = it.password,
+                    name = it.name,
+                    grade = it.grade,
+                    classNum = it.classNum,
+                    num = it.num,
+                    birthDay = it.birthDay,
+                    profileFileName = it.profileFileName,
+                )
+            }
 }
