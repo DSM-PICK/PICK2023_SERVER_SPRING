@@ -10,9 +10,9 @@ data class QueryClubStudentList(
     val studentList: List<StudentElement>,
 ) {
     data class StudentElement(
-        val studentId: UUID,
-        val headStatus: Boolean,
-        val studentNumber: String,
-        val studentName: String,
+        val studentId: UUID?,
+        val headStatus: Boolean?,
+        val studentNumber: String?,
+        val studentName: String?,
     )
 }
