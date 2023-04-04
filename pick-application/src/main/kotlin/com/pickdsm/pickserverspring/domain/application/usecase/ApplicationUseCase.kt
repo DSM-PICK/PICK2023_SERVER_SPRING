@@ -398,7 +398,7 @@ class ApplicationUseCase(
                 }
             }
         }
-        return QueryStudentStatusList(students)
+        return QueryStudentStatusList(students.sortedBy { it.studentNumber })
     }
 
     override fun savePicnicPass(request: DomainPicnicPassRequest) {
