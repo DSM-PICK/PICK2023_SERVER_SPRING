@@ -143,19 +143,19 @@ class StatusPersistenceAdapter(
             .fetch()
             .map(statusMapper::entityToDomain)
 
-    override fun queryPicnicApplicationCountByToday(): Int =
+    override fun queryPicnicApplicationStatusIdByToday(): List<UUID> =
         jpaQueryFactory
-            .select(statusEntity.count().intValue())
+            .select(statusEntity.id)
             .from(statusEntity)
             .where(
                 statusEntity.date.eq(LocalDate.now()),
                 statusEntity.type.eq(StatusType.AWAIT),
             )
-            .fetchFirst()
+            .fetch()
 
-    override fun queryMovementCountByFloorAndToday(floor: Int): Int =
+    override fun queryMovementStatusIdByFloorAndToday(floor: Int): List<UUID> =
         jpaQueryFactory
-            .select(statusEntity.count().intValue())
+            .select(statusEntity.id)
             .from(statusEntity)
             .innerJoin(classroomMovementEntity)
             .on(statusEntity.id.eq(classroomMovementEntity.statusEntity.id))
@@ -166,15 +166,15 @@ class StatusPersistenceAdapter(
                 statusEntity.type.eq(StatusType.MOVEMENT),
                 classroomEntity.floor.eq(floor),
             )
-            .fetchFirst()
+            .fetch()
 
-    override fun queryPicnicCountByToday(): Int =
+    override fun queryPicnicStatusIdByToday(): List<UUID> =
         jpaQueryFactory
-            .select(statusEntity.count().intValue())
+            .select(statusEntity.id)
             .from(statusEntity)
             .where(
                 statusEntity.date.eq(LocalDate.now()),
                 statusEntity.type.eq(StatusType.PICNIC),
             )
-            .fetchFirst()
+            .fetch()
 }
