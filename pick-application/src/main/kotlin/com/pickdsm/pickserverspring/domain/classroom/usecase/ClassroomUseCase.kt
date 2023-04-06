@@ -127,7 +127,7 @@ class ClassroomUseCase(
 
         return QueryResponsibleClassroomList(
             floor = floor,
-            responsibleClassroomList = classrooms,
+            responsibleClassroomList = classrooms.sortedBy { it.name },
         )
     }
 }
