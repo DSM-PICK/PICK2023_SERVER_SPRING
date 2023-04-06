@@ -29,9 +29,9 @@ interface QueryStatusSpi {
 
     fun queryMovementStatusListByTodayAndClassroomId(classroomId: UUID): List<Status>
 
-    fun queryPicnicApplicationCountByToday(): Int
+    fun queryPicnicApplicationStatusSizeByToday(): Int
 
-    fun queryMovementCountByFloorAndToday(floor: Int): Int
+    fun queryMovementStatusSizeByFloorAndToday(floor: Int): Int
 
-    fun queryPicnicCountByToday(): Int
+    fun queryPicnicStatusSizeByToday(): Int
 }

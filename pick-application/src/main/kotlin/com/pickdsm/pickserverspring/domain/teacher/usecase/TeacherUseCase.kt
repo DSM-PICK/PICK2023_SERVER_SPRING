@@ -63,9 +63,9 @@ class TeacherUseCase(
             ?: throw FloorNotFoundException
 
         return QueryStudentStatusCountResponse(
-            picnic = queryStatusSpi.queryPicnicCountByToday(),
-            application = queryStatusSpi.queryPicnicApplicationCountByToday(),
-            classroomMovement = queryStatusSpi.queryMovementCountByFloorAndToday(teacherResponsibleFloor),
+            picnic = queryStatusSpi.queryPicnicStatusSizeByToday(),
+            application = queryStatusSpi.queryPicnicApplicationStatusSizeByToday(),
+            classroomMovement = queryStatusSpi.queryMovementStatusSizeByFloorAndToday(teacherResponsibleFloor),
         )
     }
 
