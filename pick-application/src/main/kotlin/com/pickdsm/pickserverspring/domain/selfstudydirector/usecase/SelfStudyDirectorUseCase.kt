@@ -98,7 +98,7 @@ class SelfStudyDirectorUseCase(
             querySelfStudyDirectorSpi.querySelfStudyDirectorByDateAndFloor(request.date, request.floor)
                 ?: throw SelfStudyDirectorNotFoundException
 
-        commandSelfStudyDirectorSpi.updateSelfStudyDirector(
+        commandSelfStudyDirectorSpi.saveSelfStudyDirector(
             selfStudyDirector.changeSelfStudyDirector(teacherId = request.teacherId),
         )
     }
