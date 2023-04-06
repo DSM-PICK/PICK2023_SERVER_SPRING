@@ -85,14 +85,6 @@ class SelfStudyDirectorPersistenceAdapter(
             .fetch()
             .map(selfStudyDirectorMapper::entityToDomain)
 
-    override fun updateSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
-        jpaQueryFactory
-            .update(selfStudyDirectorEntity)
-            .set(selfStudyDirectorEntity.teacherId, selfStudyDirector.teacherId)
-            .where(selfStudyDirectorEntity.id.eq(selfStudyDirector.id))
-            .execute()
-    }
-
     override fun saveSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
         selfStudyDirectorRepository.save(selfStudyDirectorMapper.domainToEntity(selfStudyDirector))
     }
