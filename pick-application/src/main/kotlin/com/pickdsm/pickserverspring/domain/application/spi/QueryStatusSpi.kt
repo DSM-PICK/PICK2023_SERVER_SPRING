@@ -28,4 +28,10 @@ interface QueryStatusSpi {
     fun queryStatusTypesByStudentIdAndEndPeriod(studentId: UUID, period: Int): List<StatusType>
 
     fun queryMovementStatusListByTodayAndClassroomId(classroomId: UUID): List<Status>
+
+    fun queryPicnicApplicationStatusSizeByToday(): Int
+
+    fun queryMovementStatusSizeByFloorAndToday(floor: Int): Int
+
+    fun queryPicnicStatusSizeByToday(): Int
 }

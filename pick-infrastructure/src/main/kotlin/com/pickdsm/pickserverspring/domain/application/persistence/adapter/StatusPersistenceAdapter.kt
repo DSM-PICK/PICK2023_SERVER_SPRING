@@ -142,4 +142,39 @@ class StatusPersistenceAdapter(
             .where(statusEntity.date.eq(LocalDate.now()))
             .fetch()
             .map(statusMapper::entityToDomain)
+
+    override fun queryPicnicApplicationStatusSizeByToday(): Int =
+        jpaQueryFactory
+            .select(statusEntity.id)
+            .from(statusEntity)
+            .where(
+                statusEntity.date.eq(LocalDate.now()),
+                statusEntity.type.eq(StatusType.AWAIT),
+            )
+            .fetch().size
+
+    override fun queryMovementStatusSizeByFloorAndToday(floor: Int): Int =
+        jpaQueryFactory
+            .select(statusEntity.id)
+            .from(statusEntity)
+            .innerJoin(classroomMovementEntity)
+            .on(statusEntity.id.eq(classroomMovementEntity.statusEntity.id))
+            .innerJoin(classroomEntity)
+            .on(classroomMovementEntity.classroomEntity.id.eq(classroomEntity.id))
+            .where(
+                statusEntity.date.eq(LocalDate.now()),
+                statusEntity.type.eq(StatusType.MOVEMENT),
+                classroomEntity.floor.eq(floor),
+            )
+            .fetch().size
+
+    override fun queryPicnicStatusSizeByToday(): Int =
+        jpaQueryFactory
+            .select(statusEntity.id)
+            .from(statusEntity)
+            .where(
+                statusEntity.date.eq(LocalDate.now()),
+                statusEntity.type.eq(StatusType.PICNIC),
+            )
+            .fetch().size
 }

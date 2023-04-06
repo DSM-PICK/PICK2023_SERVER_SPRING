@@ -6,7 +6,9 @@ import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundE
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
+import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
@@ -28,6 +30,7 @@ class TeacherUseCase(
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
     private val queryApplicationSpi: QueryApplicationSpi,
     private val queryClassroomSpi: QueryClassroomSpi,
+    private val querySelfStudyDirectorSpi: QuerySelfStudyDirectorSpi,
     private val queryStatusSpi: QueryStatusSpi,
 ) : TeacherApi {
 
@@ -56,20 +59,13 @@ class TeacherUseCase(
     }
 
     override fun getStudentStatusCount(): QueryStudentStatusCountResponse {
-        val today = LocalDate.now()
-        val status = queryStatusSpi.queryPicnicStudentInfoListByToday(today)
-        val picnicCount = status.count()
-
-        val classroomMovement = queryStatusSpi.queryMovementStudentInfoListByToday(today)
-        val classroomMovementCount = classroomMovement.count()
-
-        val application = queryApplicationSpi.queryPicnicApplicationListByToday(today)
-        val applicationCount = application.count()
+        val teacherResponsibleFloor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(userSpi.getCurrentUserId())
+            ?: throw FloorNotFoundException
 
         return QueryStudentStatusCountResponse(
-            picnic = picnicCount,
-            classroomMovement = classroomMovementCount,
-            application = applicationCount,
+            picnic = queryStatusSpi.queryPicnicStatusSizeByToday(),
+            application = queryStatusSpi.queryPicnicApplicationStatusSizeByToday(),
+            classroomMovement = queryStatusSpi.queryMovementStatusSizeByFloorAndToday(teacherResponsibleFloor),
         )
     }
 
