@@ -89,7 +89,7 @@ class SelfStudyDirectorPersistenceAdapter(
         jpaQueryFactory
             .update(selfStudyDirectorEntity)
             .set(selfStudyDirectorEntity.teacherId, selfStudyDirector.teacherId)
-            .where(selfStudyDirectorEntity.floor.eq(selfStudyDirector.floor))
+            .where(selfStudyDirectorEntity.id.eq(selfStudyDirector.id))
             .execute()
     }
 
