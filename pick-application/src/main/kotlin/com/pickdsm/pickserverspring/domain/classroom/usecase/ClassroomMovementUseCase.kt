@@ -137,7 +137,7 @@ class ClassroomMovementUseCase(
                 }
             movementStudent.addAll(moveList)
         }
-        return QueryMovementStudentList(movementStudent)
+        return QueryMovementStudentList(movementStudent.sortedBy { it.studentNumber })
     }
 
     override fun returnClassroomMovement() {

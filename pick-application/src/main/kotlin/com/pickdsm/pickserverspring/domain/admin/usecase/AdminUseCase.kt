@@ -209,7 +209,7 @@ class AdminUseCase(
 
         return QueryStudentAttendanceList(
             classroom = classroom.name,
-            studentList = students,
+            studentList = students.sortedBy { it.studentNumber },
         )
     }
 

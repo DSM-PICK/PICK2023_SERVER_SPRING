@@ -103,7 +103,7 @@ class TeacherUseCase(
             )
         }
 
-        return QueryMovementStudentList(movementList)
+        return QueryMovementStudentList(movementList.sortedBy { it.studentNumber })
     }
 
     private fun checkUserNumLessThanTen(userNum: Int) =
