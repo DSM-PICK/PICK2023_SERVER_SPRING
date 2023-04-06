@@ -143,7 +143,7 @@ class StatusPersistenceAdapter(
             .fetch()
             .map(statusMapper::entityToDomain)
 
-    override fun queryPicnicApplicationStatusIdByToday(): List<UUID> =
+    override fun queryPicnicApplicationCountByToday(): Int =
         jpaQueryFactory
             .select(statusEntity.id)
             .from(statusEntity)
@@ -151,9 +151,9 @@ class StatusPersistenceAdapter(
                 statusEntity.date.eq(LocalDate.now()),
                 statusEntity.type.eq(StatusType.AWAIT),
             )
-            .fetch()
+            .fetch().size
 
-    override fun queryMovementStatusIdByFloorAndToday(floor: Int): List<UUID> =
+    override fun queryMovementCountByFloorAndToday(floor: Int): Int =
         jpaQueryFactory
             .select(statusEntity.id)
             .from(statusEntity)
@@ -166,9 +166,9 @@ class StatusPersistenceAdapter(
                 statusEntity.type.eq(StatusType.MOVEMENT),
                 classroomEntity.floor.eq(floor),
             )
-            .fetch()
+            .fetch().size
 
-    override fun queryPicnicStatusIdByToday(): List<UUID> =
+    override fun queryPicnicCountByToday(): Int =
         jpaQueryFactory
             .select(statusEntity.id)
             .from(statusEntity)
@@ -176,5 +176,5 @@ class StatusPersistenceAdapter(
                 statusEntity.date.eq(LocalDate.now()),
                 statusEntity.type.eq(StatusType.PICNIC),
             )
-            .fetch()
+            .fetch().size
 }
