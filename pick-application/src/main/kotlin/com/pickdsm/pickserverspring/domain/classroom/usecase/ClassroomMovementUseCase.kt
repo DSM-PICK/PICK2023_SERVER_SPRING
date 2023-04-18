@@ -182,7 +182,7 @@ class ClassroomMovementUseCase(
                 return classroom
             }
 
-            DirectorType.CLUB -> {
+            DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
                 val clubClassroomId = queryClubSpi.queryClubIdByStudentId(studentId)
                     ?: throw ClubNotFoundException
                 val classroomForClub = queryClassroomSpi.queryClassroomById(clubClassroomId)

@@ -12,7 +12,7 @@ interface AdminApi {
 
     fun updateStudentStatusOfClass(request: DomainUpdateStudentStatusOfClassRequest)
 
-    fun getStudentAttendanceList(classroomId: UUID, date: LocalDate): QueryStudentAttendanceList
+    fun getStudentAttendanceList(classroomId: UUID, date: LocalDate): QueryStudentAttendanceList?
 
     fun getTypeByDate(date: LocalDate): QueryTypeResponse
 

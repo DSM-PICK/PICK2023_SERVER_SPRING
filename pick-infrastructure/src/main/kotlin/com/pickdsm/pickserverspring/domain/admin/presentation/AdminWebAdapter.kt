@@ -181,7 +181,7 @@ class AdminWebAdapter(
         @RequestParam
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         date: LocalDate,
-    ): QueryStudentAttendanceList {
+    ): QueryStudentAttendanceList? {
         return adminApi.getStudentAttendanceList(classroomId, date)
     }
 
