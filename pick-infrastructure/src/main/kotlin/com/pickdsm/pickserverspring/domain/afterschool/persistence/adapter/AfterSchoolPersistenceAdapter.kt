@@ -63,7 +63,8 @@ class AfterSchoolPersistenceAdapter(
         jpaQueryFactory
             .selectFrom(afterSchoolEntity)
             .innerJoin(
-                afterSchoolEntity.afterSchoolInfoEntity, afterSchoolInfoEntity
+                afterSchoolEntity.afterSchoolInfoEntity,
+                afterSchoolInfoEntity,
             )
             .where(
                 afterSchoolEntity.afterSchoolInfoEntity.id.eq(afterSchoolId),
