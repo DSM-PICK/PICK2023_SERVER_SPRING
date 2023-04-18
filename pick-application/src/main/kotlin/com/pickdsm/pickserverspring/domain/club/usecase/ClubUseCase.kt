@@ -11,7 +11,6 @@ import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentR
 import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.spi.CommandClubSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
-import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.util.UUID
 

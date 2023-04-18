@@ -6,8 +6,8 @@ import com.pickdsm.pickserverspring.global.annotation.Adapter
 
 @Adapter
 class SchedulePersistenceAdapter(
-    private val scheduleClient: ScheduleClient
-    ): QueryScheduleSpi {
+    private val scheduleClient: ScheduleClient,
+) : QueryScheduleSpi {
 
     override fun queryIsHomecomingDay(date: String): Boolean {
         val scheduleResponse = scheduleClient.getIsHomecomingDay(date)

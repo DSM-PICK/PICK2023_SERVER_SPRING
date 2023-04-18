@@ -62,7 +62,8 @@ class AfterSchoolPersistenceAdapter(
     override fun findByAfterSchoolIdAndStudentId(afterSchoolId: UUID, studentId: UUID): AfterSchool? =
         jpaQueryFactory
             .selectFrom(afterSchoolEntity)
-            .innerJoin(afterSchoolEntity.afterSchoolInfoEntity, afterSchoolInfoEntity
+            .innerJoin(
+                afterSchoolEntity.afterSchoolInfoEntity, afterSchoolInfoEntity
             )
             .where(
                 afterSchoolEntity.afterSchoolInfoEntity.id.eq(afterSchoolId),
