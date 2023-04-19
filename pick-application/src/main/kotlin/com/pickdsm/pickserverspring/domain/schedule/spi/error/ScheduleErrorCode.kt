@@ -7,7 +7,7 @@ enum class ScheduleErrorCode(
     private val message: String,
 ) : ErrorProperty {
 
-    HOMECOMING_DAY(404, "homecoming day"), ;
+    SCHEDULE_NOT_FOUND_ON_HOMECOMING_DAY(404, "Schedule not found on homecoming day"), ;
 
     override fun status(): Int = status
     override fun message(): String = message

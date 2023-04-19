@@ -4,5 +4,5 @@ import com.pickdsm.pickserverspring.common.error.PickException
 import com.pickdsm.pickserverspring.domain.schedule.spi.error.ScheduleErrorCode
 
 object HomecomingDayException : PickException(
-    ScheduleErrorCode.HOMECOMING_DAY,
+    ScheduleErrorCode.SCHEDULE_NOT_FOUND_ON_HOMECOMING_DAY,
 )
