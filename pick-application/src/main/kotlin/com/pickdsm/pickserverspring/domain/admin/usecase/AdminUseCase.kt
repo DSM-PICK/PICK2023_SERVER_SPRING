@@ -102,8 +102,7 @@ class AdminUseCase(
         statusCommandTeacherSpi.saveAllStatus(changeStatusList)
     }
 
-    override fun getStudentAttendanceList(classroomId: UUID, date: LocalDate): QueryStudentAttendanceList
-    {
+    override fun getStudentAttendanceList(classroomId: UUID, date: LocalDate): QueryStudentAttendanceList {
         if (queryScheduleSpi.queryIsHomecomingDay(date.toString()))
             throw HomecomingDayException
 
@@ -111,7 +110,7 @@ class AdminUseCase(
         val dateStatusList = queryStatusSpi.queryStatusListByDate(date)
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
             ?: throw ClassroomNotFoundException
-        val startPeriod = if(dateType == DirectorType.FRI_CLUB) 6 else 8
+        val startPeriod = if (dateType == DirectorType.FRI_CLUB) 6 else 8
         val students = mutableListOf<StudentElement>()
 
         when (dateType) {
