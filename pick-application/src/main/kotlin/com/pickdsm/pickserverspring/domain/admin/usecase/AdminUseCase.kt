@@ -103,8 +103,9 @@ class AdminUseCase(
     }
 
     override fun getStudentAttendanceList(classroomId: UUID, date: LocalDate): QueryStudentAttendanceList {
-        if (queryScheduleSpi.queryIsHomecomingDay(date.toString()))
+        if (queryScheduleSpi.queryIsHomecomingDay(date.toString())) {
             throw HomecomingDayException
+        }
 
         val dateType = queryTypeSpi.queryDirectorTypeByDate(date) ?: DirectorType.SELF_STUDY
         val dateStatusList = queryStatusSpi.queryStatusListByDate(date)
