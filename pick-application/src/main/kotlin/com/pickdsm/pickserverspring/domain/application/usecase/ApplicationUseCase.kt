@@ -154,7 +154,7 @@ class ApplicationUseCase(
                 }
             }
 
-            DirectorType.CLUB -> {
+            DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
                 when {
                     floor == null -> {
                         todayStatusList.filter { status ->
@@ -357,7 +357,7 @@ class ApplicationUseCase(
                 }
             }
 
-            DirectorType.CLUB -> {
+            DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
                 val clubList = queryClubSpi.queryClubListByClassroomId(classroomId)
                 val clubStudentIdList = clubList.map { it.studentId }
                 val clubUserInfos = userSpi.queryUserInfo(clubStudentIdList)

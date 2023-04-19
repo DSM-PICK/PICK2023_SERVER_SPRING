@@ -17,6 +17,8 @@ import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
+import com.pickdsm.pickserverspring.domain.schedule.spi.QueryScheduleSpi
+import com.pickdsm.pickserverspring.domain.schedule.spi.exception.HomecomingDayException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.Type
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
@@ -44,6 +46,7 @@ class AdminUseCase(
     private val queryTimeSpi: QueryTimeSpi,
     private val queryStatusSpi: QueryStatusSpi,
     private val commandTypeSpi: CommandTypeSpi,
+    private val queryScheduleSpi: QueryScheduleSpi,
 ) : AdminApi {
 
     override fun updateStudentStatusOfClass(request: DomainUpdateStudentStatusOfClassRequest) {
@@ -100,12 +103,15 @@ class AdminUseCase(
     }
 
     override fun getStudentAttendanceList(classroomId: UUID, date: LocalDate): QueryStudentAttendanceList {
+        if (queryScheduleSpi.queryIsHomecomingDay(date.toString())) {
+            throw HomecomingDayException
+        }
+
         val dateType = queryTypeSpi.queryDirectorTypeByDate(date) ?: DirectorType.SELF_STUDY
         val dateStatusList = queryStatusSpi.queryStatusListByDate(date)
-        val timeList = timeQueryTeacherSpi.queryTime(date)
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
             ?: throw ClassroomNotFoundException
-        val startPeriod = timeList.timeList.firstOrNull { it.periodType == dateType.name }?.period ?: 8
+        val startPeriod = if (dateType == DirectorType.FRI_CLUB) 6 else 8
         val students = mutableListOf<StudentElement>()
 
         when (dateType) {
@@ -141,7 +147,7 @@ class AdminUseCase(
                 }
             }
 
-            DirectorType.CLUB -> {
+            DirectorType.FRI_CLUB, DirectorType.TUE_CLUB -> {
                 val clubList = queryClubSpi.queryClubListByClassroomId(classroomId)
                 val clubStudentIdList = clubList.map { it.studentId }
                 val clubUserInfos = userSpi.queryUserInfo(clubStudentIdList)
