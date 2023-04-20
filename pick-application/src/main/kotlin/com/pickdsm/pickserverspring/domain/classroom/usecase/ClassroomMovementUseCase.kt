@@ -4,12 +4,14 @@ import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
+import com.pickdsm.pickserverspring.domain.application.Application
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
+import com.pickdsm.pickserverspring.domain.classroom.Classroom
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
@@ -17,17 +19,20 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementSt
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementLocationResponse
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementException
+import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementYourClassroom
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
+import com.pickdsm.pickserverspring.domain.club.Club
 import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 import java.util.UUID
@@ -51,21 +56,24 @@ class ClassroomMovementUseCase(
     override fun saveClassroomMovement(request: DomainClassroomMovementRequest) {
         val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
             ?: throw ClassroomNotFoundException
-        val studentId = userSpi.getCurrentUserId()
+
+        val student = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
+
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val time = timeList.timeList.find { time -> time.period == request.period }
             ?: throw TimeNotFoundException
+
         val statusTypes = queryStatusSpi.queryStatusTypesByStudentIdAndEndPeriod(
-            studentId = studentId,
+            studentId = student.id,
             period = request.period,
         )
 
-        if (statusTypes.contains(StatusType.PICNIC)) {
-            throw CannotMovementException
-        }
+        checkIsStatusPicnic(statusTypes)
+
+        checkIsMovementYourClassroom(student, classroom)
 
         val status = Status(
-            studentId = studentId,
+            studentId = student.id,
             teacherId = UUID(0, 0), // TODO: 해당 층 자습감독쌤 아이디 넣기
             startPeriod = time.period,
             endPeriod = 10,
@@ -78,6 +86,21 @@ class ClassroomMovementUseCase(
                 statusId = saveStatusId,
             ),
         )
+    }
+
+    private fun checkIsMovementYourClassroom(
+        user: User,
+        classroom: Classroom
+    ) {
+        if (user.grade == classroom.grade && user.classNum == classroom.classNum) {
+            throw CannotMovementYourClassroom
+        }
+    }
+
+    private fun checkIsStatusPicnic(statusTypes: List<StatusType>) {
+        if (statusTypes.contains(StatusType.PICNIC)) {
+            throw CannotMovementException
+        }
     }
 
     override fun queryMovementStudentList(
