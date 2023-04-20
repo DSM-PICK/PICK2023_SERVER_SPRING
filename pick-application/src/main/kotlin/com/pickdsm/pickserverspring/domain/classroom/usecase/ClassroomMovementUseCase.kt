@@ -4,7 +4,6 @@ import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
-import com.pickdsm.pickserverspring.domain.application.Application
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
@@ -25,7 +24,6 @@ import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFound
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
-import com.pickdsm.pickserverspring.domain.club.Club
 import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
@@ -90,7 +88,7 @@ class ClassroomMovementUseCase(
 
     private fun checkIsMovementYourClassroom(
         user: User,
-        classroom: Classroom
+        classroom: Classroom,
     ) {
         if (user.grade == classroom.grade && user.classNum == classroom.classNum) {
             throw CannotMovementYourClassroom
