@@ -18,7 +18,7 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.MovementSt
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomMovementLocationResponse
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementException
-import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementYourClassroom
+import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementMyClassroom
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
@@ -68,7 +68,7 @@ class ClassroomMovementUseCase(
 
         checkIsStatusPicnic(statusTypes)
 
-        checkIsMovementYourClassroom(student, classroom)
+        checkIsMovementMyClassroom(student, classroom)
 
         val status = Status(
             studentId = student.id,
@@ -86,12 +86,12 @@ class ClassroomMovementUseCase(
         )
     }
 
-    private fun checkIsMovementYourClassroom(
+    private fun checkIsMovementMyClassroom(
         user: User,
         classroom: Classroom,
     ) {
         if (user.grade == classroom.grade && user.classNum == classroom.classNum) {
-            throw CannotMovementYourClassroom
+            throw CannotMovementMyClassroom
         }
     }
 
