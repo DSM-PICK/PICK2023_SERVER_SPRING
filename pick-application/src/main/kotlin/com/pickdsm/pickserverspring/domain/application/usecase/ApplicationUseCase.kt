@@ -17,8 +17,9 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
-import com.pickdsm.pickserverspring.domain.application.exception.AlreadyPicnicAwaitException
+import com.pickdsm.pickserverspring.domain.application.exception.AlreadyApplicationPicnicOrAlreadyPicnicException
 import com.pickdsm.pickserverspring.domain.application.exception.ApplicationNotFoundException
+import com.pickdsm.pickserverspring.domain.application.exception.CannotApplicationWeekendException
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
@@ -35,6 +36,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.UUID
 
@@ -56,6 +58,9 @@ class ApplicationUseCase(
 
     override fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest) {
         val studentId = userSpi.getCurrentUserId()
+        checkIsExistAwaitOrPicnicStatus(studentId)
+        checkIsWeekends()
+
         val status = Status(
             studentId = studentId,
             teacherId = UUID(0, 0), // TODO: 선생님 아이디 뭐로 넣을지 나중에 정하기
@@ -63,11 +68,6 @@ class ApplicationUseCase(
             endPeriod = request.desiredEndPeriod,
             type = StatusType.AWAIT,
         )
-        
-        if(!queryApplicationSpi.queryApplicationByStudentId(studentId)) {
-            throw AlreadyPicnicAwaitException
-        }
-
         val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(status)
         commandApplicationSpi.saveApplication(
             Application(
@@ -75,6 +75,18 @@ class ApplicationUseCase(
                 statusId = saveStatusId,
             ),
         )
+    }
+
+    private fun checkIsExistAwaitOrPicnicStatus(studentId: UUID) {
+        if (queryStatusSpi.existAwaitOrPicnicStatusByStudentId(studentId)) {
+            throw AlreadyApplicationPicnicOrAlreadyPicnicException
+        }
+    }
+
+    private fun checkIsWeekends() {
+        if (LocalDate.now().dayOfWeek > DayOfWeek.FRIDAY) {
+            throw CannotApplicationWeekendException
+        }
     }
 
     override fun queryPicnicApplicationListByGradeAndClassNum(
