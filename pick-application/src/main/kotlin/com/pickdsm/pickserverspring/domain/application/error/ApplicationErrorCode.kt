@@ -7,8 +7,11 @@ enum class ApplicationErrorCode(
     private val message: String,
 ) : ErrorProperty {
 
+    CANNOT_APPLICATION_WEEKEND(401, "Cannot Application Weekend"),
+
     APPLICATION_NOT_FOUND(404, "Application Not Found"),
-    AlREADY_PICNIC_AWAIT(409, "Already picnic Await"), ;
+
+    ALREADY_APPLICATION_PICNIC_OR_ALREADY_PICNIC(409, "Already Application Picnic Or Already Picnic"), ;
 
     override fun status() = status
     override fun message() = message
