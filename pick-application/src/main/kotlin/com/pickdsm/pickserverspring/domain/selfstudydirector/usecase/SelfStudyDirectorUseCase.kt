@@ -131,7 +131,7 @@ class SelfStudyDirectorUseCase(
                 ?: throw SelfStudyDirectorNotFoundException
 
         commandSelfStudyDirectorSpi.deleteSelfStudyDirector(
-            selfStudyDirector
+            selfStudyDirector,
         )
     }
 }
