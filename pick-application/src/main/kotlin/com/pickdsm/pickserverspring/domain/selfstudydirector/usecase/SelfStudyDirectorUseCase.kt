@@ -5,6 +5,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainDeleteSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainRegisterSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyElement
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
@@ -121,6 +122,16 @@ class SelfStudyDirectorUseCase(
 
         commandSelfStudyDirectorSpi.saveSelfStudyDirector(
             selfStudyDirector,
+        )
+    }
+
+    override fun deleteSelfStudyDirector(request: DomainDeleteSelfStudyDirectorRequest) {
+        val selfStudyDirector =
+            querySelfStudyDirectorSpi.querySelfStudyDirectorByDateAndFloor(request.date, request.floor)
+                ?: throw SelfStudyDirectorNotFoundException
+
+        commandSelfStudyDirectorSpi.deleteSelfStudyDirector(
+            selfStudyDirector
         )
     }
 }

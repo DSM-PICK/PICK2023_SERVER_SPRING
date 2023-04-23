@@ -13,6 +13,7 @@ import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.Delete
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.RegisterSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainDeleteAfterSchoolStudentRequest
@@ -28,6 +29,7 @@ import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentR
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainDeleteSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request.DomainRegisterSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyListResponse
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.response.SelfStudyStateResponse
@@ -286,5 +288,20 @@ class AdminWebAdapter(
     @PatchMapping("/movement/unlock")
     fun blockUnlockMoveClassroom() {
         selfStudyDirectorApi.blockUnlockMoveClassroom()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/director")
+    fun deleteSelfStudyDirector(
+        @RequestBody
+        @Valid
+        request: DeleteSelfStudyDirectorRequest,
+    ) {
+        val domainRequest = DomainDeleteSelfStudyDirectorRequest(
+            teacherId = request.teacherId,
+            floor = request.floor,
+            date = request.date,
+        )
+        selfStudyDirectorApi.deleteSelfStudyDirector(domainRequest)
     }
 }
