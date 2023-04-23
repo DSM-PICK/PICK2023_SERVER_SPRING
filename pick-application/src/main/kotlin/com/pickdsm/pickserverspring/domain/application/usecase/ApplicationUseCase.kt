@@ -17,6 +17,7 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPic
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryPicnicStudentList
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusElement
 import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStudentStatusList
+import com.pickdsm.pickserverspring.domain.application.exception.AlreadyPicnicAwaitException
 import com.pickdsm.pickserverspring.domain.application.exception.ApplicationNotFoundException
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
@@ -62,6 +63,11 @@ class ApplicationUseCase(
             endPeriod = request.desiredEndPeriod,
             type = StatusType.AWAIT,
         )
+        
+        if(!queryApplicationSpi.queryApplicationByStudentId(studentId)) {
+            throw AlreadyPicnicAwaitException
+        }
+
         val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(status)
         commandApplicationSpi.saveApplication(
             Application(
