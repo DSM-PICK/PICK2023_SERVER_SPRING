@@ -9,6 +9,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.StatusSpi
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity.classroomMovementEntity
 import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
 import java.util.UUID
@@ -188,4 +189,17 @@ class StatusPersistenceAdapter(
                 statusEntity.type.eq(StatusType.PICNIC),
             )
             .fetch().size
+
+    override fun existAwaitOrPicnicStatusByStudentId(studentId: UUID): Boolean =
+        jpaQueryFactory
+            .select(statusEntity.id)
+            .from(statusEntity)
+            .where(
+                checkIsExistAwaitOrPicnic(),
+                statusEntity.studentId.eq(studentId),
+            )
+            .fetchFirst() != null
+
+    private fun checkIsExistAwaitOrPicnic(): BooleanExpression =
+        statusEntity.type.eq(StatusType.AWAIT).or(statusEntity.type.eq(StatusType.PICNIC))
 }
