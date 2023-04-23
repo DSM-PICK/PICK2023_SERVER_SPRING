@@ -1,16 +1,17 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.application.Application
+import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.mapper.ApplicationMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.ApplicationRepository
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QApplicationEntity.applicationEntity
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
 import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class ApplicationPersistenceAdapter(
@@ -47,8 +48,4 @@ class ApplicationPersistenceAdapter(
             .where(statusEntity.studentId.eq(studentId))
             .fetchFirst()
             ?.let(applicationMapper::entityToDomain)
-
-    override fun queryApplicationByStudentId(studentId: UUID): Boolean {
-        return applicationRepository.findById(studentId).isEmpty
-    }
 }
