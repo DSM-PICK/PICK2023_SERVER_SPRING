@@ -88,4 +88,8 @@ class SelfStudyDirectorPersistenceAdapter(
     override fun saveSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
         selfStudyDirectorRepository.save(selfStudyDirectorMapper.domainToEntity(selfStudyDirector))
     }
+
+    override fun deleteSelfStudyDirector(selfStudyDirector: SelfStudyDirector) {
+        selfStudyDirectorRepository.delete(selfStudyDirectorMapper.domainToEntity(selfStudyDirector))
+    }
 }
