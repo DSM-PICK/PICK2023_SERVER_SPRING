@@ -466,9 +466,8 @@ class ApplicationUseCase(
     }
 
     override fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse {
-        val userId = userSpi.getCurrentUserId()
-        val userInfo = userSpi.queryUserInfoByUserId(userId)
-        val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentId(userId)
+        val userInfo = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
+        val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentIdAndToday(userInfo.id)
             ?: throw StatusNotFoundException
         val endTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
             .timeList.find { time -> time.period == picnicUserStatus.endPeriod }?.endTime
@@ -482,9 +481,8 @@ class ApplicationUseCase(
     }
 
     override fun getMyPicnicInfo(): QueryMyPicnicInfoResponse {
-        val userId = userSpi.getCurrentUserId()
-        val userInfo = userSpi.queryUserInfoByUserId(userId)
-        val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentId(userId)
+        val userInfo = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
+        val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentIdAndToday(userInfo.id)
             ?: throw StatusNotFoundException
         val teacherName = userSpi.queryUserInfoByUserId(picnicUserStatus.teacherId).name
 
