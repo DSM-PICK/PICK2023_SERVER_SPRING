@@ -11,4 +11,6 @@ interface QueryApplicationSpi {
     fun queryApplicationListByToday(date: LocalDate): List<Application>
 
     fun queryApplicationByStudentIdAndStatusId(studentId: UUID, statusId: UUID): Application?
+
+    fun queryApplicationByStudentId(studentId:UUID): Boolean
 }

@@ -8,8 +8,9 @@ import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatu
 import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @Adapter
 class ApplicationPersistenceAdapter(
@@ -46,4 +47,8 @@ class ApplicationPersistenceAdapter(
             .where(statusEntity.studentId.eq(studentId))
             .fetchFirst()
             ?.let(applicationMapper::entityToDomain)
+
+    override fun queryApplicationByStudentId(studentId: UUID): Boolean {
+        return applicationRepository.findById(studentId).isEmpty
+    }
 }
