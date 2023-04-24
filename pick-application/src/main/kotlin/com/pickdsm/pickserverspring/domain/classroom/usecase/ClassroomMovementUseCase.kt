@@ -19,6 +19,7 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClass
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementException
 import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementMyClassroom
+import com.pickdsm.pickserverspring.domain.classroom.exception.CannotMovementWeekendException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomMovementStudentNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.CommandClassroomMovementSpi
@@ -32,6 +33,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.UUID
 
@@ -67,8 +69,8 @@ class ClassroomMovementUseCase(
         )
 
         checkIsStatusPicnic(statusTypes)
-
         checkIsMovementMyClassroom(student, classroom)
+        checkIsWeekends()
 
         val status = Status(
             studentId = student.id,
@@ -84,6 +86,12 @@ class ClassroomMovementUseCase(
                 statusId = saveStatusId,
             ),
         )
+    }
+
+    private fun checkIsWeekends() {
+        if (LocalDate.now().dayOfWeek > DayOfWeek.FRIDAY) {
+            throw CannotMovementWeekendException
+        }
     }
 
     private fun checkIsMovementMyClassroom(
