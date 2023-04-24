@@ -36,4 +36,6 @@ interface QueryStatusSpi {
     fun queryMovementStatusSizeByFloorAndToday(floor: Int): Int
 
     fun queryPicnicStatusSizeByToday(): Int
+
+    fun existAwaitOrPicnicStatusByStudentId(studentId: UUID): Boolean
 }
