@@ -6,14 +6,17 @@ import com.pickdsm.pickserverspring.common.feign.client.dto.response.UserRespons
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
+import javax.validation.Valid
 
 @FeignClient(name = "UserClient", url = "\${service.scheme}://\${service.user.host}")
 interface UserClient {
 
-    @GetMapping("/users/id")
-    fun getUserInfo(@RequestParam("userId") ids: List<UUID>): UserInfoResponse
+    @PostMapping("/users/id")
+    fun getUserInfo(@Valid @RequestBody ids: List<UUID>): UserInfoResponse
 
     @GetMapping("/users/class")
     fun getUserInfoByGradeAndClassNum(
