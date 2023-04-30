@@ -45,7 +45,7 @@ class ClassroomUseCase(
                 }
             }
 
-            ClassroomType.CLUB.name -> {
+            ClassroomType.TUE_CLUB.name, ClassroomType.FRI_CLUB.name -> {
                 val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
                 clubRoomList.map {
                     val clubRooms = ClassroomElement(
@@ -98,7 +98,7 @@ class ClassroomUseCase(
                 }
             }
 
-            ClassroomType.CLUB.name -> {
+            ClassroomType.TUE_CLUB.name, ClassroomType.FRI_CLUB.name -> {
                 val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
                 clubRoomList.map {
                     val clubRooms = ResponsibleClassroomElement(
