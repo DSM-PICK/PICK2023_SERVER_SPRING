@@ -18,6 +18,7 @@ import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudent
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
+import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
@@ -87,8 +88,8 @@ class TeacherUseCase(
             ?: throw ClassroomNotFoundException
         val movementStatusList = queryStatusSpi.queryMovementStatusListByTodayAndClassroomId(classroomId)
         val movementStudentIdList = movementStatusList.map { it.studentId }
-
-        val movementUserInfos = userSpi.queryUserInfo(movementStudentIdList)
+        val userIdRequest = UserInfoRequest(movementStudentIdList)
+        val movementUserInfos = userSpi.queryUserInfo(userIdRequest)
 
         val movementList = movementStatusList.map {
             val user = movementUserInfos.find { user -> user.id == it.studentId }

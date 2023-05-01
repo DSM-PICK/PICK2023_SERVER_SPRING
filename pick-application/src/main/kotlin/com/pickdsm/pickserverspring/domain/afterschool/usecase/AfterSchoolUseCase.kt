@@ -11,6 +11,7 @@ import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotF
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolStudentExistsException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.CommandAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
+import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.util.*
@@ -55,7 +56,8 @@ class AfterSchoolUseCase(
             ?: throw AfterSchoolNotFoundException
         val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolListByAfterSchoolId(afterSchoolId)
         val afterSchoolStudentIdList = afterSchoolList.map { it.studentId }
-        val afterSchoolStudentInfos = userSpi.queryUserInfo(afterSchoolStudentIdList)
+        val userIdRequest = UserInfoRequest(afterSchoolStudentIdList)
+        val afterSchoolStudentInfos = userSpi.queryUserInfo(userIdRequest)
 
         val afterSchoolUsers = afterSchoolList.map {
             val user = afterSchoolStudentInfos.find { user -> user.id == it.studentId }
