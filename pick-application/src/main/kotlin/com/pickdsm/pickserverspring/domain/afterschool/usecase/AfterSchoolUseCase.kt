@@ -11,7 +11,6 @@ import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotF
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolStudentExistsException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.CommandAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
-import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
