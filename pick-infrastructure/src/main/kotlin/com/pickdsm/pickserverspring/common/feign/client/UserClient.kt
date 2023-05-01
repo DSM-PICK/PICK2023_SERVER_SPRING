@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
-import javax.validation.Valid
 
 @FeignClient(name = "UserClient", url = "\${service.scheme}://\${service.user.host}")
 interface UserClient {
 
     @PostMapping("/users/id")
-    fun getUserInfo(@Valid @RequestBody request: UserInfoRequest): UserInfoResponse
+    fun getUserInfo(@RequestBody request: UserInfoRequest): UserInfoResponse
 
     @GetMapping("/users/class")
     fun getUserInfoByGradeAndClassNum(
