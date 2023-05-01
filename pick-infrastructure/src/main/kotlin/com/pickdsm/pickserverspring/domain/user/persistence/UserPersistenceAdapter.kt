@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.user.persistence
 
 import com.pickdsm.pickserverspring.common.feign.client.UserClient
+import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.UserInfo
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
@@ -16,11 +17,11 @@ class UserPersistenceAdapter(
     override fun getCurrentUserId(): UUID =
         UUID.fromString(SecurityContextHolder.getContext().authentication.name)
 
-    override fun queryUserInfo(ids: List<UUID>): List<User> =
-        if (ids.isEmpty()) {
+    override fun queryUserInfo(request: UserInfoRequest): List<User> =
+        if (request.userIds.isEmpty()) {
             emptyList()
         } else {
-            userClient.getUserInfo(ids)
+            userClient.getUserInfo(request)
                 .users
                 .map {
                     User(

@@ -34,6 +34,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
+import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.DayOfWeek
@@ -100,7 +101,8 @@ class ApplicationUseCase(
         val todayStatusList = queryStatusSpi.queryAwaitStudentListByToday(today)
         val todayApplicationStudentIdList = todayStatusList.map { it.studentId }
         val timeList = timeQueryTeacherSpi.queryTime(today)
-        val userList = userQueryApplicationSpi.queryUserInfo(todayApplicationStudentIdList)
+        val userIdRequest = UserInfoRequest(todayApplicationStudentIdList)
+        val userList = userQueryApplicationSpi.queryUserInfo(userIdRequest)
 
         val outing = mutableListOf<QueryPicnicApplicationElement>()
 
@@ -324,7 +326,8 @@ class ApplicationUseCase(
         val todayPicnicStudentInfoList = queryStatusSpi.queryPicnicStudentInfoListByToday(LocalDate.now())
         val todayPicnicStudentIdList = todayPicnicStudentInfoList.map { status -> status.studentId }
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
-        val userList = userQueryApplicationSpi.queryUserInfo(todayPicnicStudentIdList)
+        val userIdRequest = UserInfoRequest(todayPicnicStudentIdList)
+        val userList = userQueryApplicationSpi.queryUserInfo(userIdRequest)
 
         val outing: List<QueryPicnicStudentElement> = todayPicnicStudentInfoList
             .map { status ->
@@ -358,7 +361,8 @@ class ApplicationUseCase(
             DirectorType.AFTER_SCHOOL -> {
                 val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolListByClassroomId(classroomId)
                 val afterSchoolStudentIdList = afterSchoolList.map { it.studentId }
-                val afterSchoolUserInfos = userSpi.queryUserInfo(afterSchoolStudentIdList)
+                val userIdRequest = UserInfoRequest(afterSchoolStudentIdList)
+                val afterSchoolUserInfos = userSpi.queryUserInfo(userIdRequest)
 
                 afterSchoolUserInfos.map { user ->
                     val status = todayStudentStatusList.find { user.id == it.studentId }
@@ -378,7 +382,8 @@ class ApplicationUseCase(
             DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
                 val clubList = queryClubSpi.queryClubListByClassroomId(classroomId)
                 val clubStudentIdList = clubList.map { it.studentId }
-                val clubUserInfos = userSpi.queryUserInfo(clubStudentIdList)
+                val userIdRequest = UserInfoRequest(clubStudentIdList)
+                val clubUserInfos = userSpi.queryUserInfo(userIdRequest)
 
                 clubUserInfos.map { user ->
                     val status = todayStudentStatusList.find { user.id == it.studentId }
@@ -421,7 +426,8 @@ class ApplicationUseCase(
 
     override fun savePicnicPass(request: DomainPicnicPassRequest) {
         val teacherId = userSpi.getCurrentUserId()
-        val userList = userSpi.queryUserInfo(request.userIdList)
+        val userIdRequest = UserInfoRequest(request.userIdList)
+        val userList = userSpi.queryUserInfo(userIdRequest)
 
         val statusList = request.userIdList.map {
             val user = userList.find { user -> user.id == it }
@@ -441,7 +447,8 @@ class ApplicationUseCase(
 
     override fun savePicnicAcceptOrRefuse(request: DomainPicnicAcceptOrRefuseRequest) {
         val teacherId = userSpi.getCurrentUserId()
-        val userList = userSpi.queryUserInfo(request.userIdList)
+        val userIdRequest = UserInfoRequest(request.userIdList)
+        val userList = userSpi.queryUserInfo(userIdRequest)
         val todayAwaitStatusList = queryStatusSpi.queryAwaitStudentListByToday(LocalDate.now())
 
         when (request.type) {

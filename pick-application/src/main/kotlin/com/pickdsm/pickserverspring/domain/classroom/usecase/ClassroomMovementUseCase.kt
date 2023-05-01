@@ -32,6 +32,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.User
+import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -116,7 +117,8 @@ class ClassroomMovementUseCase(
     ): QueryMovementStudentList {
         val todayMovementStudentInfoList = queryStatusSpi.queryMovementStudentInfoListByToday(LocalDate.now())
         val todayMovementStudentIdList = todayMovementStudentInfoList.map { movement -> movement.studentId }
-        val userList = userQueryApplicationSpi.queryUserInfo(todayMovementStudentIdList)
+        val userIdRequest = UserInfoRequest(todayMovementStudentIdList)
+        val userList = userQueryApplicationSpi.queryUserInfo(userIdRequest)
         val movementStudent = mutableListOf<MovementStudentElement>()
         val studentAttendanceList = adminApi.getTypeByDate(LocalDate.now())
 

@@ -18,6 +18,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyD
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.UserQuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.user.User
+import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
 
@@ -34,7 +35,8 @@ class SelfStudyDirectorUseCase(
         val startDate = LocalDate.of(LocalDate.now().year, month.toInt(), 1)
         val selfStudyDirectorList = querySelfStudyDirectorSpi.querySelfStudyDirectorByDate(startDate)
         val teacherIdList = selfStudyDirectorList.map { it.teacherId }
-        val userInfoList = userQuerySelfStudyDirectorSpi.queryUserInfo(teacherIdList)
+        val userIdRequest = UserInfoRequest(teacherIdList)
+        val userInfoList = userQuerySelfStudyDirectorSpi.queryUserInfo(userIdRequest)
         val typeList = queryTypeSpi.queryTypeListByDate(startDate)
 
         // 해당 달의 1일부터 마지막일까지 반복문을 돌면서 값 가공
@@ -60,7 +62,8 @@ class SelfStudyDirectorUseCase(
     override fun getTodaySelfStudyTeacher(): TodaySelfStudyTeacherResponse {
         val selfStudyList = querySelfStudyDirectorSpi.querySelfStudyDirectorByToday()
         val teacherIdList = selfStudyList.map { it.teacherId }
-        val teacherList = userQuerySelfStudyDirectorSpi.queryUserInfo(teacherIdList)
+        val userIdRequest = UserInfoRequest(teacherIdList)
+        val teacherList = userQuerySelfStudyDirectorSpi.queryUserInfo(userIdRequest)
 
         return TodaySelfStudyTeacherResponse(
             secondFloor = getTeacherName(teacherList, selfStudyList, 2),

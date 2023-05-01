@@ -29,6 +29,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.time.spi.QueryTimeSpi
+import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.LocalDate
@@ -55,7 +56,8 @@ class AdminUseCase(
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val nowPeriod = queryTimeSpi.queryNowPeriod(timeList)
         val userIdList = request.userList.map { it.userId }
-        val userInfoList = userSpi.queryUserInfo(userIdList)
+        val userIdRequest = UserInfoRequest(userIdList)
+        val userInfoList = userSpi.queryUserInfo(userIdRequest)
 
         val changeStatusList: List<Status> = request.userList.map {
             val user = userInfoList.find { user -> user.id == it.userId }
@@ -118,7 +120,8 @@ class AdminUseCase(
             DirectorType.AFTER_SCHOOL -> {
                 val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolListByClassroomId(classroomId)
                 val afterSchoolStudentIdList = afterSchoolList.map { it.studentId }
-                val afterSchoolUserInfos = userSpi.queryUserInfo(afterSchoolStudentIdList)
+                val userIdRequest = UserInfoRequest(afterSchoolStudentIdList)
+                val afterSchoolUserInfos = userSpi.queryUserInfo(userIdRequest)
 
                 afterSchoolUserInfos.map { user ->
                     val afterSchoolStatusList = dateStatusList.filter { it.studentId == user.id }
@@ -150,7 +153,8 @@ class AdminUseCase(
             DirectorType.FRI_CLUB, DirectorType.TUE_CLUB -> {
                 val clubList = queryClubSpi.queryClubListByClassroomId(classroomId)
                 val clubStudentIdList = clubList.map { it.studentId }
-                val clubUserInfos = userSpi.queryUserInfo(clubStudentIdList)
+                val userIdRequest = UserInfoRequest(clubStudentIdList)
+                val clubUserInfos = userSpi.queryUserInfo(userIdRequest)
 
                 clubUserInfos.map { user ->
                     val clubStatusList = dateStatusList.filter { it.studentId == user.id }
