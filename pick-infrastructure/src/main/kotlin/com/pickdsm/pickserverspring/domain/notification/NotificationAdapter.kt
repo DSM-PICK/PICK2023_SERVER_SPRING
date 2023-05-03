@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.pickdsm.pickserverspring.domain.notification.dto.request.DomainSendGroupMessageRequest
 import com.pickdsm.pickserverspring.domain.notification.dto.request.DomainSendMessageRequest
 import com.pickdsm.pickserverspring.global.annotation.Adapter
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class NotificationAdapter(
