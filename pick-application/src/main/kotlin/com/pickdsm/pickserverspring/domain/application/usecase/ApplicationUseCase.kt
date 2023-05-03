@@ -29,6 +29,7 @@ import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFound
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
+import com.pickdsm.pickserverspring.domain.notification.NotificationSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
@@ -55,6 +56,7 @@ class ApplicationUseCase(
     private val queryClubSpi: QueryClubSpi,
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
     private val queryTypeSpi: QueryTypeSpi,
+    private val notificationSpi: NotificationSpi,
 ) : ApplicationApi {
 
     override fun saveApplicationToGoOut(request: DomainApplicationGoOutRequest) {
@@ -443,6 +445,15 @@ class ApplicationUseCase(
         }
 
         statusCommandTeacherSpi.saveAllStatus(statusList)
+
+        request.userIdList.forEach {
+            notificationSpi.sendNotification(
+                userId = it,
+                topic = "APPLICATION_PICNIC",
+                content = "외출증이 발급되었습니다.",
+                threadId = "pick_picnic",
+            )
+        }
     }
 
     override fun savePicnicAcceptOrRefuse(request: DomainPicnicAcceptOrRefuseRequest) {
@@ -467,6 +478,14 @@ class ApplicationUseCase(
                 }
 
                 statusCommandTeacherSpi.saveAllStatus(statusList)
+                request.userIdList.forEach {
+                    notificationSpi.sendNotification(
+                        userId = it,
+                        topic = "APPLICATION_PICNIC",
+                        content = "외출 신청이 수락 되었습니다.",
+                        threadId = "pick_picnic",
+                    )
+                }
             }
 
             StatusType.PICNIC_REJECT -> {
@@ -484,6 +503,14 @@ class ApplicationUseCase(
                 }
 
                 statusCommandTeacherSpi.saveAllStatus(statusList)
+                request.userIdList.forEach {
+                    notificationSpi.sendNotification(
+                        userId = it,
+                        topic = "APPLICATION_PICNIC",
+                        content = "외출 신청이 거절 되었습니다.",
+                        threadId = "pick_picnic",
+                    )
+                }
             }
 
             else -> throw StatusNotFoundException

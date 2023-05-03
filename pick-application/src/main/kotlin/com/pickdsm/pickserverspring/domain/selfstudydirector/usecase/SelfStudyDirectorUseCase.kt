@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
+import com.pickdsm.pickserverspring.domain.notification.NotificationSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.SelfStudyDirector
 import com.pickdsm.pickserverspring.domain.selfstudydirector.api.SelfStudyDirectorApi
@@ -29,6 +30,7 @@ class SelfStudyDirectorUseCase(
     private val queryTypeSpi: QueryTypeSpi,
     private val userSpi: UserSpi,
     private val commandSelfStudyDirectorSpi: CommandSelfStudyDirectorSpi,
+    private val notificationSpi: NotificationSpi,
 ) : SelfStudyDirectorApi {
 
     override fun getSelfStudyTeacher(month: String): SelfStudyListResponse {
@@ -94,6 +96,11 @@ class SelfStudyDirectorUseCase(
         val teacher = querySelfStudyDirectorSpi.querySelfStudyDirectorByTeacherId(teacherId)
 
         commandSelfStudyDirectorSpi.setRestrictionMovementTrue(teacher)
+        notificationSpi.sendGroupNotification(
+            topic = "APPLICATION_MOVE_CLASSROOM",
+            content = "오늘은 교실이동이 불가합니다.",
+            threadId = "pick",
+        )
         // TODO 이동 제한시 동아리, 자습일 떄 구분해서 이동한 학생 상태 지우기 추가해야함
     }
 
