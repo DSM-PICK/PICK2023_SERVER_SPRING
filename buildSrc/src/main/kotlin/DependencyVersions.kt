@@ -4,4 +4,5 @@ object DependencyVersions {
     const val SENTRY_VERSION = "6.5.0"
     const val QUERYDSL = "5.0.0"
     const val OPENFEIGN = "3.1.4"
+    const val AWS_MESSAGING = "2.2.6.RELEASE"
 }

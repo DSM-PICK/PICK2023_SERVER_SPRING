@@ -22,6 +22,7 @@ dependencies {
     implementation(Dependencies.JACKSON)
     implementation(Dependencies.QUERYDSL)
     kapt(Dependencies.QUERYDSL_PROCESSOR)
+    implementation(Dependencies.AWS_MESSAGING)
 
     implementation(project(":pick-application"))
 }
