@@ -51,6 +51,13 @@ class TypePersistenceAdapter(
             .fetchOne()
             ?.let(typeMapper::entityToDomain)
 
+    override fun queryTypeIdByDate(date: LocalDate): UUID? =
+        jpaQueryFactory
+            .select(typeEntity.id)
+            .from(typeEntity)
+            .where(typeEntity.date.eq(date))
+            .fetchOne()
+
     override fun saveType(type: Type) {
         val typeEntity = typeMapper.domainToEntity(type)
         typeRepository.save(typeEntity)

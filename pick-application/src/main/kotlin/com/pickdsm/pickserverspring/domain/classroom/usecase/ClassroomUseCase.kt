@@ -79,8 +79,12 @@ class ClassroomUseCase(
 
     override fun queryResponsibleClassroomList(): QueryResponsibleClassroomList {
         val teacherId = userSpi.getCurrentUserId()
-        val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(teacherId)
-            ?: throw FloorNotFoundException
+        val typeId = queryTypeSpi.queryTypeIdByDate(LocalDate.now())
+            ?: throw TypeNotFoundException
+        val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherIdAndTypeId(
+            teacherId = teacherId,
+            typeId = typeId,
+        ) ?: throw FloorNotFoundException
         val todayType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now())
             ?: DirectorType.SELF_STUDY
         val classrooms = mutableListOf<ResponsibleClassroomElement>()

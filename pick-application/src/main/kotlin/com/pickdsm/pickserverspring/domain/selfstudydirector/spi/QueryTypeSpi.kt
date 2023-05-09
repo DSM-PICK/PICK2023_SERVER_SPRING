@@ -16,4 +16,6 @@ interface QueryTypeSpi {
     fun queryDirectorTypeByDate(date: LocalDate): DirectorType?
 
     fun queryTypeByDate(date: LocalDate): Type?
+
+    fun queryTypeIdByDate(date: LocalDate): UUID?
 }
