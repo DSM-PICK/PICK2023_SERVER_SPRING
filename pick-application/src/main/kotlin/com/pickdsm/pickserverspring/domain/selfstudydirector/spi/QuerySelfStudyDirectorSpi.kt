@@ -10,6 +10,8 @@ interface QuerySelfStudyDirectorSpi {
 
     fun queryResponsibleFloorByTeacherId(teacherId: UUID): Int?
 
+    fun queryResponsibleFloorByTeacherIdAndTypeId(teacherId: UUID, typeId: UUID): Int?
+
     fun queryAllSelfStudyDirectorByTeacherIdAndDate(teacherId: UUID, date: LocalDate): List<SelfStudyDirector>
 
     fun querySelfStudyDirectorByTeacherId(teacherId: UUID): SelfStudyDirector
