@@ -9,6 +9,7 @@ import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassro
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.util.*
 
 @Adapter
 class ClassroomMovementPersistenceAdapter(
@@ -35,5 +36,15 @@ class ClassroomMovementPersistenceAdapter(
             .join(statusEntity)
             .on(classroomMovementEntity.statusEntity.id.eq(statusEntity.id))
             .fetchFirst()
+            ?.let(classroomMovementMapper::entityToDomain)
+
+    override fun queryClassroomMovementByStudentId(studentId: UUID): ClassroomMovement? =
+        jpaQueryFactory
+            .selectFrom(classroomMovementEntity)
+            .join(statusEntity)
+            .on(classroomMovementEntity.statusEntity.studentId.eq(studentId)
+                .and(statusEntity.id.eq(classroomMovementEntity.statusEntity.id))
+            )
+            .fetchOne()
             ?.let(classroomMovementMapper::entityToDomain)
 }
