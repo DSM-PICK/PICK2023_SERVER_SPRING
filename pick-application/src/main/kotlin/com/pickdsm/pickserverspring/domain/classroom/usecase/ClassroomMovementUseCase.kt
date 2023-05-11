@@ -73,6 +73,12 @@ class ClassroomMovementUseCase(
         checkIsMovementMyClassroom(student, classroom)
         checkIsWeekends()
 
+        if (queryClassroomMovementSpi.queryClassroomMovementByStudentId(student.id) != null) {
+            val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStudentId(student.id)
+                ?: throw CannotMovementException
+            commandClassroomMovementSpi.saveClassroomMovement(classroomMovement.chageClassroom(classroomId = classroom.id))
+        }
+
         val status = Status(
             studentId = student.id,
             teacherId = UUID(0, 0), // TODO: 해당 층 자습감독쌤 아이디 넣기
