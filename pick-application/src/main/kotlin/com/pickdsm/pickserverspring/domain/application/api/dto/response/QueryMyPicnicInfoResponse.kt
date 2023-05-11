@@ -8,6 +8,6 @@ data class QueryMyPicnicInfoResponse(
     val studentName: String,
     val startTime: LocalTime,
     val endTime: LocalTime,
-    val reason: String,
+    val reason: String?,
     val teacherName: String,
 )
