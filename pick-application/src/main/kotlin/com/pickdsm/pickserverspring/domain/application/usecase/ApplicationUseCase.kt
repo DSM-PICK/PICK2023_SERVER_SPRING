@@ -441,14 +441,14 @@ class ApplicationUseCase(
                     startPeriod = request.startPeriod,
                     endPeriod = request.endPeriod,
                     type = StatusType.PICNIC,
-                )
+                ),
             )
 
             commandApplicationSpi.saveApplication(
                 Application(
                     reason = request.reason,
                     statusId = saveStatusId,
-                )
+                ),
             )
         }
     }
