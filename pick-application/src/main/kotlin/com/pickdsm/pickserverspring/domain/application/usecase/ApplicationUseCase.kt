@@ -514,7 +514,7 @@ class ApplicationUseCase(
         val application = queryApplicationSpi.queryApplicationByStudentIdAndStatusId(
             studentId = userInfo.id,
             statusId = picnicUserStatus.id,
-        ) ?: throw ApplicationNotFoundException
+        )
 
         val startTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
             .timeList.find { time -> time.period == picnicUserStatus.startPeriod }?.startTime
@@ -529,7 +529,7 @@ class ApplicationUseCase(
             studentName = userInfo.name,
             startTime = startTime,
             endTime = endTime,
-            reason = application.reason,
+            reason = application?.reason,
             teacherName = teacherName,
         )
     }
