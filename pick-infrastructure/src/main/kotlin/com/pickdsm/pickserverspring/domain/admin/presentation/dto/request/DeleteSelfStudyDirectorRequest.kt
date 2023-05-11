@@ -8,4 +8,3 @@ data class DeleteSelfStudyDirectorRequest(
     val floor: Int,
     val date: LocalDate,
 )
-

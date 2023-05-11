@@ -426,23 +426,43 @@ class ApplicationUseCase(
 
     override fun savePicnicPass(request: DomainPicnicPassRequest) {
         val teacherId = userSpi.getCurrentUserId()
-        val userIdRequest = UserInfoRequest(request.userIdList)
+        val userIdList = request.userIdList
+
+        isExistPicnicOrAwaitOrMovementStudent(userIdList)
+
+        val userIdRequest = UserInfoRequest(userIdList)
         val userList = userSpi.queryUserInfo(userIdRequest)
 
-        val statusList = request.userIdList.map {
+        userIdList.map {
             val user = userList.find { user -> user.id == it }
                 ?: throw UserNotFoundException
 
-            Status(
-                studentId = user.id,
-                teacherId = teacherId,
-                startPeriod = request.startPeriod,
-                endPeriod = request.endPeriod,
-                type = StatusType.PICNIC,
+            val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(
+                Status(
+                    studentId = user.id,
+                    teacherId = teacherId,
+                    startPeriod = request.startPeriod,
+                    endPeriod = request.endPeriod,
+                    type = StatusType.PICNIC,
+                ),
+            )
+
+            commandApplicationSpi.saveApplication(
+                Application(
+                    reason = request.reason,
+                    statusId = saveStatusId,
+                ),
             )
         }
+    }
 
-        statusCommandTeacherSpi.saveAllStatus(statusList)
+    private fun isExistPicnicOrAwaitOrMovementStudent(userIdList: List<UUID>) {
+        val picnicOrAwaitOrMovementStudentIds = queryStatusSpi.queryPicnicOrAwaitOrMovementStatusStudentIdListByToday()
+        val isExistPicnicOrAwaitOrMovement = picnicOrAwaitOrMovementStudentIds.containsAll(userIdList)
+
+        if (isExistPicnicOrAwaitOrMovement) {
+            throw AlreadyApplicationPicnicOrAlreadyPicnicException
+        }
     }
 
     override fun savePicnicAcceptOrRefuse(request: DomainPicnicAcceptOrRefuseRequest) {

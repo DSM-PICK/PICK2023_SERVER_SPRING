@@ -202,4 +202,16 @@ class StatusPersistenceAdapter(
 
     private fun checkIsExistAwaitOrPicnic(): BooleanExpression =
         statusEntity.type.eq(StatusType.AWAIT).or(statusEntity.type.eq(StatusType.PICNIC))
+
+    override fun queryPicnicOrAwaitOrMovementStatusStudentIdListByToday(): List<UUID> =
+        jpaQueryFactory
+            .select(statusEntity.studentId)
+            .from(statusEntity)
+            .where(
+                statusEntity.type.eq(StatusType.PICNIC)
+                    .or(statusEntity.type.eq(StatusType.AWAIT))
+                    .or(statusEntity.type.eq(StatusType.MOVEMENT))
+                    .and(statusEntity.date.eq(LocalDate.now())),
+            )
+            .fetch()
 }
