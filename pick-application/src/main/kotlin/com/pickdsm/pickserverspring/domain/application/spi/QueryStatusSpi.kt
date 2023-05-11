@@ -38,4 +38,6 @@ interface QueryStatusSpi {
     fun queryPicnicStatusSizeByToday(): Int
 
     fun existAwaitOrPicnicStatusByStudentId(studentId: UUID): Boolean
+
+    fun queryPicnicOrAwaitOrMovementStatusStudentIdListByToday(): List<UUID>
 }
