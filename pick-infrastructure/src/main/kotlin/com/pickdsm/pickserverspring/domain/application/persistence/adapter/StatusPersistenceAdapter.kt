@@ -211,7 +211,7 @@ class StatusPersistenceAdapter(
                 statusEntity.type.eq(StatusType.PICNIC)
                     .or(statusEntity.type.eq(StatusType.AWAIT))
                     .or(statusEntity.type.eq(StatusType.MOVEMENT))
-                    .and(statusEntity.date.eq(LocalDate.now()))
+                    .and(statusEntity.date.eq(LocalDate.now())),
             )
             .fetch()
 }
