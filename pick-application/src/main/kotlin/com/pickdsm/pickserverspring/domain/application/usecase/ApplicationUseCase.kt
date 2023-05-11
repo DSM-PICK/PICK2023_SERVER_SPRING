@@ -427,6 +427,9 @@ class ApplicationUseCase(
     override fun savePicnicPass(request: DomainPicnicPassRequest) {
         val teacherId = userSpi.getCurrentUserId()
         val userIdList = request.userIdList
+
+        isExistPicnicOrAwaitOrMovementStudent(userIdList)
+
         val userIdRequest = UserInfoRequest(userIdList)
         val userList = userSpi.queryUserInfo(userIdRequest)
 
@@ -450,6 +453,15 @@ class ApplicationUseCase(
                     statusId = saveStatusId,
                 ),
             )
+        }
+    }
+
+    private fun isExistPicnicOrAwaitOrMovementStudent(userIdList: List<UUID>) {
+        val picnicOrAwaitOrMovementStudentIds = queryStatusSpi.queryPicnicOrAwaitOrMovementStatusStudentIdListByToday()
+        val isExistPicnicOrAwaitOrMovement = picnicOrAwaitOrMovementStudentIds.containsAll(userIdList)
+
+        if (isExistPicnicOrAwaitOrMovement) {
+            throw AlreadyApplicationPicnicOrAlreadyPicnicException
         }
     }
 
