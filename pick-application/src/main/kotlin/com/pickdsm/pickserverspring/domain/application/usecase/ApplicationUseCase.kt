@@ -426,23 +426,31 @@ class ApplicationUseCase(
 
     override fun savePicnicPass(request: DomainPicnicPassRequest) {
         val teacherId = userSpi.getCurrentUserId()
-        val userIdRequest = UserInfoRequest(request.userIdList)
+        val userIdList = request.userIdList
+        val userIdRequest = UserInfoRequest(userIdList)
         val userList = userSpi.queryUserInfo(userIdRequest)
 
-        val statusList = request.userIdList.map {
+        userIdList.map {
             val user = userList.find { user -> user.id == it }
                 ?: throw UserNotFoundException
 
-            Status(
-                studentId = user.id,
-                teacherId = teacherId,
-                startPeriod = request.startPeriod,
-                endPeriod = request.endPeriod,
-                type = StatusType.PICNIC,
+            val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(
+                Status(
+                    studentId = user.id,
+                    teacherId = teacherId,
+                    startPeriod = request.startPeriod,
+                    endPeriod = request.endPeriod,
+                    type = StatusType.PICNIC,
+                )
+            )
+
+            commandApplicationSpi.saveApplication(
+                Application(
+                    reason = request.reason,
+                    statusId = saveStatusId,
+                )
             )
         }
-
-        statusCommandTeacherSpi.saveAllStatus(statusList)
     }
 
     override fun savePicnicAcceptOrRefuse(request: DomainPicnicAcceptOrRefuseRequest) {
@@ -514,7 +522,7 @@ class ApplicationUseCase(
         val application = queryApplicationSpi.queryApplicationByStudentIdAndStatusId(
             studentId = userInfo.id,
             statusId = picnicUserStatus.id,
-        )
+        ) ?: throw ApplicationNotFoundException
 
         val startTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
             .timeList.find { time -> time.period == picnicUserStatus.startPeriod }?.startTime
@@ -529,7 +537,7 @@ class ApplicationUseCase(
             studentName = userInfo.name,
             startTime = startTime,
             endTime = endTime,
-            reason = application?.reason,
+            reason = application.reason,
             teacherName = teacherName,
         )
     }
