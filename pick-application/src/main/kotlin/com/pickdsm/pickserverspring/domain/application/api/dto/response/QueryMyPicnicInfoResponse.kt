@@ -1,5 +1,6 @@
 package com.pickdsm.pickserverspring.domain.application.api.dto.response
 
+import java.time.LocalDate
 import java.time.LocalTime
 
 data class QueryMyPicnicInfoResponse(
@@ -10,4 +11,5 @@ data class QueryMyPicnicInfoResponse(
     val endTime: LocalTime,
     val reason: String,
     val teacherName: String,
+    val picnicDate: LocalDate,
 )
