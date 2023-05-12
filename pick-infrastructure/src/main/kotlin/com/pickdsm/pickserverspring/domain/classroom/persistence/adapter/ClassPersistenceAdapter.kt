@@ -2,7 +2,6 @@ package com.pickdsm.pickserverspring.domain.classroom.persistence.adapter
 
 import com.pickdsm.pickserverspring.domain.classroom.Classroom
 import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMapper
-import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomRepository
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.classroom.persistence.vo.QQueryClassroomVO
 import com.pickdsm.pickserverspring.domain.classroom.persistence.vo.QueryClassroomVO
