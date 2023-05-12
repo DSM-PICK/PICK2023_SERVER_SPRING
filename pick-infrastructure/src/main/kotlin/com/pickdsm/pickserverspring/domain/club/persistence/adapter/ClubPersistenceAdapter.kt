@@ -14,7 +14,7 @@ import com.pickdsm.pickserverspring.domain.club.persistence.vo.QueryClubRoomVO
 import com.pickdsm.pickserverspring.domain.club.spi.ClubSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class ClubPersistenceAdapter(
@@ -134,4 +134,15 @@ class ClubPersistenceAdapter(
     override fun deleteClub(club: Club) {
         clubRepository.delete(clubMapper.domainToEntity(club))
     }
+
+    override fun queryClubClassroomIdByStudentId(studentId: UUID): UUID? =
+        jpaQueryFactory
+            .select(clubEntity.clubInfoEntity.classroomEntity.id)
+            .from(clubEntity)
+            .join(clubInfoEntity)
+            .on(clubEntity.clubInfoEntity.eq(clubInfoEntity))
+            .join(classroomEntity)
+            .on(clubEntity.clubInfoEntity.classroomEntity.eq(classroomEntity))
+            .where(clubEntity.studentId.eq(studentId))
+            .fetchOne()
 }
