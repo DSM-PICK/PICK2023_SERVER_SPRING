@@ -139,10 +139,10 @@ class ClubPersistenceAdapter(
         jpaQueryFactory
             .select(clubEntity.clubInfoEntity.classroomEntity.id)
             .from(clubEntity)
-            .join(clubInfoEntity)
-            .on(clubEntity.clubInfoEntity.eq(clubInfoEntity))
-            .join(classroomEntity)
-            .on(clubEntity.clubInfoEntity.classroomEntity.eq(classroomEntity))
             .where(clubEntity.studentId.eq(studentId))
+            .join(clubInfoEntity)
+            .on(clubEntity.clubInfoEntity.id.eq(clubInfoEntity.id))
+            .join(classroomEntity)
+            .on(clubInfoEntity.classroomEntity.id.eq(classroomEntity.id))
             .fetchOne()
 }

@@ -134,10 +134,10 @@ class AfterSchoolPersistenceAdapter(
         jpaQueryFactory
             .select(afterSchoolEntity.afterSchoolInfoEntity.classroomEntity.id)
             .from(afterSchoolEntity)
-            .innerJoin(afterSchoolInfoEntity)
-            .innerJoin(classroomEntity)
-            .on(afterSchoolEntity.afterSchoolInfoEntity.id.eq(afterSchoolInfoEntity.id))
-            .on(afterSchoolInfoEntity.classroomEntity.id.eq(classroomEntity.id))
             .where(afterSchoolEntity.studentId.eq(studentId))
+            .join(afterSchoolInfoEntity)
+            .on(afterSchoolEntity.afterSchoolInfoEntity.id.eq(afterSchoolInfoEntity.id))
+            .join(classroomEntity)
+            .on(afterSchoolInfoEntity.classroomEntity.id.eq(classroomEntity.id))
             .fetchOne()
 }
