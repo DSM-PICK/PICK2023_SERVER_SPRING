@@ -33,7 +33,7 @@ class AfterSchoolUseCase(
     }
 
     override fun createAfterSchoolStudent(request: DomainCreateAfterSchoolStudentRequest) {
-        val afterSchoolInfo = queryAfterSchoolSpi.findByAfterSchoolInfoId(request.afterSchoolId)
+        val afterSchoolInfo = queryAfterSchoolSpi.queryAfterSchoolInfoByAfterSchoolId(request.afterSchoolId)
             ?: throw AfterSchoolNotFoundException
 
         val studentIdList = request.studentIds.distinct()
@@ -52,7 +52,7 @@ class AfterSchoolUseCase(
     }
 
     override fun getAfterSchoolStudents(afterSchoolId: UUID): QueryAfterSchoolStudentList {
-        val afterSchoolInfo = queryAfterSchoolSpi.findByAfterSchoolInfoId(afterSchoolId)
+        val afterSchoolInfo = queryAfterSchoolSpi.queryAfterSchoolInfoByAfterSchoolId(afterSchoolId)
             ?: throw AfterSchoolNotFoundException
         val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolListByAfterSchoolId(afterSchoolId)
         val afterSchoolStudentIdList = afterSchoolList.map { it.studentId }
