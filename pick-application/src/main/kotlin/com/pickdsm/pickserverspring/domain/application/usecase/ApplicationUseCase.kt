@@ -551,6 +551,7 @@ class ApplicationUseCase(
             endTime = endTime,
             reason = application.reason,
             teacherName = teacherName,
+            picnicDate = picnicUserStatus.date,
         )
     }
 
