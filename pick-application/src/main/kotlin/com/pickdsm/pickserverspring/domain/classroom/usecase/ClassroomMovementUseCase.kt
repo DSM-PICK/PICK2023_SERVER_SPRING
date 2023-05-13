@@ -71,8 +71,8 @@ class ClassroomMovementUseCase(
             period = request.period,
         )
 
-        val todayType = queryTypeSpi.queryTypeByDate(LocalDate.now())
-            ?.type ?: throw TypeNotFoundException
+        val todayType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now())
+            ?: throw TypeNotFoundException
 
         when (todayType) {
             DirectorType.AFTER_SCHOOL -> {
