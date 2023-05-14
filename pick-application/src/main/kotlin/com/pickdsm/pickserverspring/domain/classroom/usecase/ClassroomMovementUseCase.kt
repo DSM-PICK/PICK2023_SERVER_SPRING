@@ -66,7 +66,8 @@ class ClassroomMovementUseCase(
             ?: throw TimeNotFoundException
 
         val statusTypes = queryStatusSpi.queryStatusTypesByStudentIdAndEndPeriod(
-            studentId = student.id, period = request.period,
+            studentId = student.id,
+            period = request.period,
         )
         val todayType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now())
             ?: throw TypeNotFoundException
@@ -107,8 +108,9 @@ class ClassroomMovementUseCase(
 
         when (queryClassroomMovementSpi.existClassroomMovementByStudentId(student.id)) {
             true -> {
-                val existClassroomMovementStatus = queryClassroomMovementSpi.queryClassroomMovementByStudentIdAndToday(student.id)
-                    ?: throw ClassroomMovementStudentNotFoundException
+                val existClassroomMovementStatus =
+                    queryClassroomMovementSpi.queryClassroomMovementByStudentIdAndToday(student.id)
+                        ?: throw ClassroomMovementStudentNotFoundException
 
                 commandClassroomMovementSpi.saveClassroomMovement(
                     existClassroomMovementStatus.changeClassroomId(request.classroomId),
