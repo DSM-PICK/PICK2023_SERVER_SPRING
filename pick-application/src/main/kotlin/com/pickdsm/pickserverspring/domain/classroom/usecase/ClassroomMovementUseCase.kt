@@ -108,7 +108,7 @@ class ClassroomMovementUseCase(
         when (queryClassroomMovementSpi.existClassroomMovementByStudentId(student.id)) {
             true -> {
                 val existClassroomMovementStatus = queryClassroomMovementSpi.queryClassroomMovementByStudentIdAndToday(student.id)
-                        ?: throw ClassroomMovementStudentNotFoundException
+                    ?: throw ClassroomMovementStudentNotFoundException
 
                 commandClassroomMovementSpi.saveClassroomMovement(
                     existClassroomMovementStatus.changeClassroomId(request.classroomId),
