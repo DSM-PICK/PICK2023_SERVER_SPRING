@@ -11,4 +11,8 @@ data class ClassroomMovement(
     val classroomId: UUID,
 
     val statusId: UUID,
-)
+) {
+    fun changeClassroomId(classroomId: UUID): ClassroomMovement {
+        return copy(classroomId = classroomId)
+    }
+}
