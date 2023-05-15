@@ -9,6 +9,8 @@ import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassro
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.time.LocalDate
+import java.util.UUID
 
 @Adapter
 class ClassroomMovementPersistenceAdapter(
@@ -35,5 +37,26 @@ class ClassroomMovementPersistenceAdapter(
             .join(statusEntity)
             .on(classroomMovementEntity.statusEntity.id.eq(statusEntity.id))
             .fetchFirst()
+            ?.let(classroomMovementMapper::entityToDomain)
+
+    override fun existClassroomMovementByStudentId(studentId: UUID): Boolean =
+        jpaQueryFactory
+            .select(classroomMovementEntity.id)
+            .from(classroomMovementEntity)
+            .join(statusEntity)
+            .on(classroomMovementEntity.statusEntity.id.eq(statusEntity.id))
+            .where(statusEntity.studentId.eq(studentId))
+            .fetchOne() != null
+
+    override fun queryClassroomMovementByStudentIdAndToday(studentId: UUID): ClassroomMovement? =
+        jpaQueryFactory
+            .selectFrom(classroomMovementEntity)
+            .join(statusEntity)
+            .on(classroomMovementEntity.statusEntity.id.eq(statusEntity.id))
+            .where(
+                statusEntity.studentId.eq(studentId),
+                statusEntity.date.eq(LocalDate.now()),
+            )
+            .fetchOne()
             ?.let(classroomMovementMapper::entityToDomain)
 }

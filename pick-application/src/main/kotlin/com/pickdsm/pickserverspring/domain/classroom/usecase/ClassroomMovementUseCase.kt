@@ -28,10 +28,11 @@ import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
+import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
-import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.DayOfWeek
@@ -52,11 +53,11 @@ class ClassroomMovementUseCase(
     private val adminApi: AdminApi,
     private val queryClubSpi: QueryClubSpi,
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
+    private val queryTypeSpi: QueryTypeSpi,
 ) : ClassroomMovementApi {
 
     override fun saveClassroomMovement(request: DomainClassroomMovementRequest) {
-        val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
-            ?: throw ClassroomNotFoundException
+        val classroom = getClassroomByClassroomId(request.classroomId)
 
         val student = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
 
@@ -68,44 +69,98 @@ class ClassroomMovementUseCase(
             studentId = student.id,
             period = request.period,
         )
+        val todayType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now())
+            ?: throw TypeNotFoundException
+
+        when (todayType) {
+            DirectorType.AFTER_SCHOOL -> {
+                val userAfterSchoolClassroomId = queryAfterSchoolSpi.queryAfterSchoolClassroomIdByStudentId(student.id)
+                    ?: throw AfterSchoolNotFoundException
+                val userAfterSchoolClassroom = getClassroomByClassroomId(userAfterSchoolClassroomId)
+
+                checkIsMovementMyClassroom(
+                    requestMovementClassroom = classroom,
+                    existingClassroom = userAfterSchoolClassroom,
+                )
+            }
+
+            DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
+                val userClubClassroomId = queryClubSpi.queryClubClassroomIdByStudentId(student.id)
+                    ?: throw ClubNotFoundException
+                val userClubClassroom = getClassroomByClassroomId(userClubClassroomId)
+
+                checkIsMovementMyClassroom(
+                    requestMovementClassroom = classroom,
+                    existingClassroom = userClubClassroom,
+                )
+            }
+
+            DirectorType.SELF_STUDY -> {
+                val isEqGradeAndClassNum = student.grade == classroom.grade && student.classNum == classroom.classNum
+                if (isEqGradeAndClassNum) {
+                    throw CannotMovementMyClassroom
+                }
+            }
+        }
 
         checkIsStatusPicnic(statusTypes)
-        checkIsMovementMyClassroom(student, classroom)
         checkIsWeekends()
 
-        val status = Status(
-            studentId = student.id,
-            teacherId = UUID(0, 0), // TODO: 해당 층 자습감독쌤 아이디 넣기
-            startPeriod = time.period,
-            endPeriod = 10,
-            type = StatusType.MOVEMENT,
-        )
-        val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(status)
-        commandClassroomMovementSpi.saveClassroomMovement(
-            ClassroomMovement(
-                classroomId = classroom.id,
-                statusId = saveStatusId,
-            ),
-        )
+        when (queryClassroomMovementSpi.existClassroomMovementByStudentId(student.id)) {
+            true -> {
+                val existClassroomMovementStatus =
+                    queryClassroomMovementSpi.queryClassroomMovementByStudentIdAndToday(student.id)
+                        ?: throw ClassroomMovementStudentNotFoundException
+
+                commandClassroomMovementSpi.saveClassroomMovement(
+                    existClassroomMovementStatus.changeClassroomId(request.classroomId),
+                )
+            }
+
+            false -> {
+                val newClassroomMovementStatus = Status(
+                    studentId = student.id,
+                    teacherId = UUID(0, 0), // TODO: 해당 층 자습감독쌤 아이디 넣기
+                    startPeriod = time.period,
+                    endPeriod = 10,
+                    type = StatusType.MOVEMENT,
+                )
+                val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(newClassroomMovementStatus)
+                commandClassroomMovementSpi.saveClassroomMovement(
+                    ClassroomMovement(
+                        classroomId = classroom.id,
+                        statusId = saveStatusId,
+                    ),
+                )
+            }
+        }
     }
 
+    private fun getClassroomByClassroomId(classroomId: UUID): Classroom =
+        queryClassroomSpi.queryClassroomById(classroomId)
+            ?: throw ClassroomNotFoundException
+
     private fun checkIsWeekends() {
-        if (LocalDate.now().dayOfWeek > DayOfWeek.FRIDAY) {
+        val isWeekend = LocalDate.now().dayOfWeek > DayOfWeek.FRIDAY
+        if (isWeekend) {
             throw CannotMovementWeekendException
         }
     }
 
     private fun checkIsMovementMyClassroom(
-        user: User,
-        classroom: Classroom,
+        requestMovementClassroom: Classroom,
+        existingClassroom: Classroom,
     ) {
-        if (user.grade == classroom.grade && user.classNum == classroom.classNum) {
+        val isEqRequestMovementClassroomAndExistClassroom =
+            requestMovementClassroom.grade == existingClassroom.grade && requestMovementClassroom.classNum == existingClassroom.classNum
+        if (isEqRequestMovementClassroomAndExistClassroom) {
             throw CannotMovementMyClassroom
         }
     }
 
     private fun checkIsStatusPicnic(statusTypes: List<StatusType>) {
-        if (statusTypes.contains(StatusType.PICNIC)) {
+        val isExistStatusPicnic = statusTypes.contains(StatusType.PICNIC)
+        if (isExistStatusPicnic) {
             throw CannotMovementException
         }
     }

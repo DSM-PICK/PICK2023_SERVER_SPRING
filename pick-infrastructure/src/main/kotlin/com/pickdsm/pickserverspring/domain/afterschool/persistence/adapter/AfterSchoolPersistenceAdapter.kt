@@ -13,7 +13,7 @@ import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
-import java.util.*
+import java.util.UUID
 import javax.persistence.LockModeType
 
 @Adapter
@@ -82,7 +82,7 @@ class AfterSchoolPersistenceAdapter(
             ?.let(afterSchoolMapper::entityToDomain)
     }
 
-    override fun findByAfterSchoolInfoId(afterSchoolId: UUID): AfterSchoolInfo? {
+    override fun queryAfterSchoolInfoByAfterSchoolId(afterSchoolId: UUID): AfterSchoolInfo? {
         return jpaQueryFactory
             .selectFrom(afterSchoolInfoEntity)
             .where(afterSchoolInfoEntity.id.eq(afterSchoolId))
@@ -129,4 +129,15 @@ class AfterSchoolPersistenceAdapter(
             .from(afterSchoolEntity)
             .where(afterSchoolEntity.studentId.`in`(afterSchoolStudentIds))
             .fetchFirst() != null
+
+    override fun queryAfterSchoolClassroomIdByStudentId(studentId: UUID): UUID? =
+        jpaQueryFactory
+            .select(afterSchoolEntity.afterSchoolInfoEntity.classroomEntity.id)
+            .from(afterSchoolEntity)
+            .where(afterSchoolEntity.studentId.eq(studentId))
+            .join(afterSchoolInfoEntity)
+            .on(afterSchoolEntity.afterSchoolInfoEntity.id.eq(afterSchoolInfoEntity.id))
+            .join(classroomEntity)
+            .on(afterSchoolInfoEntity.classroomEntity.id.eq(classroomEntity.id))
+            .fetchOne()
 }
