@@ -73,17 +73,6 @@ class ClassroomMovementUseCase(
             ?: throw TypeNotFoundException
 
         when (todayType) {
-            DirectorType.AFTER_SCHOOL -> {
-                val userAfterSchoolClassroomId = queryAfterSchoolSpi.queryAfterSchoolClassroomIdByStudentId(student.id)
-                    ?: throw AfterSchoolNotFoundException
-                val userAfterSchoolClassroom = getClassroomByClassroomId(userAfterSchoolClassroomId)
-
-                checkIsMovementMyClassroom(
-                    requestMovementClassroom = classroom,
-                    existingClassroom = userAfterSchoolClassroom,
-                )
-            }
-
             DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
                 val userClubClassroomId = queryClubSpi.queryClubClassroomIdByStudentId(student.id)
                     ?: throw ClubNotFoundException
@@ -101,6 +90,8 @@ class ClassroomMovementUseCase(
                     throw CannotMovementMyClassroom
                 }
             }
+
+            else -> throw TypeNotFoundException
         }
 
         checkIsStatusPicnic(statusTypes)
