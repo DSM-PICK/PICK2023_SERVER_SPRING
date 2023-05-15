@@ -138,6 +138,7 @@ class ApplicationUseCase(
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
                                 reason = application.reason,
+                                createDate = status.date,
                             )
 
                             outing.add(picnicApplications)
@@ -166,6 +167,7 @@ class ApplicationUseCase(
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
                                 reason = application.reason,
+                                createDate = status.date,
                             )
 
                             outing.add(picnicApplication)
@@ -205,6 +207,7 @@ class ApplicationUseCase(
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
                                 reason = application.reason,
+                                createDate = status.date,
                             )
 
                             outing.add(picnicApplications)
@@ -235,6 +238,7 @@ class ApplicationUseCase(
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
                                 reason = application.reason,
+                                createDate = status.date,
                             )
 
                             outing.add(picnicApplications)
@@ -274,6 +278,7 @@ class ApplicationUseCase(
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
                                 reason = application.reason,
+                                createDate = status.date,
                             )
 
                             outing.add(picnicApplications)
@@ -304,6 +309,7 @@ class ApplicationUseCase(
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
                                 reason = application.reason,
+                                createDate = status.date,
                             )
 
                             outing.add(picnicApplications)
