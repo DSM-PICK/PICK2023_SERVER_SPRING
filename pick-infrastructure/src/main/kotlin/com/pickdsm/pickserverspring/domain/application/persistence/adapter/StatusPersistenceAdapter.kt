@@ -197,6 +197,7 @@ class StatusPersistenceAdapter(
             .where(
                 checkIsExistAwaitOrPicnic(),
                 statusEntity.studentId.eq(studentId),
+                statusEntity.date.eq(LocalDate.now()),
             )
             .fetchFirst() != null
 
