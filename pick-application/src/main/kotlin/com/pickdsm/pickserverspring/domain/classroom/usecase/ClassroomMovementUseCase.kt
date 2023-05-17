@@ -10,7 +10,6 @@ import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundE
 import com.pickdsm.pickserverspring.domain.application.spi.CommandStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
-import com.pickdsm.pickserverspring.domain.classroom.Classroom
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomMovementApi
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.request.DomainClassroomMovementRequest
@@ -90,7 +89,10 @@ class ClassroomMovementUseCase(
                     throw CannotMovementMyClassroom
                 }
             }
-            else -> throw AfterSchoolCannotMovementException
+
+            DirectorType.AFTER_SCHOOL -> {
+                throw AfterSchoolCannotMovementException
+            }
         }
 
         checkIsStatusPicnic(statusTypes)
