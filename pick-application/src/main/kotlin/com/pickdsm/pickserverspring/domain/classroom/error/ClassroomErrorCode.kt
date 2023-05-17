@@ -14,7 +14,8 @@ enum class ClassroomErrorCode(
 
     CLASS_NOT_FOUND(404, "Class not found"),
     FLOOR_NOT_FOUND(404, "Floor not found"),
-    CLASSROOM_MOVEMENT_STUDENT_NOT_FOUND(404, "Classroom Movement Student Not Found"), ;
+    CLASSROOM_MOVEMENT_STUDENT_NOT_FOUND(404, "Classroom Movement Student Not Found"),
+    AFTER_SCHOOL_CANNOT_MOVEMENT(404, "After School Cannot Movement"), ;
 
     override fun status(): Int = status
     override fun message(): String = message
