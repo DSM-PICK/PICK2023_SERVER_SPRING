@@ -58,7 +58,8 @@ class ClassroomMovementUseCase(
 ) : ClassroomMovementApi {
 
     override fun saveClassroomMovement(request: DomainClassroomMovementRequest) {
-        val classroom = getClassroomByClassroomId(request.classroomId)
+        val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
+            ?: throw ClassroomNotFoundException
         val student = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val time = timeList.timeList.find { time -> time.period == request.period }
@@ -124,10 +125,6 @@ class ClassroomMovementUseCase(
             }
         }
     }
-
-    private fun getClassroomByClassroomId(classroomId: UUID): Classroom =
-        queryClassroomSpi.queryClassroomById(classroomId)
-            ?: throw ClassroomNotFoundException
 
     private fun checkIsWeekends() {
         val isWeekend = LocalDate.now().dayOfWeek > DayOfWeek.FRIDAY
