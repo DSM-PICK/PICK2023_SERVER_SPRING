@@ -76,11 +76,10 @@ class ClassroomMovementUseCase(
             DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
                 val userClubClassroomId = queryClubSpi.queryClubClassroomIdByStudentId(student.id)
                     ?: throw ClubNotFoundException
-                val userClubClassroom = getClassroomByClassroomId(userClubClassroomId)
 
                 checkIsMovementMyClassroom(
                     requestMovementClassroomId = classroom.id,
-                    existingClassroomId = userClubClassroom.id,
+                    existingClassroomId = userClubClassroomId,
                 )
             }
 
