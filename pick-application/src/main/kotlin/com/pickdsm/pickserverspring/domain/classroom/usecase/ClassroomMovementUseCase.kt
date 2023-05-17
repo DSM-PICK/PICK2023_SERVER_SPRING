@@ -60,6 +60,7 @@ class ClassroomMovementUseCase(
         val classroom = queryClassroomSpi.queryClassroomById(request.classroomId)
             ?: throw ClassroomNotFoundException
         val student = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
+
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val time = timeList.timeList.find { time -> time.period == request.period }
             ?: throw TimeNotFoundException
@@ -73,6 +74,10 @@ class ClassroomMovementUseCase(
             ?: throw TypeNotFoundException
 
         when (todayType) {
+            DirectorType.AFTER_SCHOOL -> {
+                throw AfterSchoolCannotMovementException
+            }
+
             DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
                 val userClubClassroomId = queryClubSpi.queryClubClassroomIdByStudentId(student.id)
                     ?: throw ClubNotFoundException
@@ -84,14 +89,15 @@ class ClassroomMovementUseCase(
             }
 
             DirectorType.SELF_STUDY -> {
-                val isEqGradeAndClassNum = student.grade == classroom.grade && student.classNum == classroom.classNum
-                if (isEqGradeAndClassNum) {
-                    throw CannotMovementMyClassroom
-                }
-            }
+                val userClassroomId = queryClassroomSpi.queryClassroomIdByGradeAndClassNum(
+                    grade = student.grade,
+                    classNum = student.classNum,
+                )
 
-            DirectorType.AFTER_SCHOOL -> {
-                throw AfterSchoolCannotMovementException
+                checkIsMovementMyClassroom(
+                    requestMovementClassroomId = classroom.id,
+                    existingClassroomId = userClassroomId,
+                )
             }
         }
 
@@ -100,9 +106,8 @@ class ClassroomMovementUseCase(
 
         when (queryClassroomMovementSpi.existClassroomMovementByStudentId(student.id)) {
             true -> {
-                val existClassroomMovementStatus =
-                    queryClassroomMovementSpi.queryClassroomMovementByStudentIdAndToday(student.id)
-                        ?: throw ClassroomMovementStudentNotFoundException
+                val existClassroomMovementStatus = queryClassroomMovementSpi.queryClassroomMovementByStudentIdAndToday(student.id)
+                    ?: throw ClassroomMovementStudentNotFoundException
 
                 commandClassroomMovementSpi.saveClassroomMovement(
                     existClassroomMovementStatus.changeClassroomId(request.classroomId),
@@ -137,7 +142,7 @@ class ClassroomMovementUseCase(
 
     private fun checkIsMovementMyClassroom(
         requestMovementClassroomId: UUID,
-        existingClassroomId: UUID,
+        existingClassroomId: UUID?,
     ) {
         val isEqRequestMovementClassroomAndExistClassroom = requestMovementClassroomId == existingClassroomId
 
