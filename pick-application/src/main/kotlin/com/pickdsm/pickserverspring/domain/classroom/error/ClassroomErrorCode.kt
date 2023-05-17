@@ -10,7 +10,7 @@ enum class ClassroomErrorCode(
     CANNOT_MOVEMENT(400, "Cannot Movement"),
 
     CANNOT_MOVEMENT_MY_CLASSROOM(401, "Cannot Movement My Classroom"),
-    CANNOT_MOVEMEMENT_WEEKEND(401, "Cannot Movement Weekend"),
+    CANNOT_MOVEMENT_WEEKEND(401, "Cannot Movement Weekend"),
 
     CLASS_NOT_FOUND(404, "Class not found"),
     FLOOR_NOT_FOUND(404, "Floor not found"),
