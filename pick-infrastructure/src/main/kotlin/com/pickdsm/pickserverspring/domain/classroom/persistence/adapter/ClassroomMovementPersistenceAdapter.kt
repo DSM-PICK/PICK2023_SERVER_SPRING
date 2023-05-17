@@ -46,7 +46,8 @@ class ClassroomMovementPersistenceAdapter(
             .join(statusEntity)
             .on(classroomMovementEntity.statusEntity.id.eq(statusEntity.id))
             .where(statusEntity.studentId.eq(studentId),
-                statusEntity.date.eq(LocalDate.now()))
+                statusEntity.date.eq(LocalDate.now()),
+            )
             .fetchOne() != null
 
     override fun queryClassroomMovementByStudentIdAndToday(studentId: UUID): ClassroomMovement? =
