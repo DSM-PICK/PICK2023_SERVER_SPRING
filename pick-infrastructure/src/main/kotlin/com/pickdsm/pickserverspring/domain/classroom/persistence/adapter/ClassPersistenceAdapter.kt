@@ -53,4 +53,14 @@ class ClassPersistenceAdapter(
             )
             .fetchFirst()
             ?.let(classroomMapper::entityToDomain)
+
+    override fun queryClassroomIdByGradeAndClassNum(grade: Int, classNum: Int): UUID? =
+        jpaQueryFactory
+            .select(classroomEntity.id)
+            .from(classroomEntity)
+            .where(
+                classroomEntity.grade.eq(grade),
+                classroomEntity.classNum.eq(classNum),
+            )
+            .fetchOne()
 }
