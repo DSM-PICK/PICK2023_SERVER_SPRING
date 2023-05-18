@@ -60,7 +60,7 @@ class ClassPersistenceAdapter(
             .from(classroomEntity)
             .where(
                 classroomEntity.grade.eq(grade),
-                classroomEntity.classNum.eq(classNum)
+                classroomEntity.classNum.eq(classNum),
             )
             .fetchOne()
 }
