@@ -233,18 +233,17 @@ class ClassroomMovementUseCase(
     }
 
     override fun getClassroomMovementLocation(): QueryClassroomMovementLocationResponse {
-        val userId = userSpi.getCurrentUserId()
-        val userInfo = userSpi.queryUserInfoByUserId(userId)
-        val status = queryStatusSpi.queryMovementStudentByStudentId(userId)
+        val userInfo = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
+        val statusId = queryStatusSpi.queryMovementStudentStatusIdByStudentIdAndToday(userInfo.id)
             ?: throw StatusNotFoundException
-        val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status)
+        val movementClassroomId = queryClassroomMovementSpi.queryClassroomMovementClassroomIdByStatusId(statusId)
             ?: throw ClassroomMovementStudentNotFoundException
-        val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+        val classroomName = queryClassroomSpi.queryClassroomNameByClassroomId(movementClassroomId)
             ?: throw ClassroomNotFoundException
 
         return QueryClassroomMovementLocationResponse(
             name = userInfo.name,
-            locationClassroom = classroom.name,
+            locationClassroom = classroomName,
         )
     }
 
