@@ -124,7 +124,7 @@ class StatusPersistenceAdapter(
             .selectFrom(statusEntity)
             .where(
                 statusEntity.studentId.eq(studentId),
-                statusEntity.type.eq(StatusType.MOVEMENT)
+                statusEntity.type.eq(StatusType.MOVEMENT),
             )
             .fetchOne()
             ?.let(statusMapper::entityToDomain)
@@ -136,7 +136,7 @@ class StatusPersistenceAdapter(
             .where(
                 statusEntity.studentId.eq(studentId),
                 statusEntity.type.eq(StatusType.MOVEMENT),
-                statusEntity.date.eq(LocalDate.now())
+                statusEntity.date.eq(LocalDate.now()),
             )
             .fetchOne()
 
