@@ -63,4 +63,11 @@ class ClassPersistenceAdapter(
                 classroomEntity.classNum.eq(classNum),
             )
             .fetchOne()
+
+    override fun queryClassroomNameByClassroomId(classroomId: UUID): String? =
+        jpaQueryFactory
+            .select(classroomEntity.name)
+            .from(classroomEntity)
+            .where(classroomEntity.id.eq(classroomId))
+            .fetchOne()
 }
