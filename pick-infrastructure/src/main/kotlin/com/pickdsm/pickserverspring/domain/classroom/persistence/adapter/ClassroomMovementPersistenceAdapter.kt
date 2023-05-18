@@ -5,6 +5,7 @@ import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatu
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomMovement
 import com.pickdsm.pickserverspring.domain.classroom.mapper.ClassroomMovementMapper
 import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomMovementRepository
+import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity.classroomMovementEntity
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
 import com.pickdsm.pickserverspring.global.annotation.Adapter
@@ -35,8 +36,8 @@ class ClassroomMovementPersistenceAdapter(
         jpaQueryFactory
             .selectFrom(classroomMovementEntity)
             .join(statusEntity)
-            .on(classroomMovementEntity.statusEntity.id.eq(statusEntity.id))
-            .fetchFirst()
+            .on(classroomMovementEntity.statusEntity.id.eq(status.id))
+            .fetchOne()
             ?.let(classroomMovementMapper::entityToDomain)
 
     override fun existClassroomMovementByStudentId(studentId: UUID): Boolean =
@@ -62,4 +63,11 @@ class ClassroomMovementPersistenceAdapter(
             )
             .fetchOne()
             ?.let(classroomMovementMapper::entityToDomain)
+
+    override fun queryClassroomMovementClassroomIdByStatusId(statusId: UUID): UUID? =
+        jpaQueryFactory
+            .select(classroomMovementEntity.classroomEntity.id)
+            .from(classroomMovementEntity)
+            .where(classroomMovementEntity.statusEntity.id.eq(statusId))
+            .fetchOne()
 }
