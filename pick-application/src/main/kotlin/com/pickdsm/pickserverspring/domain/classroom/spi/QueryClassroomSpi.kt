@@ -15,4 +15,6 @@ interface QueryClassroomSpi {
     fun queryClassroomByGradeAndClassNum(grade: Int?, classNum: Int?): Classroom?
 
     fun queryClassroomIdByGradeAndClassNum(grade: Int, classNum: Int): UUID?
+
+    fun queryClassroomNameByClassroomId(classroomId: UUID): String?
 }

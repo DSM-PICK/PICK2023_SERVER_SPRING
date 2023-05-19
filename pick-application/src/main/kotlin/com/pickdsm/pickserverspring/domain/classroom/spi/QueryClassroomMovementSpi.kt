@@ -10,4 +10,6 @@ interface QueryClassroomMovementSpi {
     fun existClassroomMovementByStudentId(studentId: UUID): Boolean
 
     fun queryClassroomMovementByStudentIdAndToday(studentId: UUID): ClassroomMovement?
+
+    fun queryClassroomMovementClassroomIdByStatusId(statusId: UUID): UUID?
 }
