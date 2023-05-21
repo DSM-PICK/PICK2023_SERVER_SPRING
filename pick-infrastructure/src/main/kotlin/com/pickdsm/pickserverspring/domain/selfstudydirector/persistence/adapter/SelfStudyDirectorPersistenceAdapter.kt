@@ -51,10 +51,7 @@ class SelfStudyDirectorPersistenceAdapter(
             )
             .fetchOne()
 
-    override fun queryAllSelfStudyDirectorByTeacherIdAndDate(
-        teacherId: UUID,
-        date: LocalDate,
-    ): List<SelfStudyDirector> =
+    override fun queryAllSelfStudyDirectorByTeacherIdAndDate(teacherId: UUID, date: LocalDate): List<SelfStudyDirector> =
         jpaQueryFactory
             .selectFrom(selfStudyDirectorEntity)
             .innerJoin(selfStudyDirectorEntity.typeEntity, typeEntity)
