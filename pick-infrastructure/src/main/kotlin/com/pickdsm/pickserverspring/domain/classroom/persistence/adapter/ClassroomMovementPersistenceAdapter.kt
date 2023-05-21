@@ -37,6 +37,7 @@ class ClassroomMovementPersistenceAdapter(
             .selectFrom(classroomMovementEntity)
             .join(statusEntity)
             .on(classroomMovementEntity.statusEntity.id.eq(status.id))
+            .where(statusEntity.date.eq(LocalDate.now()))
             .fetchOne()
             ?.let(classroomMovementMapper::entityToDomain)
 
