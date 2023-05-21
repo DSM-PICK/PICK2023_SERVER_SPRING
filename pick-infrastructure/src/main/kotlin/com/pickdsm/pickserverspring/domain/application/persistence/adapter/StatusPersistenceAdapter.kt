@@ -51,21 +51,30 @@ class StatusPersistenceAdapter(
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> =
         jpaQueryFactory
             .selectFrom(statusEntity)
-            .where(statusEntity.date.eq(date), (statusEntity.type.eq(StatusType.PICNIC)))
+            .where(
+                statusEntity.date.eq(date),
+                statusEntity.type.eq(StatusType.PICNIC)
+            )
             .fetch()
             .map(statusMapper::entityToDomain)
 
     override fun queryMovementStudentInfoListByToday(date: LocalDate): List<Status> =
         jpaQueryFactory
             .selectFrom(statusEntity)
-            .where(statusEntity.date.eq(date), (statusEntity.type.eq(StatusType.MOVEMENT)))
+            .where(
+                statusEntity.date.eq(date),
+                statusEntity.type.eq(StatusType.MOVEMENT)
+            )
             .fetch()
             .map(statusMapper::entityToDomain)
 
     override fun queryAwaitStudentListByToday(date: LocalDate): List<Status> =
         jpaQueryFactory
             .selectFrom(statusEntity)
-            .where(statusEntity.date.eq(date), statusEntity.type.eq(StatusType.AWAIT))
+            .where(
+                statusEntity.date.eq(date),
+                statusEntity.type.eq(StatusType.AWAIT)
+            )
             .fetch()
             .map(statusMapper::entityToDomain)
 
@@ -125,6 +134,7 @@ class StatusPersistenceAdapter(
             .where(
                 statusEntity.studentId.eq(studentId),
                 statusEntity.type.eq(StatusType.MOVEMENT),
+                statusEntity.date.eq(LocalDate.now()),
             )
             .fetchOne()
             ?.let(statusMapper::entityToDomain)
@@ -139,13 +149,6 @@ class StatusPersistenceAdapter(
                 statusEntity.date.eq(LocalDate.now()),
             )
             .fetchOne()
-
-    override fun queryStatusByStudentId(studentId: UUID): Status? =
-        jpaQueryFactory
-            .selectFrom(statusEntity)
-            .where(statusEntity.studentId.eq(studentId))
-            .fetchFirst()
-            ?.let(statusMapper::entityToDomain)
 
     override fun queryStatusTypesByStudentIdAndEndPeriod(studentId: UUID, period: Int): List<StatusType> =
         jpaQueryFactory
