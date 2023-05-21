@@ -31,18 +31,18 @@ class ClubUseCase(
     }
 
     override fun changeClubStudent(request: DomainChangeClubStudentRequest) {
-        val oldClub = queryClubSpi.queryClubByStudentId(request.studentId)
-        val newClub = queryClubSpi.queryClubByClubId(request.clubId)
+        val currentClub = queryClubSpi.queryClubByStudentId(request.studentId)
+        val changeClub = queryClubSpi.queryClubByClubId(request.clubId)
             ?: throw ClubNotFoundException
 
-        if (oldClub != null) {
-            commandClubSpi.deleteClub(oldClub)
+        if (currentClub != null) {
+            commandClubSpi.deleteClub(currentClub)
         }
 
         commandClubSpi.saveClub(
-            newClub.changeClubStudent(
+            changeClub.changeClubStudent(
                 studentId = request.studentId,
-                clubInfoId = newClub.clubInfoId,
+                clubInfoId = changeClub.clubInfoId,
             ),
         )
     }
