@@ -227,9 +227,6 @@ class ClassroomMovementUseCase(
         if (classroom != null) {
             commandClassroomMovementSpi.deleteClassroomMovement(classroom)
         }
-        if (status != null) {
-            commandStatusSpi.deleteStatus(status)
-        }
     }
 
     override fun getClassroomMovementLocation(): QueryClassroomMovementLocationResponse {
