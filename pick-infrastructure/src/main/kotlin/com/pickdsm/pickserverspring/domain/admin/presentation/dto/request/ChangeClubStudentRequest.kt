@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull
 
 data class ChangeClubStudentRequest(
     @field:NotNull
-    val clubId: UUID,
+    val clubInfoId: UUID,
     @field:NotNull
     val studentId: UUID,
 )

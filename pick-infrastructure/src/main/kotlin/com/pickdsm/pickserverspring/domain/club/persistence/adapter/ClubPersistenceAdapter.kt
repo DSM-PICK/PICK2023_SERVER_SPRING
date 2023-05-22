@@ -42,12 +42,12 @@ class ClubPersistenceAdapter(
             .orderBy(clubInfoEntity.name.asc())
             .fetch()
 
-    override fun queryClubByClubId(clubId: UUID): Club? =
+    override fun queryClubByClubInfoId(clubInfoId: UUID): Club? =
         jpaQueryFactory
             .selectFrom(clubEntity)
             .join(clubInfoEntity)
             .on(clubInfoEntity.id.eq(clubEntity.clubInfoEntity.id))
-            .where(clubInfoEntity.id.eq(clubId))
+            .where(clubInfoEntity.id.eq(clubInfoId))
             .fetchFirst()
             ?.let(clubMapper::entityToDomain)
 
