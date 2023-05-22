@@ -5,12 +5,12 @@ import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStude
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStudentList.StudentElement
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
+import com.pickdsm.pickserverspring.domain.club.Club
 import com.pickdsm.pickserverspring.domain.club.ClubInfo
 import com.pickdsm.pickserverspring.domain.club.api.ClubApi
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubHeadRequest
 import com.pickdsm.pickserverspring.domain.club.api.dto.DomainChangeClubStudentRequest
 import com.pickdsm.pickserverspring.domain.club.exception.ClubInfoNotFoundException
-import com.pickdsm.pickserverspring.domain.club.exception.ClubNotFoundException
 import com.pickdsm.pickserverspring.domain.club.spi.CommandClubSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.user.User
@@ -30,20 +30,19 @@ class ClubUseCase(
         commandClubSpi.saveClubInfo(clubInfo.changeClubHead(headId = request.studentId))
     }
 
-    override fun changeClubStudent(request: DomainChangeClubStudentRequest) { // TODO: 다음 pr에 로직 변경
-        val currentClub = queryClubSpi.queryClubByStudentId(request.studentId)
-        val changeClub = queryClubSpi.queryClubByClubId(request.clubId)
-            ?: throw ClubNotFoundException
+    override fun changeClubStudent(request: DomainChangeClubStudentRequest) {
+        val (studentId, clubInfoId) = request
+        val currentClub = queryClubSpi.queryClubByStudentId(studentId)
 
         if (currentClub != null) {
             commandClubSpi.deleteClub(currentClub)
         }
 
         commandClubSpi.saveClub(
-            changeClub.changeClubStudent(
-                studentId = request.studentId,
-                clubInfoId = changeClub.clubInfoId,
-            ),
+            Club(
+                studentId = studentId,
+                clubInfoId = clubInfoId,
+            )
         )
     }
 
