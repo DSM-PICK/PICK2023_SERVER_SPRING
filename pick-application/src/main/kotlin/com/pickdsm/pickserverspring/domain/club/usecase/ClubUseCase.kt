@@ -42,7 +42,7 @@ class ClubUseCase(
             Club(
                 studentId = studentId,
                 clubInfoId = clubInfoId,
-            )
+            ),
         )
     }
 
