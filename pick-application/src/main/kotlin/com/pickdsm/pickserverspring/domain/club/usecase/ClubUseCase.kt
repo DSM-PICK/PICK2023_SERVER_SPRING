@@ -30,7 +30,7 @@ class ClubUseCase(
         commandClubSpi.saveClubInfo(clubInfo.changeClubHead(headId = request.studentId))
     }
 
-    override fun changeClubStudent(request: DomainChangeClubStudentRequest) {  // TODO: 다음 pr에 로직 변경
+    override fun changeClubStudent(request: DomainChangeClubStudentRequest) { // TODO: 다음 pr에 로직 변경
         val currentClub = queryClubSpi.queryClubByStudentId(request.studentId)
         val changeClub = queryClubSpi.queryClubByClubId(request.clubId)
             ?: throw ClubNotFoundException
