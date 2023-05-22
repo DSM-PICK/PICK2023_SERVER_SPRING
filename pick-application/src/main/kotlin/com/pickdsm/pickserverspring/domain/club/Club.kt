@@ -11,12 +11,4 @@ data class Club(
     val studentId: UUID,
 
     val clubInfoId: UUID,
-) {
-
-    fun changeClubStudent(studentId: UUID, clubInfoId: UUID): Club {
-        return copy(
-            studentId = studentId,
-            clubInfoId = clubInfoId,
-        )
-    }
-}
+)
