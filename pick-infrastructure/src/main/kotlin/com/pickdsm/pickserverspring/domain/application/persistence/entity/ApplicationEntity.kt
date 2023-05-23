@@ -2,6 +2,8 @@ package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
+import org.springframework.data.annotation.CreatedDate
+import java.time.LocalDate
 import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -24,4 +26,10 @@ class ApplicationEntity(
     @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)", nullable = false)
     val statusEntity: StatusEntity,
 
-) : BaseUUIDEntity(id)
+    date: LocalDate,
+
+    ) : BaseUUIDEntity(id) {
+    @Column(columnDefinition = "DATE", nullable = false)
+    var date = date
+        protected set
+}
