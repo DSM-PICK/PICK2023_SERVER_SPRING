@@ -1,6 +1,7 @@
 package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
+import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomType
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
@@ -16,6 +17,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFo
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 @ReadOnlyUseCase
@@ -28,21 +30,31 @@ class ClassroomUseCase(
     private val queryTypeSpi: QueryTypeSpi,
 ) : ClassroomApi {
 
+    companion object {
+        const val MON_AFTER_SCHOOL_NAME = "자습(월)"
+        const val WEN_AFTER_SCHOOL_NAME = "자습(수)"
+    }
+
     override fun queryClassroomList(floor: Int, type: ClassroomType): QueryClassroomList {
         val classrooms = mutableListOf<ClassroomElement>()
 
         when (type.name) {
             ClassroomType.AFTER_SCHOOL.name -> {
-                val afterSchoolRoomList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
-                afterSchoolRoomList.map {
-                    val afterSchoolRooms = ClassroomElement(
-                        classroomId = it.classroomId,
-                        typeId = it.afterSchoolId,
-                        name = it.name,
-                        description = it.description,
-                    )
-                    classrooms.add(afterSchoolRooms)
+                val todayAfterSchoolName = when (LocalDate.now().dayOfWeek) {
+                    DayOfWeek.MONDAY -> MON_AFTER_SCHOOL_NAME
+                    DayOfWeek.WEDNESDAY -> WEN_AFTER_SCHOOL_NAME
+                    else -> throw AfterSchoolNotFoundException
                 }
+
+                val afterSchool = queryAfterSchoolSpi.queryAfterSchoolClassroomByAfterSchoolName(todayAfterSchoolName)
+                    ?: throw AfterSchoolNotFoundException
+                val afterSchoolRoom = ClassroomElement(
+                    classroomId = afterSchool.classroomId,
+                    typeId = afterSchool.afterSchoolInfoId,
+                    name = afterSchool.name,
+                    description = afterSchool.description,
+                )
+                classrooms.add(afterSchoolRoom)
             }
 
             ClassroomType.TUE_CLUB.name, ClassroomType.FRI_CLUB.name -> {
