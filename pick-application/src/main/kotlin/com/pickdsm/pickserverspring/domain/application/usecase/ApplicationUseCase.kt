@@ -564,7 +564,6 @@ class ApplicationUseCase(
     private fun List<User>.findUserByStudentId(studentId: UUID): User? =
         this.find { it.id == studentId }
 
-
     private fun movementStudent(status: Status?): String {
         var moveClassroomName = ""
         if (status?.type == StatusType.MOVEMENT) {
