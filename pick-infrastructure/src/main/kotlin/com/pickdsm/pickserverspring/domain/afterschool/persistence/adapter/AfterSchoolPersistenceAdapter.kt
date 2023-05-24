@@ -41,6 +41,22 @@ class AfterSchoolPersistenceAdapter(
             .orderBy(afterSchoolInfoEntity.classroomEntity.name.asc())
             .fetch()
 
+    override fun queryAfterSchoolClassroomByAfterSchoolName(afterSchoolName: String): QueryAfterSchoolRoomVO? =
+        jpaQueryFactory
+            .select(
+                QQueryAfterSchoolRoomVO(
+                    classroomEntity.id,
+                    afterSchoolInfoEntity.id,
+                    classroomEntity.name,
+                    afterSchoolInfoEntity.afterSchoolName,
+                ),
+            )
+            .from(afterSchoolInfoEntity)
+            .innerJoin(afterSchoolInfoEntity.classroomEntity, classroomEntity)
+            .on(afterSchoolInfoEntity.classroomEntity.id.eq(classroomEntity.id))
+            .where(afterSchoolInfoEntity.afterSchoolName.eq(afterSchoolName))
+            .fetchOne()
+
     override fun queryAfterSchoolListByClassroomId(classroomId: UUID): List<AfterSchool> =
         jpaQueryFactory
             .selectFrom(afterSchoolEntity)
