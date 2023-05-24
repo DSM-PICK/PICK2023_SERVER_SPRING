@@ -1,7 +1,6 @@
 package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
-import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.classroom.ClassroomType
 import com.pickdsm.pickserverspring.domain.classroom.api.ClassroomApi
@@ -40,21 +39,27 @@ class ClassroomUseCase(
 
         when (type.name) {
             ClassroomType.AFTER_SCHOOL.name -> {
-                val todayAfterSchoolName = when (LocalDate.now().dayOfWeek) {
-                    DayOfWeek.MONDAY -> MON_AFTER_SCHOOL_NAME
-                    DayOfWeek.WEDNESDAY -> WEN_AFTER_SCHOOL_NAME
-                    else -> throw AfterSchoolNotFoundException
+                val afterSchoolList = when (LocalDate.now().dayOfWeek) {
+                    DayOfWeek.MONDAY -> {
+                        queryAfterSchoolSpi.queryAfterSchoolClassroomByAfterSchoolName(MON_AFTER_SCHOOL_NAME)
+                    }
+
+                    DayOfWeek.WEDNESDAY -> {
+                        queryAfterSchoolSpi.queryAfterSchoolClassroomByAfterSchoolName(WEN_AFTER_SCHOOL_NAME)
+                    }
+
+                    else -> queryAfterSchoolSpi.queryAllAfterSchoolClassroom()
                 }
 
-                val afterSchool = queryAfterSchoolSpi.queryAfterSchoolClassroomByAfterSchoolName(todayAfterSchoolName)
-                    ?: throw AfterSchoolNotFoundException
-                val afterSchoolRoom = ClassroomElement(
-                    classroomId = afterSchool.classroomId,
-                    typeId = afterSchool.afterSchoolInfoId,
-                    name = afterSchool.name,
-                    description = afterSchool.description,
-                )
-                classrooms.add(afterSchoolRoom)
+                afterSchoolList.map { afterSchool ->
+                    val afterSchoolRoom = ClassroomElement(
+                        classroomId = afterSchool.classroomId,
+                        typeId = afterSchool.afterSchoolInfoId,
+                        name = afterSchool.name,
+                        description = afterSchool.description,
+                    )
+                    classrooms.add(afterSchoolRoom)
+                }
             }
 
             ClassroomType.TUE_CLUB.name, ClassroomType.FRI_CLUB.name -> {
