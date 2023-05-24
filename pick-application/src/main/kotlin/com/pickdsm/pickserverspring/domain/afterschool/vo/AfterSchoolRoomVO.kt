@@ -4,7 +4,7 @@ import java.util.UUID
 
 open class AfterSchoolRoomVO(
     val classroomId: UUID,
-    val afterSchoolId: UUID,
+    val afterSchoolInfoId: UUID,
     val name: String,
     val description: String,
 )
