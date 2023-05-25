@@ -11,10 +11,11 @@ import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotF
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolStudentExistsException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.CommandAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
-import java.util.*
+import java.util.UUID
 
 @UseCase
 class AfterSchoolUseCase(
@@ -65,7 +66,7 @@ class AfterSchoolUseCase(
 
             QueryAfterSchoolStudentElement(
                 studentId = user.id,
-                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                 studentName = user.name,
             )
         }.sortedBy(QueryAfterSchoolStudentElement::studentNumber)
@@ -76,10 +77,6 @@ class AfterSchoolUseCase(
         )
     }
 
-    private fun checkUserNumLessThanTen(userNum: Int) =
-        if (userNum < 10) {
-            "0$userNum"
-        } else {
-            userNum.toString()
-        }
+    private fun User.paddedUserNum(): String =
+        this.num.toString().padStart(2, '0')
 }
