@@ -33,6 +33,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.DayOfWeek
@@ -184,7 +185,7 @@ class ClassroomMovementUseCase(
                 val gradeForMovement = getGrade(studentAttendanceList.type, number, it.id)
 
                 MovementStudentElement(
-                    studentNumber = "${it.grade}${it.classNum}${checkUserNumLessThanTen(it.num)}",
+                    studentNumber = "${it.grade}${it.classNum}${it.paddedUserNum()}",
                     studentName = it.name,
                     before = gradeForMovement,
                     after = classroom.name,
@@ -204,12 +205,7 @@ class ClassroomMovementUseCase(
                     val gradeForMovement = getGrade(studentAttendanceList.type, number, it.id)
 
                     if (classroom.floor == floor) {
-                        MovementStudentElement(
-                            studentNumber = "${it.grade}${it.classNum}${checkUserNumLessThanTen(it.num)}",
-                            studentName = it.name,
-                            before = gradeForMovement,
-                            after = classroom.name,
-                        )
+                        it.toMovementStudent(gradeForMovement, classroom.name)
                     } else {
                         throw ClassroomMovementStudentNotFoundException
                     }
@@ -218,6 +214,42 @@ class ClassroomMovementUseCase(
         }
         return QueryMovementStudentList(movementStudent.sortedBy { it.studentNumber })
     }
+
+    private fun getGrade(directorType: DirectorType, classroom: String, studentId: UUID): String {
+        when (directorType) {
+            DirectorType.SELF_STUDY -> {
+                return classroom
+            }
+
+            DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
+                val clubClassroomId = queryClubSpi.queryClubClassroomIdByStudentId(studentId)
+                    ?: throw ClubNotFoundException
+                return queryClassroomSpi.queryClassroomNameByClassroomId(clubClassroomId)
+                    ?: throw ClassroomNotFoundException
+            }
+
+            DirectorType.AFTER_SCHOOL -> {
+                val afterSchoolClassroomId = queryAfterSchoolSpi.queryAfterSchoolClassroomIdByStudentId(studentId)
+                    ?: throw AfterSchoolNotFoundException
+                return queryClassroomSpi.queryClassroomNameByClassroomId(afterSchoolClassroomId)
+                    ?: throw ClassroomNotFoundException
+            }
+
+            else -> return ""
+        }
+    }
+
+    private fun User.toMovementStudent(gradeForMovement: String, classroomName: String): MovementStudentElement {
+        return MovementStudentElement(
+            studentNumber = "${this.grade}${this.classNum}${this.paddedUserNum()}",
+            studentName = this.name,
+            before = gradeForMovement,
+            after = classroomName,
+        )
+    }
+
+    private fun User.paddedUserNum(): String =
+        this.num.toString().padStart(2, '0')
 
     override fun returnClassroomMovement() {
         val currentStudentId = userSpi.getCurrentUserId()
@@ -245,38 +277,5 @@ class ClassroomMovementUseCase(
             name = userInfo.name,
             locationClassroom = classroomName,
         )
-    }
-
-    private fun checkUserNumLessThanTen(userNum: Int) =
-        if (userNum < 10) {
-            "0$userNum"
-        } else {
-            userNum.toString()
-        }
-
-    private fun getGrade(directorType: DirectorType, classroom: String, studentId: UUID): String {
-        when (directorType) {
-            DirectorType.SELF_STUDY -> {
-                return classroom
-            }
-
-            DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
-                val clubClassroomId = queryClubSpi.queryClubIdByStudentId(studentId)
-                    ?: throw ClubNotFoundException
-                val classroomForClub = queryClassroomSpi.queryClassroomById(clubClassroomId)
-                    ?: throw ClassroomNotFoundException
-                return classroomForClub.name
-            }
-
-            DirectorType.AFTER_SCHOOL -> {
-                val afterSchoolClassroomId = queryAfterSchoolSpi.queryAfterSchoolIdByStudentId(studentId)
-                    ?: throw AfterSchoolNotFoundException
-                val classroomForAfterSchool = queryClassroomSpi.queryClassroomById(afterSchoolClassroomId)
-                    ?: throw ClassroomNotFoundException
-                return classroomForAfterSchool.name
-            }
-
-            else -> return ""
-        }
     }
 }
