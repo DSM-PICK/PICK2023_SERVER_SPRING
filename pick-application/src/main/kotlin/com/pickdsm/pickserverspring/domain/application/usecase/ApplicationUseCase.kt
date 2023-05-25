@@ -34,6 +34,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
@@ -133,7 +134,7 @@ class ApplicationUseCase(
 
                             val picnicApplications = QueryPicnicApplicationElement(
                                 studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
@@ -161,7 +162,7 @@ class ApplicationUseCase(
 
                             val picnicApplication = QueryPicnicApplicationElement(
                                 studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
@@ -200,7 +201,7 @@ class ApplicationUseCase(
 
                             val picnicApplications = QueryPicnicApplicationElement(
                                 studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
@@ -230,7 +231,7 @@ class ApplicationUseCase(
 
                             val picnicApplications = QueryPicnicApplicationElement(
                                 studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
@@ -269,7 +270,7 @@ class ApplicationUseCase(
 
                             val picnicApplications = QueryPicnicApplicationElement(
                                 studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
@@ -299,7 +300,7 @@ class ApplicationUseCase(
 
                             val picnicApplications = QueryPicnicApplicationElement(
                                 studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
                                 startTime = startTime.startTime,
                                 endTime = endTime.endTime,
@@ -338,7 +339,7 @@ class ApplicationUseCase(
 
                 QueryPicnicStudentElement(
                     studentId = user.id,
-                    studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                    studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                     studentName = user.name,
                     endTime = endTime.endTime,
                 )
@@ -370,7 +371,7 @@ class ApplicationUseCase(
 
                     val studentStatus = QueryStudentStatusElement(
                         studentId = user.id,
-                        studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                        studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                         studentName = user.name,
                         type = status?.type?.name ?: StatusType.ATTENDANCE.name,
                         classroomName = movementClassroomName,
@@ -391,7 +392,7 @@ class ApplicationUseCase(
 
                     val studentStatus = QueryStudentStatusElement(
                         studentId = user.id,
-                        studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                        studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                         studentName = user.name,
                         type = status?.type?.name ?: StatusType.ATTENDANCE.name,
                         classroomName = movementClassroomName,
@@ -545,7 +546,7 @@ class ApplicationUseCase(
 
         return QueryMyPicnicInfoResponse(
             profileFileName = userInfo.profileFileName,
-            studentNumber = "${userInfo.grade}${userInfo.classNum}${checkUserNumLessThanTen(userInfo.num)}",
+            studentNumber = "${userInfo.grade}${userInfo.classNum}${userInfo.paddedUserNum()}",
             studentName = userInfo.name,
             startTime = startTime,
             endTime = endTime,
@@ -554,6 +555,9 @@ class ApplicationUseCase(
             picnicDate = picnicUserStatus.date,
         )
     }
+
+    private fun User.paddedUserNum(): String =
+        this.num.toString().padStart(2, '0')
 
     private fun movementStudent(status: Status?): String {
         var moveClassroomName = ""
@@ -566,11 +570,4 @@ class ApplicationUseCase(
         }
         return moveClassroomName
     }
-
-    private fun checkUserNumLessThanTen(userNum: Int) =
-        if (userNum < 10) {
-            "0$userNum"
-        } else {
-            userNum.toString()
-        }
 }
