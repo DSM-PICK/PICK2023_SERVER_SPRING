@@ -42,19 +42,19 @@ class ClubPersistenceAdapter(
             .orderBy(clubInfoEntity.name.asc())
             .fetch()
 
-    override fun queryClubByClubId(clubId: UUID): Club? =
+    override fun queryClubByClubInfoId(clubInfoId: UUID): Club? =
         jpaQueryFactory
             .selectFrom(clubEntity)
             .join(clubInfoEntity)
             .on(clubInfoEntity.id.eq(clubEntity.clubInfoEntity.id))
-            .where(clubInfoEntity.id.eq(clubId))
+            .where(clubInfoEntity.id.eq(clubInfoId))
             .fetchFirst()
             ?.let(clubMapper::entityToDomain)
 
-    override fun queryClubInfoByClubId(clubId: UUID): ClubInfo? =
+    override fun queryClubInfoByClubInfoId(clubInfoId: UUID): ClubInfo? =
         jpaQueryFactory
             .selectFrom(clubInfoEntity)
-            .where(clubInfoEntity.id.eq(clubId))
+            .where(clubInfoEntity.id.eq(clubInfoId))
             .fetchOne()
             ?.let(clubInfoMapper::entityToDomain)
 
@@ -100,14 +100,14 @@ class ClubPersistenceAdapter(
             .where(clubEntity.studentId.eq(studentId))
             .fetchOne()
 
-    override fun queryClubListByClubId(clubId: UUID): List<Club> =
+    override fun queryClubStudentIdListByClubInfoId(clubInfoId: UUID): List<UUID> =
         jpaQueryFactory
-            .selectFrom(clubEntity)
+            .select(clubEntity.studentId)
+            .from(clubEntity)
             .join(clubInfoEntity)
             .on(clubEntity.clubInfoEntity.id.eq(clubInfoEntity.id))
-            .where(clubInfoEntity.id.eq(clubId))
+            .where(clubInfoEntity.id.eq(clubInfoId))
             .fetch()
-            .map(clubMapper::entityToDomain)
 
     override fun queryClubInfoListByClubId(clubId: UUID): List<ClubInfo> =
         jpaQueryFactory

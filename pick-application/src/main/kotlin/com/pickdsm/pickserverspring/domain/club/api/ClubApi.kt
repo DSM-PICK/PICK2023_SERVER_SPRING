@@ -11,5 +11,5 @@ interface ClubApi {
 
     fun changeClubStudent(request: DomainChangeClubStudentRequest)
 
-    fun getClubStudentList(clubId: UUID): QueryClubStudentList
+    fun getClubStudentList(clubInfoId: UUID): QueryClubStudentList
 }

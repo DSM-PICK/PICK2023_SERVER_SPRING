@@ -7,7 +7,8 @@ enum class ClubErrorCode(
     private val message: String,
 ) : ErrorProperty {
 
-    CLUB_NOT_FOUND(404, "Club Not Found"), ;
+    CLUB_NOT_FOUND(404, "Club Not Found"),
+    CLUB_INFO_NOT_FOUND(404, "Club Info Not Found"), ;
 
     override fun status(): Int = status
     override fun message(): String = message
