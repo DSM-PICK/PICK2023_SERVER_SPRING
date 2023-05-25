@@ -33,6 +33,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
+import com.pickdsm.pickserverspring.domain.time.Time
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
@@ -125,9 +126,9 @@ class ApplicationUseCase(
                         }.map { status ->
                             val user = userList.find { user -> user.id == status.studentId }
                                 ?: throw UserNotFoundException
-                            val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
+                            val startTime = getTimeByPeriod(status.startPeriod)?.startTime
                                 ?: throw TimeNotFoundException
-                            val endTime = timeList.timeList.find { time -> time.period == status.endPeriod }
+                            val endTime = getTimeByPeriod(status.endPeriod)?.endTime
                                 ?: throw TimeNotFoundException
                             val application = todayOutingList.find { application -> application.statusId == status.id }
                                 ?: throw ApplicationNotFoundException
@@ -136,8 +137,8 @@ class ApplicationUseCase(
                                 studentId = user.id,
                                 studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
-                                startTime = startTime.startTime,
-                                endTime = endTime.endTime,
+                                startTime = startTime,
+                                endTime = endTime,
                                 reason = application.reason,
                             )
 
@@ -153,9 +154,9 @@ class ApplicationUseCase(
                         }.map { status ->
                             val user = userList.find { user -> user.id == status.studentId }
                                 ?: throw UserNotFoundException
-                            val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
+                            val startTime = getTimeByPeriod(status.startPeriod)?.startTime
                                 ?: throw TimeNotFoundException
-                            val endTime = timeList.timeList.find { time -> time.period == status.endPeriod }
+                            val endTime = getTimeByPeriod(status.endPeriod)?.endTime
                                 ?: throw TimeNotFoundException
                             val application = todayOutingList.find { application -> application.statusId == status.id }
                                 ?: throw ApplicationNotFoundException
@@ -164,8 +165,8 @@ class ApplicationUseCase(
                                 studentId = user.id,
                                 studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
-                                startTime = startTime.startTime,
-                                endTime = endTime.endTime,
+                                startTime = startTime,
+                                endTime = endTime,
                                 reason = application.reason,
                             )
 
@@ -192,9 +193,9 @@ class ApplicationUseCase(
                         }.map { status ->
                             val user = userList.find { user -> user.id == status.studentId }
                                 ?: throw UserNotFoundException
-                            val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
+                            val startTime = getTimeByPeriod(status.startPeriod)?.startTime
                                 ?: throw TimeNotFoundException
-                            val endTime = timeList.timeList.find { time -> time.period == status.endPeriod }
+                            val endTime = getTimeByPeriod(status.endPeriod)?.endTime
                                 ?: throw TimeNotFoundException
                             val application = todayOutingList.find { application -> application.statusId == status.id }
                                 ?: throw ApplicationNotFoundException
@@ -203,8 +204,8 @@ class ApplicationUseCase(
                                 studentId = user.id,
                                 studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
-                                startTime = startTime.startTime,
-                                endTime = endTime.endTime,
+                                startTime = startTime,
+                                endTime = endTime,
                                 reason = application.reason,
                             )
 
@@ -222,9 +223,9 @@ class ApplicationUseCase(
                         }.map { status ->
                             val user = userList.find { user -> user.id == status.studentId }
                                 ?: throw UserNotFoundException
-                            val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
+                            val startTime = getTimeByPeriod(status.startPeriod)?.startTime
                                 ?: throw TimeNotFoundException
-                            val endTime = timeList.timeList.find { time -> time.period == status.endPeriod }
+                            val endTime = getTimeByPeriod(status.endPeriod)?.endTime
                                 ?: throw TimeNotFoundException
                             val application = todayOutingList.find { application -> application.statusId == status.id }
                                 ?: throw ApplicationNotFoundException
@@ -233,8 +234,8 @@ class ApplicationUseCase(
                                 studentId = user.id,
                                 studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
-                                startTime = startTime.startTime,
-                                endTime = endTime.endTime,
+                                startTime = startTime,
+                                endTime = endTime,
                                 reason = application.reason,
                             )
 
@@ -261,9 +262,9 @@ class ApplicationUseCase(
                         }.map { status ->
                             val user = userList.find { user -> user.id == status.studentId }
                                 ?: throw UserNotFoundException
-                            val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
+                            val startTime = getTimeByPeriod(status.startPeriod)?.startTime
                                 ?: throw TimeNotFoundException
-                            val endTime = timeList.timeList.find { time -> time.period == status.endPeriod }
+                            val endTime = getTimeByPeriod(status.endPeriod)?.endTime
                                 ?: throw TimeNotFoundException
                             val application = todayOutingList.find { application -> application.statusId == status.id }
                                 ?: throw ApplicationNotFoundException
@@ -272,8 +273,8 @@ class ApplicationUseCase(
                                 studentId = user.id,
                                 studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
-                                startTime = startTime.startTime,
-                                endTime = endTime.endTime,
+                                startTime = startTime,
+                                endTime = endTime,
                                 reason = application.reason,
                             )
 
@@ -291,9 +292,9 @@ class ApplicationUseCase(
                         }.map { status ->
                             val user = userList.find { user -> user.id == status.studentId }
                                 ?: throw UserNotFoundException
-                            val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
+                            val startTime = getTimeByPeriod(status.startPeriod)?.startTime
                                 ?: throw TimeNotFoundException
-                            val endTime = timeList.timeList.find { time -> time.period == status.endPeriod }
+                            val endTime = getTimeByPeriod(status.endPeriod)?.endTime
                                 ?: throw TimeNotFoundException
                             val application = todayOutingList.find { application -> application.statusId == status.id }
                                 ?: throw ApplicationNotFoundException
@@ -302,8 +303,8 @@ class ApplicationUseCase(
                                 studentId = user.id,
                                 studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                                 studentName = user.name,
-                                startTime = startTime.startTime,
-                                endTime = endTime.endTime,
+                                startTime = startTime,
+                                endTime = endTime,
                                 reason = application.reason,
                             )
 
@@ -334,14 +335,14 @@ class ApplicationUseCase(
             .map { status ->
                 val user = userList.find { user -> user.id == status.studentId }
                     ?: throw UserNotFoundException
-                val endTime = timeList.timeList.find { time -> time.period == status.endPeriod }
+                val endTime = getTimeByPeriod(status.endPeriod)?.endTime
                     ?: throw TimeNotFoundException
 
                 QueryPicnicStudentElement(
                     studentId = user.id,
                     studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                     studentName = user.name,
-                    endTime = endTime.endTime,
+                    endTime = endTime,
                 )
             }
             .sortedWith(
@@ -515,8 +516,7 @@ class ApplicationUseCase(
         val userInfo = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
         val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentIdAndToday(userInfo.id)
             ?: throw StatusNotFoundException
-        val endTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
-            .timeList.find { time -> time.period == picnicUserStatus.endPeriod }?.endTime
+        val endTime = getTimeByPeriod(picnicUserStatus.endPeriod)?.endTime
             ?: throw TimeNotFoundException
 
         return QueryMyPicnicEndTimeResponse(
@@ -537,11 +537,9 @@ class ApplicationUseCase(
             statusId = picnicUserStatus.id,
         ) ?: throw ApplicationNotFoundException
 
-        val startTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
-            .timeList.find { time -> time.period == picnicUserStatus.startPeriod }?.startTime
+        val startTime = getTimeByPeriod(picnicUserStatus.startPeriod)?.startTime
             ?: throw TimeNotFoundException
-        val endTime = timeQueryTeacherSpi.queryTime(LocalDate.now())
-            .timeList.find { time -> time.period == picnicUserStatus.endPeriod }?.endTime
+        val endTime = getTimeByPeriod(picnicUserStatus.endPeriod)?.endTime
             ?: throw TimeNotFoundException
 
         return QueryMyPicnicInfoResponse(
@@ -558,6 +556,10 @@ class ApplicationUseCase(
 
     private fun User.paddedUserNum(): String =
         this.num.toString().padStart(2, '0')
+
+    private fun getTimeByPeriod(period: Int): Time.DomainTimeElement? =
+        timeQueryTeacherSpi.queryTime(LocalDate.now()).timeList
+            .find { time -> time.period == period }
 
     private fun movementStudent(status: Status?): String {
         var moveClassroomName = ""
