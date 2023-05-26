@@ -11,7 +11,7 @@ interface QueryStatusSpi {
 
     fun queryMovementStudentInfoListByToday(date: LocalDate): List<Status>
 
-    fun queryAwaitStudentListByToday(date: LocalDate): List<Status>
+    fun queryAwaitStudentListByToday(): List<Status>
 
     fun queryStatusListByToday(): List<Status>
 

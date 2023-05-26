@@ -68,11 +68,11 @@ class StatusPersistenceAdapter(
             .fetch()
             .map(statusMapper::entityToDomain)
 
-    override fun queryAwaitStudentListByToday(date: LocalDate): List<Status> =
+    override fun queryAwaitStudentListByToday(): List<Status> =
         jpaQueryFactory
             .selectFrom(statusEntity)
             .where(
-                statusEntity.date.eq(date),
+                statusEntity.date.eq(LocalDate.now()),
                 statusEntity.type.eq(StatusType.AWAIT),
             )
             .fetch()
