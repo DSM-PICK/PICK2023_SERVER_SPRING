@@ -34,6 +34,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
@@ -108,10 +109,11 @@ class ApplicationUseCase(
 
         when (type) {
             DirectorType.SELF_STUDY -> {
-                when {
-                    floor == null -> {
+                when (floor) {
+                    null -> {
                         todayStatusList.filter { status ->
-                            val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
+                            val user = userList.findUserByStudentId(status.studentId)
+                                ?: return@filter false
 
                             val studentGrade = grade?.toIntOrNull() ?: 0
                             val studentClassNum = classNum?.toIntOrNull() ?: 0
@@ -122,7 +124,7 @@ class ApplicationUseCase(
                                 else -> (studentGrade == user.grade && studentClassNum == user.classNum)
                             }
                         }.map { status ->
-                            val user = userList.find { user -> user.id == status.studentId }
+                            val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
                                 ?: throw TimeNotFoundException
@@ -144,13 +146,14 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != null -> {
+                    else -> {
                         todayStatusList.filter { status ->
-                            val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
+                            val user = userList.findUserByStudentId(status.studentId)
+                                ?: return@filter false
                             val classroomGrade = queryClassroomSpi.queryClassroomGradeByFloor(floor)
                             classroomGrade == user.grade
                         }.map { status ->
-                            val user = userList.find { user -> user.id == status.studentId }
+                            val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
                                 ?: throw TimeNotFoundException
@@ -167,7 +170,6 @@ class ApplicationUseCase(
                                 endTime = endTime.endTime,
                                 reason = application.reason,
                             )
-
                             outing.add(picnicApplication)
                         }
                     }
@@ -175,10 +177,11 @@ class ApplicationUseCase(
             }
 
             DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
-                when {
-                    floor == null -> {
+                when (floor) {
+                    null -> {
                         todayStatusList.filter { status ->
-                            val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
+                            val user = userList.findUserByStudentId(status.studentId)
+                                ?: return@filter false
 
                             val studentGrade = grade?.toIntOrNull() ?: 0
                             val studentClassNum = classNum?.toIntOrNull() ?: 0
@@ -189,7 +192,7 @@ class ApplicationUseCase(
                                 else -> (studentGrade == user.grade && studentClassNum == user.classNum)
                             }
                         }.map { status ->
-                            val user = userList.find { user -> user.id == status.studentId }
+                            val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
                                 ?: throw TimeNotFoundException
@@ -211,15 +214,16 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != null -> {
+                    else -> {
                         todayStatusList.filter { status ->
-                            val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
+                            val user = userList.findUserByStudentId(status.studentId)
+                                ?: return@filter false
                             val clubStudentIdList =
                                 queryClubSpi.queryClubStudentIdListByFloor(floor).find { user.id == it }
 
                             clubStudentIdList == user.id
                         }.map { status ->
-                            val user = userList.find { user -> user.id == status.studentId }
+                            val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
                                 ?: throw TimeNotFoundException
@@ -244,10 +248,11 @@ class ApplicationUseCase(
             }
 
             DirectorType.AFTER_SCHOOL -> {
-                when {
-                    floor == null -> {
+                when (floor) {
+                    null -> {
                         todayStatusList.filter { status ->
-                            val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
+                            val user = userList.findUserByStudentId(status.studentId)
+                                ?: return@filter false
 
                             val studentGrade = grade?.toIntOrNull() ?: 0
                             val studentClassNum = classNum?.toIntOrNull() ?: 0
@@ -258,7 +263,7 @@ class ApplicationUseCase(
                                 else -> (studentGrade == user.grade && studentClassNum == user.classNum)
                             }
                         }.map { status ->
-                            val user = userList.find { user -> user.id == status.studentId }
+                            val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
                                 ?: throw TimeNotFoundException
@@ -280,15 +285,16 @@ class ApplicationUseCase(
                         }
                     }
 
-                    floor != null -> {
+                    else -> {
                         todayStatusList.filter { status ->
-                            val user = userList.find { user -> user.id == status.studentId } ?: return@filter false
+                            val user = userList.findUserByStudentId(status.studentId)
+                                ?: return@filter false
                             val afterSchoolStudentList =
                                 queryAfterSchoolSpi.queryAfterSchoolStudentIdByFloor(floor).find { user.id == it }
 
                             afterSchoolStudentList == user.id
                         }.map { status ->
-                            val user = userList.find { user -> user.id == status.studentId }
+                            val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = timeList.timeList.find { time -> time.period == status.startPeriod }
                                 ?: throw TimeNotFoundException
@@ -331,7 +337,7 @@ class ApplicationUseCase(
 
         val outing: List<QueryPicnicStudentElement> = todayPicnicStudentInfoList
             .map { status ->
-                val user = userList.find { user -> user.id == status.studentId }
+                val user = userList.findUserByStudentId(status.studentId)
                     ?: throw UserNotFoundException
                 val endTime = timeList.timeList.find { time -> time.period == status.endPeriod }
                     ?: throw TimeNotFoundException
@@ -434,7 +440,7 @@ class ApplicationUseCase(
         val userList = userSpi.queryUserInfo(userIdRequest)
 
         userIdList.map {
-            val user = userList.find { user -> user.id == it }
+            val user = userList.findUserByStudentId(it)
                 ?: throw UserNotFoundException
 
             val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(
@@ -473,8 +479,8 @@ class ApplicationUseCase(
 
         when (request.type) {
             StatusType.PICNIC -> {
-                val statusList = request.userIdList.map {
-                    val user = userList.find { user -> user.id == it }
+                val statusList = request.userIdList.map { userId ->
+                    val user = userList.findUserByStudentId(userId)
                         ?: throw UserNotFoundException
                     val status = todayAwaitStatusList.find { user.id == it.studentId }
                         ?: throw StatusNotFoundException
@@ -554,6 +560,9 @@ class ApplicationUseCase(
             picnicDate = picnicUserStatus.date,
         )
     }
+
+    private fun List<User>.findUserByStudentId(studentId: UUID): User? =
+        this.find { it.id == studentId }
 
     private fun movementStudent(status: Status?): String {
         var moveClassroomName = ""
