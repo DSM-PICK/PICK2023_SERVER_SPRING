@@ -7,13 +7,14 @@ import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryClubStude
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentAttendanceList
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryStudentListByGradeAndClassNum
 import com.pickdsm.pickserverspring.domain.admin.api.dto.response.QueryTypeResponse
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.UpdateStudentStatusOfClassRequest
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
-import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.RegisterSelfStudyDirectorRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubHeadRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeClubStudentRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.ChangeSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.DeleteSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.PicnicPassRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.RegisterSelfStudyDirectorRequest
+import com.pickdsm.pickserverspring.domain.admin.presentation.dto.request.UpdateStudentStatusOfClassRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.AfterSchoolApi
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainCreateAfterSchoolStudentRequest
 import com.pickdsm.pickserverspring.domain.afterschool.api.dto.request.DomainDeleteAfterSchoolStudentRequest
@@ -152,11 +153,11 @@ class AdminWebAdapter(
     fun changeClubStudent(
         @RequestBody
         @Valid
-        request: DomainChangeClubStudentRequest,
+        request: ChangeClubStudentRequest,
     ) {
         val domainRequest = DomainChangeClubStudentRequest(
             studentId = request.studentId,
-            clubId = request.clubId,
+            clubInfoId = request.clubInfoId,
         )
         clubApi.changeClubStudent(domainRequest)
     }
@@ -228,12 +229,12 @@ class AdminWebAdapter(
         return classroomMovementApi.queryMovementStudentList(grade, classNum, floor)
     }
 
-    @GetMapping("/club/{club-id}")
+    @GetMapping("/club/{club-info-id}")
     fun getClubStudentList(
-        @PathVariable("club-id")
-        clubId: UUID,
+        @PathVariable("club-info-id")
+        clubInfoId: UUID,
     ): QueryClubStudentList {
-        return clubApi.getClubStudentList(clubId)
+        return clubApi.getClubStudentList(clubInfoId)
     }
 
     @GetMapping("/class/students")

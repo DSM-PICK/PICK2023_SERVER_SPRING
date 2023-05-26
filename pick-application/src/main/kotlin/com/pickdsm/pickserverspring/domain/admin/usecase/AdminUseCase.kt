@@ -209,7 +209,7 @@ class AdminUseCase(
 
                     val classroomElement = StudentElement(
                         studentId = user.id,
-                        studentNumber = user.num.toString(),
+                        studentNumber = user.num,
                         studentName = user.name,
                         typeList = classroomStatusTypes,
                     )
