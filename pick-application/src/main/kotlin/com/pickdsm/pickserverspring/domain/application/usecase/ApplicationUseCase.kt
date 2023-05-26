@@ -98,33 +98,26 @@ class ApplicationUseCase(
         floor: Int?,
         type: DirectorType,
     ): QueryPicnicApplicationList {
-        val today = LocalDate.now()
-        val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday(today)
-        val todayStatusList = queryStatusSpi.queryAwaitStudentListByToday(today)
+        val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday()
+        val todayStatusList = queryStatusSpi.queryAwaitStudentListByToday()
         val todayApplicationStudentIdList = todayStatusList.map { it.studentId }
-        val timeList = timeQueryTeacherSpi.queryTime(today)
         val userIdRequest = UserInfoRequest(todayApplicationStudentIdList)
         val userList = userQueryApplicationSpi.queryUserInfo(userIdRequest)
 
         val outing = mutableListOf<QueryPicnicApplicationElement>()
 
+        val studentGrade = grade?.toIntOrNull() ?: 0
+        val studentClassNum = classNum?.toIntOrNull() ?: 0
+
         when (type) {
             DirectorType.SELF_STUDY -> {
                 when (floor) {
                     null -> {
-                        todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: return@filter false
-
-                            val studentGrade = grade?.toIntOrNull() ?: 0
-                            val studentClassNum = classNum?.toIntOrNull() ?: 0
-
-                            when {
-                                studentGrade != 0 && studentClassNum == 0 -> studentGrade == user.grade
-                                studentGrade == 0 -> false
-                                else -> (studentGrade == user.grade && studentClassNum == user.classNum)
-                            }
-                        }.map { status ->
+                        todayStatusList.filteringByGradeAndClassNum(
+                            userList = userList,
+                            studentGrade = studentGrade,
+                            studentClassNum = studentClassNum,
+                        ).map { status ->
                             val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
@@ -149,8 +142,7 @@ class ApplicationUseCase(
 
                     else -> {
                         todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: return@filter false
+                            val user = userList.findUserByStudentId(status.studentId) ?: return@filter false
                             val classroomGrade = queryClassroomSpi.queryClassroomGradeByFloor(floor)
                             classroomGrade == user.grade
                         }.map { status ->
@@ -180,19 +172,11 @@ class ApplicationUseCase(
             DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
                 when (floor) {
                     null -> {
-                        todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: return@filter false
-
-                            val studentGrade = grade?.toIntOrNull() ?: 0
-                            val studentClassNum = classNum?.toIntOrNull() ?: 0
-
-                            when {
-                                studentGrade != 0 && studentClassNum == 0 -> studentGrade == user.grade
-                                studentGrade == 0 -> false
-                                else -> (studentGrade == user.grade && studentClassNum == user.classNum)
-                            }
-                        }.map { status ->
+                        todayStatusList.filteringByGradeAndClassNum(
+                            userList = userList,
+                            studentGrade = studentGrade,
+                            studentClassNum = studentClassNum,
+                        ).map { status ->
                             val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
@@ -217,12 +201,9 @@ class ApplicationUseCase(
 
                     else -> {
                         todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: return@filter false
-                            val clubStudentIdList =
-                                queryClubSpi.queryClubStudentIdListByFloor(floor).find { user.id == it }
-
-                            clubStudentIdList == user.id
+                            val user = userList.findUserByStudentId(status.studentId) ?: return@filter false
+                            val clubStudentId = queryClubSpi.queryClubStudentIdListByFloor(floor).find { user.id == it }
+                            clubStudentId == user.id
                         }.map { status ->
                             val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
@@ -251,19 +232,11 @@ class ApplicationUseCase(
             DirectorType.AFTER_SCHOOL -> {
                 when (floor) {
                     null -> {
-                        todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: return@filter false
-
-                            val studentGrade = grade?.toIntOrNull() ?: 0
-                            val studentClassNum = classNum?.toIntOrNull() ?: 0
-
-                            when {
-                                studentGrade != 0 && studentClassNum == 0 -> studentGrade == user.grade
-                                studentGrade == 0 -> false
-                                else -> (studentGrade == user.grade && studentClassNum == user.classNum)
-                            }
-                        }.map { status ->
+                        todayStatusList.filteringByGradeAndClassNum(
+                            userList = userList,
+                            studentGrade = studentGrade,
+                            studentClassNum = studentClassNum,
+                        ).map { status ->
                             val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
                             val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
@@ -288,12 +261,9 @@ class ApplicationUseCase(
 
                     else -> {
                         todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: return@filter false
-                            val afterSchoolStudentList =
-                                queryAfterSchoolSpi.queryAfterSchoolStudentIdByFloor(floor).find { user.id == it }
-
-                            afterSchoolStudentList == user.id
+                            val user = userList.findUserByStudentId(status.studentId) ?: return@filter false
+                            val afterSchoolStudentId = queryAfterSchoolSpi.queryAfterSchoolStudentIdByFloor(floor).find { user.id == it }
+                            afterSchoolStudentId == user.id
                         }.map { status ->
                             val user = userList.findUserByStudentId(status.studentId)
                                 ?: throw UserNotFoundException
@@ -329,10 +299,24 @@ class ApplicationUseCase(
         return QueryPicnicApplicationList(outing)
     }
 
+    private fun List<Status>.filteringByGradeAndClassNum(
+        userList: List<User>,
+        studentGrade: Int,
+        studentClassNum: Int,
+    ): List<Status> =
+        this.filter { status ->
+            val user = userList.findUserByStudentId(status.studentId) ?: return@filter false
+
+            when {
+                studentGrade != 0 && studentClassNum == 0 -> studentGrade == user.grade
+                studentGrade == 0 -> false
+                else -> (studentGrade == user.grade && studentClassNum == user.classNum)
+            }
+        }
+
     override fun queryPicnicStudentListByToday(): QueryPicnicStudentList {
         val todayPicnicStudentInfoList = queryStatusSpi.queryPicnicStudentInfoListByToday(LocalDate.now())
         val todayPicnicStudentIdList = todayPicnicStudentInfoList.map { status -> status.studentId }
-        val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val userIdRequest = UserInfoRequest(todayPicnicStudentIdList)
         val userList = userQueryApplicationSpi.queryUserInfo(userIdRequest)
 
@@ -476,7 +460,7 @@ class ApplicationUseCase(
         val teacherId = userSpi.getCurrentUserId()
         val userIdRequest = UserInfoRequest(request.userIdList)
         val userList = userSpi.queryUserInfo(userIdRequest)
-        val todayAwaitStatusList = queryStatusSpi.queryAwaitStudentListByToday(LocalDate.now())
+        val todayAwaitStatusList = queryStatusSpi.queryAwaitStudentListByToday()
 
         when (request.type) {
             StatusType.PICNIC -> {
