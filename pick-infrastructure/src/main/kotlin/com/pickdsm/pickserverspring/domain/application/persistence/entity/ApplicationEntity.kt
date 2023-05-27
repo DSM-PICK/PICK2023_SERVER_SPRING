@@ -2,7 +2,7 @@ package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
-import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import java.time.LocalDate
 import java.util.UUID
 import javax.persistence.Entity
@@ -15,7 +15,6 @@ import javax.persistence.Column
 @Table(name = "tbl_application")
 @Entity
 class ApplicationEntity(
-
     override val id: UUID,
 
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
@@ -27,8 +26,7 @@ class ApplicationEntity(
     val statusEntity: StatusEntity,
 
     date: LocalDate,
-
-    ) : BaseUUIDEntity(id) {
+) : BaseUUIDEntity(id) {
     @Column(columnDefinition = "DATE", nullable = false)
     var date = date
         protected set
