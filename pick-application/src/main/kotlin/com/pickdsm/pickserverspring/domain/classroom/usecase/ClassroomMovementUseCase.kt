@@ -169,43 +169,39 @@ class ClassroomMovementUseCase(
         val userIdRequest = UserInfoRequest(todayMovementStudentIdList)
         val userList = userQueryApplicationSpi.queryUserInfo(userIdRequest)
         val movementStudent = mutableListOf<MovementStudentElement>()
-        val studentAttendanceList = adminApi.getTypeByDate(LocalDate.now())
+        val todayType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now())
+            ?: throw TypeNotFoundException
 
         if (floor == null) {
-            val moveList = userList.filter {
-                it.grade == grade && it.classNum == classNum
-            }.map {
-                val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
+            val moveList = userList.filter { user ->
+                user.grade == grade && user.classNum == classNum
+            }.map { user ->
+                val status = queryStatusSpi.queryMovementStudentByStudentId(user.id)
                     ?: throw StatusNotFoundException
                 val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status)
                     ?: throw ClassroomMovementStudentNotFoundException
-                val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
+                val classroomName = queryClassroomSpi.queryClassroomNameByClassroomId(classroomMovement.classroomId)
                     ?: throw ClassroomNotFoundException
-                val number = it.grade.toString() + "-" + it.classNum
-                val gradeForMovement = getGrade(studentAttendanceList.type, number, it.id)
+                val number = user.grade.toString() + "-" + user.classNum
+                val gradeForMovement = getGrade(todayType, number, user.id)
 
-                MovementStudentElement(
-                    studentNumber = "${it.grade}${it.classNum}${it.paddedUserNum()}",
-                    studentName = it.name,
-                    before = gradeForMovement,
-                    after = classroom.name,
-                )
+                user.toMovementStudentElement(gradeForMovement, classroomName)
             }
             movementStudent.addAll(moveList)
         } else {
             val moveList = userList
-                .map {
-                    val status = queryStatusSpi.queryMovementStudentByStudentId(it.id)
+                .map { user ->
+                    val status = queryStatusSpi.queryMovementStudentByStudentId(user.id)
                         ?: throw StatusNotFoundException
                     val classroomMovement = queryClassroomMovementSpi.queryClassroomMovementByStatus(status)
                         ?: throw ClassroomMovementStudentNotFoundException
                     val classroom = queryClassroomSpi.queryClassroomById(classroomMovement.classroomId)
                         ?: throw ClassroomNotFoundException
-                    val number = it.grade.toString() + "-" + it.classNum
-                    val gradeForMovement = getGrade(studentAttendanceList.type, number, it.id)
+                    val number = user.grade.toString() + "-" + user.classNum
+                    val gradeForMovement = getGrade(todayType, number, user.id)
 
                     if (classroom.floor == floor) {
-                        it.toMovementStudent(gradeForMovement, classroom.name)
+                        user.toMovementStudentElement(gradeForMovement, classroom.name)
                     } else {
                         throw ClassroomMovementStudentNotFoundException
                     }
@@ -214,6 +210,14 @@ class ClassroomMovementUseCase(
         }
         return QueryMovementStudentList(movementStudent.sortedBy { it.studentNumber })
     }
+
+    private fun User.toMovementStudentElement(gradeForMovement: String, classroomName: String) =
+        MovementStudentElement(
+            studentNumber = "${this.grade}${this.classNum}${this.paddedUserNum()}",
+            studentName = this.name,
+            before = gradeForMovement,
+            after = classroomName,
+        )
 
     private fun getGrade(directorType: DirectorType, classroom: String, studentId: UUID): String {
         when (directorType) {
@@ -239,17 +243,7 @@ class ClassroomMovementUseCase(
         }
     }
 
-    private fun User.toMovementStudent(gradeForMovement: String, classroomName: String): MovementStudentElement {
-        return MovementStudentElement(
-            studentNumber = "${this.grade}${this.classNum}${this.paddedUserNum()}",
-            studentName = this.name,
-            before = gradeForMovement,
-            after = classroomName,
-        )
-    }
-
-    private fun User.paddedUserNum(): String =
-        this.num.toString().padStart(2, '0')
+    private fun User.paddedUserNum(): String = this.num.toString().padStart(2, '0')
 
     override fun returnClassroomMovement() {
         val currentStudentId = userSpi.getCurrentUserId()
