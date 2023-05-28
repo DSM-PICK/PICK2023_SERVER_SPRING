@@ -29,6 +29,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.time.spi.QueryTimeSpi
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
@@ -142,7 +143,7 @@ class AdminUseCase(
 
                     val afterSchoolElement = StudentElement(
                         studentId = user.id,
-                        studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                        studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                         studentName = user.name,
                         typeList = afterSchoolStatusTypes,
                     )
@@ -175,7 +176,7 @@ class AdminUseCase(
 
                     val clubElement = StudentElement(
                         studentId = user.id,
-                        studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                        studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                         studentName = user.name,
                         typeList = clubStatusTypes,
                     )
@@ -313,10 +314,6 @@ class AdminUseCase(
         }
     }
 
-    private fun checkUserNumLessThanTen(userNum: Int) =
-        if (userNum < 10) {
-            "0$userNum"
-        } else {
-            userNum.toString()
-        }
+    private fun User.paddedUserNum(): String =
+        this.num.toString().padStart(2, '0')
 }

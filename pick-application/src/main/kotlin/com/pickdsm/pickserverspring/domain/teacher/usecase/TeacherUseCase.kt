@@ -3,7 +3,6 @@ package com.pickdsm.pickserverspring.domain.teacher.usecase
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
-import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
@@ -18,6 +17,7 @@ import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudent
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
+import com.pickdsm.pickserverspring.domain.user.User
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
@@ -29,7 +29,6 @@ class TeacherUseCase(
     private val userSpi: UserSpi,
     private val statusCommandTeacherSpi: StatusCommandTeacherSpi,
     private val timeQueryTeacherSpi: TimeQueryTeacherSpi,
-    private val queryApplicationSpi: QueryApplicationSpi,
     private val queryClassroomSpi: QueryClassroomSpi,
     private val querySelfStudyDirectorSpi: QuerySelfStudyDirectorSpi,
     private val queryStatusSpi: QueryStatusSpi,
@@ -97,7 +96,7 @@ class TeacherUseCase(
 
             MovementStudent(
                 studentId = user.id,
-                studentNumber = "${user.grade}${user.classNum}${checkUserNumLessThanTen(user.num)}",
+                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
                 studentName = user.name,
                 type = it.type.name,
                 classroomName = classroom.name,
@@ -107,10 +106,6 @@ class TeacherUseCase(
         return QueryMovementStudentList(movementList.sortedBy { it.studentNumber })
     }
 
-    private fun checkUserNumLessThanTen(userNum: Int) =
-        if (userNum < 10) {
-            "0$userNum"
-        } else {
-            userNum.toString()
-        }
+    private fun User.paddedUserNum(): String =
+        this.num.toString().padStart(2, '0')
 }

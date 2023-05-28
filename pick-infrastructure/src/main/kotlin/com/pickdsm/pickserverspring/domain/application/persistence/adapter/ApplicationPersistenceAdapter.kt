@@ -22,19 +22,11 @@ class ApplicationPersistenceAdapter(
         applicationRepository.save(applicationMapper.domainToEntity(application))
     }
 
-    override fun queryPicnicApplicationListByToday(date: LocalDate): List<Application> =
+    override fun queryPicnicApplicationListByToday(): List<Application> =
         jpaQueryFactory
             .selectFrom(applicationEntity)
             .innerJoin(applicationEntity.statusEntity, statusEntity)
-            .on(applicationEntity.statusEntity.date.eq(date))
-            .fetch()
-            .map(applicationMapper::entityToDomain)
-
-    override fun queryApplicationListByToday(date: LocalDate): List<Application> =
-        jpaQueryFactory
-            .selectFrom(applicationEntity)
-            .innerJoin(applicationEntity.statusEntity, statusEntity)
-            .on(applicationEntity.statusEntity.date.eq(date))
+            .on(applicationEntity.statusEntity.date.eq(LocalDate.now()))
             .fetch()
             .map(applicationMapper::entityToDomain)
 
