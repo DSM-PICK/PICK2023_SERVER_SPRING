@@ -92,16 +92,6 @@ class StatusPersistenceAdapter(
             .fetch()
             .map(statusMapper::entityToDomain)
 
-    override fun queryPicnicStudentByStudentId(studentId: UUID): Status? =
-        jpaQueryFactory
-            .selectFrom(statusEntity)
-            .where(
-                statusEntity.studentId.eq(studentId),
-                statusEntity.type.eq(StatusType.PICNIC),
-            )
-            .fetchFirst()
-            ?.let(statusMapper::entityToDomain)
-
     override fun queryPicnicStudentByStudentIdAndToday(studentId: UUID): Status? =
         jpaQueryFactory
             .selectFrom(statusEntity)
