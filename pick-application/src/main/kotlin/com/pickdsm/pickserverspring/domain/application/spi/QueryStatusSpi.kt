@@ -19,7 +19,7 @@ interface QueryStatusSpi {
 
     fun queryPicnicStudentByStudentIdAndToday(studentId: UUID): Status?
 
-    fun queryStatusByStudentIdAndStartPeriodAndEndPeriod(studentId: UUID, startPeriod: Int, endPeriod: Int): Status?
+    fun queryStatusByStudentIdAndStartPeriodAndEndPeriodAndToday(studentId: UUID, startPeriod: Int, endPeriod: Int): Status?
 
     fun queryMovementStudentByStudentId(studentId: UUID): Status?
 
