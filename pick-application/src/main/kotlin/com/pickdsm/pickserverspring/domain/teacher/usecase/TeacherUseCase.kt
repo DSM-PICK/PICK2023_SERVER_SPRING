@@ -41,7 +41,7 @@ class TeacherUseCase(
         val time = timeList.timeList.find { time -> time.period == request.period }
             ?: throw TimeNotFoundException
 
-        val status = queryStatusSpi.queryStatusByStudentIdAndStartPeriodAndEndPeriod(
+        val status = queryStatusSpi.queryStatusByStudentIdAndStartPeriodAndEndPeriodAndToday(
             studentId = userInfo.id,
             startPeriod = time.period,
             endPeriod = time.period,
@@ -71,11 +71,11 @@ class TeacherUseCase(
 
     override fun comebackStudent(request: DomainComebackStudentRequest) {
         val teacherId = userSpi.getCurrentUserId()
-        val picnicStatusStudent = queryStatusSpi.queryPicnicStudentByStudentId(request.studentId)
+        val picnicStudent = queryStatusSpi.queryPicnicStudentByStudentIdAndToday(request.studentId)
             ?: throw StatusNotFoundException
 
         statusCommandTeacherSpi.saveStatus(
-            picnicStatusStudent.changeStatusToAttendance(
+            picnicStudent.changeStatusToAttendance(
                 teacherId = teacherId,
                 endPeriod = request.endPeriod,
             ),
