@@ -10,7 +10,8 @@ enum class StatusErrorCode(
     CANNOT_CHANGE_EMPLOYMENT(401, "Cannot Change Employment"),
     CANNOT_CHANGE_STATUS_THIS_TIME(401, "Cannot Change Status This Time"),
 
-    STATUS_NOT_FOUND(404, "Status not found"), ;
+    STATUS_NOT_FOUND(404, "Status not found"),
+    OVER_END_TIME(404, "Over End Time"), ;
 
     override fun status(): Int = status
     override fun message(): String = message
