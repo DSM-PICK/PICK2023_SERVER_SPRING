@@ -129,25 +129,14 @@ class AdminUseCase(
                     val afterSchoolStatusTypes = mutableListOf<StatusType>()
 
                     for (i in startPeriod..10) {
-                        val afterSchoolStatus = getStatusByStartPeriodAndEndPeriod(
-                            statusList = afterSchoolStatusList,
-                            statusPeriod = i,
+                        val statusType = afterSchoolStatusList.getStatusTypeByUserIdAndBetweenStartPeriodAndEndPeriod(
                             userId = user.id,
+                            statusPeriod = i,
                         )
-
-                        awaitOrPicnicRejectChangeToAttendance(
-                            statusType = afterSchoolStatus,
-                            statusTypes = afterSchoolStatusTypes,
-                        )
+                        statusType.awaitOrPicnicRejectChangeToAttendance(afterSchoolStatusTypes)
                     }
 
-                    val afterSchoolElement = StudentElement(
-                        studentId = user.id,
-                        studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
-                        studentName = user.name,
-                        typeList = afterSchoolStatusTypes,
-                    )
-                    students.add(afterSchoolElement)
+                    students.add(user.buildStudentElement(afterSchoolStatusTypes))
                 }
             }
 
@@ -162,25 +151,14 @@ class AdminUseCase(
                     val clubStatusTypes = mutableListOf<StatusType>()
 
                     for (i in startPeriod..10) {
-                        val clubStatus = getStatusByStartPeriodAndEndPeriod(
-                            statusList = clubStatusList,
-                            statusPeriod = i,
+                        val statusType = clubStatusList.getStatusTypeByUserIdAndBetweenStartPeriodAndEndPeriod(
                             userId = user.id,
+                            statusPeriod = i,
                         )
-
-                        awaitOrPicnicRejectChangeToAttendance(
-                            statusType = clubStatus,
-                            statusTypes = clubStatusTypes,
-                        )
+                        statusType.awaitOrPicnicRejectChangeToAttendance(clubStatusTypes)
                     }
 
-                    val clubElement = StudentElement(
-                        studentId = user.id,
-                        studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
-                        studentName = user.name,
-                        typeList = clubStatusTypes,
-                    )
-                    students.add(clubElement)
+                    students.add(user.buildStudentElement(clubStatusTypes))
                 }
             }
 
@@ -195,16 +173,11 @@ class AdminUseCase(
                     val classroomStatusTypes = mutableListOf<StatusType>()
 
                     for (i in startPeriod..10) {
-                        val classroomStatus = getStatusByStartPeriodAndEndPeriod(
-                            statusList = classroomStatusList,
-                            statusPeriod = i,
+                        val statusType = classroomStatusList.getStatusTypeByUserIdAndBetweenStartPeriodAndEndPeriod(
                             userId = user.id,
+                            statusPeriod = i,
                         )
-
-                        awaitOrPicnicRejectChangeToAttendance(
-                            statusType = classroomStatus,
-                            statusTypes = classroomStatusTypes,
-                        )
+                        statusType.awaitOrPicnicRejectChangeToAttendance(classroomStatusTypes)
                     }
 
                     val classroomElement = StudentElement(
@@ -223,6 +196,25 @@ class AdminUseCase(
             studentList = students.sortedBy { it.studentNumber },
         )
     }
+
+    private fun StatusType.awaitOrPicnicRejectChangeToAttendance(statusTypes: MutableList<StatusType>) {
+        val isTypeAwaitOrPicnicReject = this == StatusType.AWAIT || this == StatusType.PICNIC_REJECT
+        if (isTypeAwaitOrPicnicReject) {
+            statusTypes.add(StatusType.ATTENDANCE)
+        } else {
+            statusTypes.add(this)
+        }
+    }
+
+    private fun User.paddedUserNum() = this.num.toString().padStart(2, '0')
+
+    private fun User.buildStudentElement(statusTypeList: MutableList<StatusType>) =
+        StudentElement(
+            studentId = this.id,
+            studentNumber = "${this.grade}${this.classNum}${this.paddedUserNum()}",
+            studentName = this.name,
+            typeList = statusTypeList,
+        )
 
     override fun getTypeByDate(date: LocalDate): QueryTypeResponse {
         val type = queryTypeSpi.queryTypeByDate(date)
@@ -243,13 +235,12 @@ class AdminUseCase(
             grade = grade,
             classNum = classNum,
         )?.homeroomTeacherId ?: throw TeacherNotFoundException
+        val homeroomTeacherInfo = userSpi.queryUserInfoByUserId(classroomTeacherId)
+
         val studentInfos = userSpi.queryUserInfoByGradeAndClassNum(
             grade = grade,
             classNum = classNum,
         )
-        val homeroomTeacherInfo = userSpi.queryUserInfoByUserId(classroomTeacherId)
-
-        val teacherName = homeroomTeacherInfo.name
 
         val timeList = timeQueryTeacherSpi.queryTime(LocalDate.now())
         val nowPeriod = queryTimeSpi.queryNowPeriod(timeList)
@@ -258,10 +249,9 @@ class AdminUseCase(
         val studentList = studentInfos.map {
             val user = studentInfos.find { studentInfo -> studentInfo.id == it.id }
                 ?: throw UserNotFoundException
-            val statusType = getStatusByStartPeriodAndEndPeriod(
-                statusList = statusList,
-                statusPeriod = nowPeriod,
+            val statusType = statusList.getStatusTypeByUserIdAndBetweenStartPeriodAndEndPeriod(
                 userId = user.id,
+                statusPeriod = nowPeriod,
             )
             StudentElementByGradeAndClassNum(
                 studentId = user.id,
@@ -272,10 +262,15 @@ class AdminUseCase(
         }
 
         return QueryStudentListByGradeAndClassNum(
-            teacherName = teacherName,
+            teacherName = homeroomTeacherInfo.name,
             studentList = studentList,
         )
     }
+
+    private fun List<Status>.getStatusTypeByUserIdAndBetweenStartPeriodAndEndPeriod(userId: UUID, statusPeriod: Int) =
+        this.find { status ->
+            status.studentId == userId && status.startPeriod <= statusPeriod && status.endPeriod >= statusPeriod
+        }?.type ?: StatusType.ATTENDANCE
 
     override fun saveType(date: LocalDate, type: DirectorType) {
         commandTypeSpi.saveType(
@@ -293,27 +288,4 @@ class AdminUseCase(
             currentType.changeType(date, type),
         )
     }
-
-    private fun getStatusByStartPeriodAndEndPeriod(
-        statusList: List<Status>,
-        statusPeriod: Int,
-        userId: UUID,
-    ): StatusType =
-        statusList.find {
-            it.startPeriod <= statusPeriod && it.endPeriod >= statusPeriod && it.studentId == userId
-        }?.type ?: StatusType.ATTENDANCE
-
-    private fun awaitOrPicnicRejectChangeToAttendance(
-        statusType: StatusType,
-        statusTypes: MutableList<StatusType>,
-    ) {
-        if (statusType == StatusType.AWAIT || statusType == StatusType.PICNIC_REJECT) {
-            statusTypes.add(StatusType.ATTENDANCE)
-        } else {
-            statusTypes.add(statusType)
-        }
-    }
-
-    private fun User.paddedUserNum(): String =
-        this.num.toString().padStart(2, '0')
 }
