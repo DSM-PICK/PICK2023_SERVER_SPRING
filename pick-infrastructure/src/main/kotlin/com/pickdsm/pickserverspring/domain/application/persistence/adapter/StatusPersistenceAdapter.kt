@@ -98,6 +98,7 @@ class StatusPersistenceAdapter(
             .where(
                 statusEntity.studentId.eq(studentId),
                 statusEntity.type.eq(StatusType.PICNIC),
+                statusEntity.date.eq(LocalDate.now()),
             )
             .fetchFirst()
             ?.let(statusMapper::entityToDomain)
