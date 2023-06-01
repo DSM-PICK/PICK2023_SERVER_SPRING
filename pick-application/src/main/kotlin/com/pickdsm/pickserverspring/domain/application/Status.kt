@@ -25,7 +25,6 @@ data class Status(
         return copy(
             teacherId = teacherId,
             endPeriod = endPeriod,
-            type = StatusType.ATTENDANCE,
         )
     }
 
