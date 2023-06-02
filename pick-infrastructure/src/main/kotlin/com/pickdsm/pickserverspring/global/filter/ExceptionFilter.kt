@@ -5,6 +5,7 @@ import com.pickdsm.pickserverspring.common.error.ErrorProperty
 import com.pickdsm.pickserverspring.common.error.PickException
 import com.pickdsm.pickserverspring.global.error.ErrorResponse
 import com.pickdsm.pickserverspring.global.exception.InternalServerErrorException
+import io.sentry.Sentry
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
 import java.nio.charset.StandardCharsets
@@ -23,16 +24,17 @@ class ExceptionFilter(
     ) {
         try {
             filterChain.doFilter(request, response)
-        } catch (e: PickException) {
-            errorToJson(e.errorProperty, response)
         } catch (e: Exception) {
             when (e.cause) {
-                is PickException -> errorToJson((e.cause as PickException).errorProperty, response)
-                else -> {
+                is PickException -> {
+                    errorToJson((e.cause as PickException).errorProperty, response)
+                }
+
+                is Exception -> {
                     errorToJson(InternalServerErrorException.errorProperty, response)
-                    e.printStackTrace()
                 }
             }
+            Sentry.captureException(e)
         }
     }
 

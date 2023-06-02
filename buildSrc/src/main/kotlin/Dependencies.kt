@@ -18,6 +18,7 @@ object Dependencies {
 
     // sentry
     const val SENTRY = "io.sentry:sentry-spring-boot-starter:${DependencyVersions.SENTRY_VERSION}"
+    const val LOGBACK = "io.sentry:sentry-logback:${DependencyVersions.LOGBACK_VERSION}"
 
     // cloud config
     const val CLOUD_CONFIG = "org.springframework.cloud:spring-cloud-config-client"
