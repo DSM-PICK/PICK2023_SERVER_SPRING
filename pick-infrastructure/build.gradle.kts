@@ -21,6 +21,8 @@ dependencies {
     implementation(Dependencies.OPENFEIGN)
     implementation(Dependencies.JACKSON)
     implementation(Dependencies.QUERYDSL)
+    implementation(Dependencies.SENTRY)
+    implementation(Dependencies.LOGBACK)
     kapt(Dependencies.QUERYDSL_PROCESSOR)
 
     implementation(project(":pick-application"))
