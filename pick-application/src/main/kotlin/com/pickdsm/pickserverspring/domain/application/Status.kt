@@ -21,11 +21,9 @@ data class Status(
 
     val type: StatusType,
 ) {
-    fun changeStatusToAttendance(teacherId: UUID, endPeriod: Int): Status {
+    fun changeStatusToAttendance(endPeriod: Int): Status {
         return copy(
-            teacherId = teacherId,
             endPeriod = endPeriod,
-            type = StatusType.ATTENDANCE,
         )
     }
 
