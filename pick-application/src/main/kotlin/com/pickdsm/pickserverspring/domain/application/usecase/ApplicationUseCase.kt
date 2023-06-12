@@ -20,6 +20,7 @@ import com.pickdsm.pickserverspring.domain.application.api.dto.response.QueryStu
 import com.pickdsm.pickserverspring.domain.application.exception.AlreadyApplicationPicnicOrAlreadyPicnicException
 import com.pickdsm.pickserverspring.domain.application.exception.ApplicationNotFoundException
 import com.pickdsm.pickserverspring.domain.application.exception.CannotApplicationWeekendException
+import com.pickdsm.pickserverspring.domain.application.exception.OverEndTimeException
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
 import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
@@ -41,6 +42,7 @@ import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.UUID
 
 @UseCase
@@ -508,6 +510,8 @@ class ApplicationUseCase(
         val endTime = getTodayTimeByPeriod(picnicUserStatus.endPeriod)?.endTime
             ?: throw TimeNotFoundException
 
+        checkIsOverEndTime(endTime)
+
         return QueryMyPicnicEndTimeResponse(
             userId = userInfo.id,
             name = userInfo.name,
@@ -519,17 +523,20 @@ class ApplicationUseCase(
         val userInfo = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
         val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentIdAndToday(userInfo.id)
             ?: throw StatusNotFoundException
-        val teacherName = userSpi.queryUserInfoByUserId(picnicUserStatus.teacherId).name
+        val endTime = getTodayTimeByPeriod(picnicUserStatus.endPeriod)?.endTime
+            ?: throw TimeNotFoundException
+
+        checkIsOverEndTime(endTime)
+
+        val startTime = getTodayTimeByPeriod(picnicUserStatus.startPeriod)?.startTime
+            ?: throw TimeNotFoundException
 
         val application = queryApplicationSpi.queryApplicationByStudentIdAndStatusId(
             studentId = userInfo.id,
             statusId = picnicUserStatus.id,
         ) ?: throw ApplicationNotFoundException
 
-        val startTime = getTodayTimeByPeriod(picnicUserStatus.startPeriod)?.startTime
-            ?: throw TimeNotFoundException
-        val endTime = getTodayTimeByPeriod(picnicUserStatus.endPeriod)?.endTime
-            ?: throw TimeNotFoundException
+        val teacherName = userSpi.queryUserInfoByUserId(picnicUserStatus.teacherId).name
 
         return QueryMyPicnicInfoResponse(
             profileFileName = userInfo.profileFileName,
@@ -541,6 +548,12 @@ class ApplicationUseCase(
             teacherName = teacherName,
             picnicDate = picnicUserStatus.date,
         )
+    }
+
+    private fun checkIsOverEndTime(endTime: LocalTime) {
+        if (LocalTime.now().isAfter(endTime)) {
+            throw OverEndTimeException
+        }
     }
 
     private fun User.paddedUserNum(): String =
