@@ -551,7 +551,7 @@ class ApplicationUseCase(
     }
 
     private fun checkIsOverEndTime(endTime: LocalTime) {
-        if (endTime.isBefore(LocalTime.now())) {
+        if (LocalTime.now().isAfter(endTime)) {
             throw OverEndTimeException
         }
     }
