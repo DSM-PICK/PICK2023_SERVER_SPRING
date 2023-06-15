@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.pickdsm.pickserverspring.common.error.ErrorProperty
 import com.pickdsm.pickserverspring.common.error.PickException
 import com.pickdsm.pickserverspring.global.error.ErrorResponse
+import com.pickdsm.pickserverspring.global.error.of
 import com.pickdsm.pickserverspring.global.exception.InternalServerErrorException
 import io.sentry.Sentry
 import org.springframework.http.MediaType
@@ -20,7 +21,7 @@ class ExceptionFilter(
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         try {
             filterChain.doFilter(request, response)
@@ -32,16 +33,18 @@ class ExceptionFilter(
 
                 is Exception -> {
                     errorToJson(InternalServerErrorException.errorProperty, response)
+                    Sentry.captureException(e)
                 }
             }
-            Sentry.captureException(e)
         }
     }
 
     private fun errorToJson(errorProperty: ErrorProperty, response: HttpServletResponse) {
-        response.status = errorProperty.status()
-        response.characterEncoding = StandardCharsets.UTF_8.name()
-        response.contentType = MediaType.APPLICATION_JSON_VALUE
-        response.writer.write(objectMapper.writeValueAsString(ErrorResponse.of(errorProperty)))
+        response.apply {
+            status = errorProperty.status()
+            characterEncoding = StandardCharsets.UTF_8.name()
+            contentType = MediaType.APPLICATION_JSON_VALUE
+            writer.write(objectMapper.writeValueAsString(errorProperty.of()))
+        }
     }
 }
