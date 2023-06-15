@@ -62,12 +62,10 @@ class TeacherUseCase(
 
     override fun getStudentStatusCount(): QueryStudentStatusCountResponse {
         val teacherResponsibleFloor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherIdAndToday(userSpi.getCurrentUserId())
-            ?: throw FloorNotFoundException
-
         return QueryStudentStatusCountResponse(
             picnic = queryStatusSpi.queryPicnicStatusSizeByToday(),
             application = queryStatusSpi.queryPicnicApplicationStatusSizeByToday(),
-            classroomMovement = queryStatusSpi.queryMovementStatusSizeByFloorAndToday(teacherResponsibleFloor),
+            classroomMovement = queryStatusSpi.queryMovementStatusSizeByFloorAndToday(teacherResponsibleFloor ?: 2),
         )
     }
 
