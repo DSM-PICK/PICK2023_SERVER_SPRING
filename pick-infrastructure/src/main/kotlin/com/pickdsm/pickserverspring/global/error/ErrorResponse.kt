@@ -17,7 +17,7 @@ data class ValidationErrorResponse(
 
 fun ErrorProperty.of() = ErrorResponse(
     this.status(),
-    this.message()
+    this.message(),
 )
 
 fun BindingResult.of(): ValidationErrorResponse {
@@ -29,7 +29,7 @@ fun BindingResult.of(): ValidationErrorResponse {
 
     return ValidationErrorResponse(
         status = GlobalErrorCode.BAD_REQUEST.status(),
-        fieldError = errorMap
+        fieldError = errorMap,
     )
 }
 
@@ -40,5 +40,5 @@ fun DataIntegrityViolationException.of() = ErrorResponse(
 
 fun IllegalArgumentException.of() = ErrorResponse(
     status = GlobalErrorCode.BAD_REQUEST.status(),
-    message = this.message.toString()
+    message = this.message.toString(),
 )
