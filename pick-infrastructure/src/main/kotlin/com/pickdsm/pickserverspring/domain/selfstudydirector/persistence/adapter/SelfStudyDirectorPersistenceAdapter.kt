@@ -10,7 +10,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.SelfStudyDirect
 import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Adapter
 class SelfStudyDirectorPersistenceAdapter(
@@ -33,11 +33,16 @@ class SelfStudyDirectorPersistenceAdapter(
             .fetch()
             .map(selfStudyDirectorMapper::entityToDomain)
 
-    override fun queryResponsibleFloorByTeacherId(teacherId: UUID): Int? =
+    override fun queryResponsibleFloorByTeacherIdAndToday(teacherId: UUID): Int? =
         jpaQueryFactory
             .select(selfStudyDirectorEntity.floor)
             .from(selfStudyDirectorEntity)
-            .where(selfStudyDirectorEntity.teacherId.eq(teacherId))
+            .join(typeEntity)
+            .on(typeEntity.id.eq(selfStudyDirectorEntity.typeEntity.id))
+            .where(
+                selfStudyDirectorEntity.teacherId.eq(teacherId),
+                typeEntity.date.eq(LocalDate.now()),
+            )
             .fetchOne()
 
     override fun queryResponsibleFloorByTeacherIdAndTypeId(teacherId: UUID, typeId: UUID): Int? =
