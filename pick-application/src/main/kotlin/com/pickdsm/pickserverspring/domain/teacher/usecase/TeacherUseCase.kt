@@ -7,7 +7,9 @@ import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
+import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
@@ -32,6 +34,7 @@ class TeacherUseCase(
     private val queryClassroomSpi: QueryClassroomSpi,
     private val querySelfStudyDirectorSpi: QuerySelfStudyDirectorSpi,
     private val queryStatusSpi: QueryStatusSpi,
+    private val queryTypeSpi: QueryTypeSpi,
 ) : TeacherApi {
 
     override fun updateStudentStatus(request: DomainUpdateStudentStatusRequest) {
@@ -59,7 +62,7 @@ class TeacherUseCase(
     }
 
     override fun getStudentStatusCount(): QueryStudentStatusCountResponse {
-        val teacherResponsibleFloor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherId(userSpi.getCurrentUserId())
+        val teacherResponsibleFloor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherIdAndToday(userSpi.getCurrentUserId())
             ?: throw FloorNotFoundException
 
         return QueryStudentStatusCountResponse(
