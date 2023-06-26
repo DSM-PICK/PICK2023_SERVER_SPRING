@@ -11,4 +11,12 @@ data class Application(
     val reason: String,
 
     val statusId: UUID,
-)
+
+    val isReturn: Boolean,
+) {
+    fun changeStatusToAttendance(isReturn: Boolean): Application {
+        return copy(
+            isReturn = isReturn,
+        )
+    }
+}

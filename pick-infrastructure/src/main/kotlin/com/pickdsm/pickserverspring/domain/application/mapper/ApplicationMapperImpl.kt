@@ -20,6 +20,7 @@ class ApplicationMapperImpl(
             id = application.id,
             reason = application.reason,
             statusEntity = statusEntity,
+            isReturn = application.isReturn,
         )
     }
 
@@ -28,6 +29,7 @@ class ApplicationMapperImpl(
             id = applicationEntity.id,
             reason = applicationEntity.reason,
             statusId = applicationEntity.statusEntity.id,
+            isReturn = applicationEntity.isReturn,
         )
     }
 }

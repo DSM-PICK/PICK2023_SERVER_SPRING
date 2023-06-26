@@ -2,7 +2,10 @@ package com.pickdsm.pickserverspring.domain.teacher.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
 import com.pickdsm.pickserverspring.domain.application.Status
+import com.pickdsm.pickserverspring.domain.application.exception.ApplicationNotFoundException
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException
+import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
+import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
@@ -33,7 +36,8 @@ class TeacherUseCase(
     private val queryClassroomSpi: QueryClassroomSpi,
     private val querySelfStudyDirectorSpi: QuerySelfStudyDirectorSpi,
     private val queryStatusSpi: QueryStatusSpi,
-    private val queryTypeSpi: QueryTypeSpi,
+    private val commandApplicationSpi: CommandApplicationSpi,
+    private val queryApplicationSpi: QueryApplicationSpi,
 ) : TeacherApi {
 
     override fun updateStudentStatus(request: DomainUpdateStudentStatusRequest) {
@@ -72,6 +76,16 @@ class TeacherUseCase(
     override fun comebackStudent(request: DomainComebackStudentRequest) {
         val picnicStudent = queryStatusSpi.queryPicnicStudentByStudentIdAndToday(request.studentId)
             ?: throw StatusNotFoundException
+
+        val picnicApplication = queryApplicationSpi.queryApplicationByStudentIdAndStatusId(picnicStudent.studentId, picnicStudent.id)
+            ?: throw ApplicationNotFoundException
+
+        commandApplicationSpi.saveApplication(
+            picnicApplication.changeStatusToAttendance(
+                isReturn = true,
+            ),
+        )
+
         statusCommandTeacherSpi.saveStatus(
             picnicStudent.changeStatusToAttendance(
                 endPeriod = request.endPeriod,

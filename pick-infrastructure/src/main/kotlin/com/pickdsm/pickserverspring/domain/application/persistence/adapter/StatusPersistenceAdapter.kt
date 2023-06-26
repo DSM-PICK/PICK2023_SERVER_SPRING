@@ -4,6 +4,7 @@ import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
+import com.pickdsm.pickserverspring.domain.application.persistence.entity.QApplicationEntity.applicationEntity
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
 import com.pickdsm.pickserverspring.domain.application.spi.StatusSpi
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
@@ -51,9 +52,12 @@ class StatusPersistenceAdapter(
     override fun queryPicnicStudentInfoListByToday(date: LocalDate): List<Status> =
         jpaQueryFactory
             .selectFrom(statusEntity)
+            .join(applicationEntity)
+            .on(statusEntity.id.eq(applicationEntity.statusEntity.id))
             .where(
                 statusEntity.date.eq(date),
                 statusEntity.type.eq(StatusType.PICNIC),
+                applicationEntity.isReturn.eq(false),
             )
             .fetch()
             .map(statusMapper::entityToDomain)

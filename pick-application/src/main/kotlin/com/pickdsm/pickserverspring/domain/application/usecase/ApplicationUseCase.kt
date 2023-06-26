@@ -78,6 +78,7 @@ class ApplicationUseCase(
             Application(
                 reason = request.reason,
                 statusId = saveStatusId,
+                isReturn = false,
             ),
         )
     }
@@ -444,6 +445,7 @@ class ApplicationUseCase(
                 Application(
                     reason = request.reason,
                     statusId = saveStatusId,
+                    isReturn = false,
                 ),
             )
         }
