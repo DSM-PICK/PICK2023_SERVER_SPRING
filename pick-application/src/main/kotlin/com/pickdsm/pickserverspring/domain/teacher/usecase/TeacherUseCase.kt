@@ -78,12 +78,12 @@ class TeacherUseCase(
             ?: throw StatusNotFoundException
 
         val picnicApplication = queryApplicationSpi.queryApplicationByStudentIdAndStatusId(picnicStudent.studentId, picnicStudent.id)
-            ?: throw ApplicationNotFoundException;
+            ?: throw ApplicationNotFoundException
 
         commandApplicationSpi.saveApplication(
             picnicApplication.changeStatusToAttendance(
                 isReturn = true,
-            )
+            ),
         )
 
         statusCommandTeacherSpi.saveStatus(
