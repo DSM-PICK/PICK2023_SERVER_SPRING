@@ -18,6 +18,7 @@ class WebConfig : WebMvcConfigurer {
                 "http://localhost:3001",
                 "https://admin.dsm-pick.com",
                 "https://teacher.dsm-pick.com",
+                "https://keeper.dsm-pick.com/",
             )
     }
 }
