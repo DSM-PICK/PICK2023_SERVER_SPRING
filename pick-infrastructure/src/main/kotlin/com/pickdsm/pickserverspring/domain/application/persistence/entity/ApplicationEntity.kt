@@ -24,4 +24,8 @@ class ApplicationEntity(
     @JoinColumn(name = "status_id", columnDefinition = "BINARY(16)", nullable = false)
     val statusEntity: StatusEntity,
 
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @ColumnDefault("false")
+    val isReturn: Boolean,
+
 ) : BaseUUIDEntity(id)
