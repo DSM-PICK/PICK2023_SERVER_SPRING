@@ -11,6 +11,7 @@ import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryMovementStudentList
+import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryMyBuckGradeAndClassNumResponse
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.ComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.PicnicAcceptOrRefuseRequest
 import com.pickdsm.pickserverspring.domain.teacher.presentation.dto.request.UpdateStudentStatusRequest
@@ -97,13 +98,18 @@ class TeacherWebAdapter(
     fun queryStudentStatusByToday(
         @PathVariable("classroom-id") classroomId: UUID,
     ): QueryStudentStatusList {
-        return applicationApi.getAllStudentStatusByClassroomId(classroomId)
+        return applicationApi.queryAllStudentStatusByClassroomId(classroomId)
     }
 
     @GetMapping("/{classroom-id}")
-    fun getMovementStatus(
+    fun queryMovementStatus(
         @PathVariable("classroom-id") classroomId: UUID,
     ): QueryMovementStudentList {
-        return teacherApi.getMovementStudents(classroomId)
+        return teacherApi.queryMovementStudents(classroomId)
+    }
+
+    @GetMapping("/buck")
+    fun queryMyBuckGradeAndClassNum(): QueryMyBuckGradeAndClassNumResponse {
+        return teacherApi.queryMyBuckGradeAndClassNum()
     }
 }

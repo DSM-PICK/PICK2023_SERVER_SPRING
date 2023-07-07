@@ -8,15 +8,14 @@ import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
-import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
-import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
 import com.pickdsm.pickserverspring.domain.teacher.api.TeacherApi
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainComebackStudentRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.request.DomainUpdateStudentStatusRequest
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryMovementStudentList
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryMovementStudentList.MovementStudent
+import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryMyBuckGradeAndClassNumResponse
 import com.pickdsm.pickserverspring.domain.teacher.api.dto.response.QueryStudentStatusCountResponse
 import com.pickdsm.pickserverspring.domain.teacher.spi.StatusCommandTeacherSpi
 import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
@@ -64,7 +63,7 @@ class TeacherUseCase(
         statusCommandTeacherSpi.saveStatus(saveOrUpdateStatus)
     }
 
-    override fun getStudentStatusCount(): QueryStudentStatusCountResponse {
+    override fun queryStudentStatusCount(): QueryStudentStatusCountResponse {
         val teacherResponsibleFloor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherIdAndToday(userSpi.getCurrentUserId())
         return QueryStudentStatusCountResponse(
             picnic = queryStatusSpi.queryPicnicStatusSizeByToday(),
@@ -93,7 +92,7 @@ class TeacherUseCase(
         )
     }
 
-    override fun getMovementStudents(classroomId: UUID): QueryMovementStudentList {
+    override fun queryMovementStudents(classroomId: UUID): QueryMovementStudentList {
         val classroom = queryClassroomSpi.queryClassroomById(classroomId)
             ?: throw ClassroomNotFoundException
         val movementStatusList = queryStatusSpi.queryMovementStatusListByTodayAndClassroomId(classroomId)
@@ -115,6 +114,13 @@ class TeacherUseCase(
         }
 
         return QueryMovementStudentList(movementList.sortedBy { it.studentNumber })
+    }
+
+    override fun queryMyBuckGradeAndClassNum(): QueryMyBuckGradeAndClassNumResponse {
+        val userId = userSpi.getCurrentUserId()
+        val userInfo = userSpi.queryUserInfoByUserId(userId)
+
+        return QueryMyBuckGradeAndClassNumResponse(userInfo.grade, userInfo.classNum)
     }
 
     private fun User.paddedUserNum(): String =
