@@ -19,13 +19,13 @@ interface ApplicationApi {
 
     fun queryPicnicStudentListByToday(): QueryPicnicStudentList
 
-    fun getAllStudentStatusByClassroomId(classroomId: UUID): QueryStudentStatusList
+    fun queryAllStudentStatusByClassroomId(classroomId: UUID): QueryStudentStatusList
 
     fun savePicnicPass(request: DomainPicnicPassRequest)
 
     fun savePicnicAcceptOrRefuse(request: DomainPicnicAcceptOrRefuseRequest)
 
-    fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse
+    fun queryMyPicnicEndTime(): QueryMyPicnicEndTimeResponse
 
-    fun getMyPicnicInfo(): QueryMyPicnicInfoResponse
+    fun queryMyPicnicInfo(): QueryMyPicnicInfoResponse
 }

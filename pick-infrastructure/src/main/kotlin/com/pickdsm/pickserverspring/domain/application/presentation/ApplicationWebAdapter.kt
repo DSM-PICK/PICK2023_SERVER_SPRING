@@ -66,15 +66,17 @@ class ApplicationWebAdapter(
 
     @GetMapping("/return")
     fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse {
-        return applicationApi.getMyPicnicEndTime()
+        return applicationApi.queryMyPicnicEndTime()
     }
 
     @GetMapping("/picnic")
     fun getMyPicnicInfo(): QueryMyPicnicInfoResponse {
-        return applicationApi.getMyPicnicInfo()
+        return applicationApi.queryMyPicnicInfo()
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
-    fun returnClassroom() = classroomMovementApi.returnClassroomMovement()
+    fun returnClassroom() {
+        classroomMovementApi.returnClassroomMovement()
+    }
 }
