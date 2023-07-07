@@ -38,7 +38,7 @@ class ApplicationPersistenceAdapter(
             .where(
                 statusEntity.studentId.eq(studentId),
                 applicationEntity.isReturn.eq(false),
-                )
+            )
             .fetchFirst()
             ?.let(applicationMapper::entityToDomain)
 }
