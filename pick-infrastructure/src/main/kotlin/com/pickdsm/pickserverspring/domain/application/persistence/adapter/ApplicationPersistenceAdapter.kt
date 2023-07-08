@@ -35,7 +35,10 @@ class ApplicationPersistenceAdapter(
             .selectFrom(applicationEntity)
             .innerJoin(applicationEntity.statusEntity, statusEntity)
             .on(applicationEntity.statusEntity.id.eq(statusId))
-            .where(statusEntity.studentId.eq(studentId))
+            .where(
+                statusEntity.studentId.eq(studentId),
+                applicationEntity.isReturn.eq(false),
+            )
             .fetchFirst()
             ?.let(applicationMapper::entityToDomain)
 }
