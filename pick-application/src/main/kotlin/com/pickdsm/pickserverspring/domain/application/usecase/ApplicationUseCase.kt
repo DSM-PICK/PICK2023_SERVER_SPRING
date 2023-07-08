@@ -345,7 +345,7 @@ class ApplicationUseCase(
         return QueryPicnicStudentList(outing)
     }
 
-    override fun getAllStudentStatusByClassroomId(classroomId: UUID): QueryStudentStatusList {
+    override fun queryAllStudentStatusByClassroomId(classroomId: UUID): QueryStudentStatusList {
         val dateType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now()) ?: DirectorType.SELF_STUDY
         val todayStudentStatusList = queryStatusSpi.queryStatusListByToday()
         val classroom = queryClassroomSpi.queryClassroomById(classroomId) ?: throw ClassroomNotFoundException
@@ -505,7 +505,7 @@ class ApplicationUseCase(
         }
     }
 
-    override fun getMyPicnicEndTime(): QueryMyPicnicEndTimeResponse {
+    override fun queryMyPicnicEndTime(): QueryMyPicnicEndTimeResponse {
         val userInfo = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
         val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentIdAndToday(userInfo.id)
             ?: throw StatusNotFoundException
@@ -521,7 +521,7 @@ class ApplicationUseCase(
         )
     }
 
-    override fun getMyPicnicInfo(): QueryMyPicnicInfoResponse {
+    override fun queryMyPicnicInfo(): QueryMyPicnicInfoResponse {
         val userInfo = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
         val picnicUserStatus = queryStatusSpi.queryPicnicStudentByStudentIdAndToday(userInfo.id)
             ?: throw StatusNotFoundException

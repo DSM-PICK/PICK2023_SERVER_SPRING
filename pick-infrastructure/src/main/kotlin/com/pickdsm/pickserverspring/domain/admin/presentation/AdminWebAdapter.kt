@@ -209,7 +209,7 @@ class AdminWebAdapter(
 
     @GetMapping("/students/count")
     fun getStudentStatusCount(): QueryStudentStatusCountResponse {
-        return teacherApi.getStudentStatusCount()
+        return teacherApi.queryStudentStatusCount()
     }
 
     @GetMapping("/afterSchool/{after-school-id}")
