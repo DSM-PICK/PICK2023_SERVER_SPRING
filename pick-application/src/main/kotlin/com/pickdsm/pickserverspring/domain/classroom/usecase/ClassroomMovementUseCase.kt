@@ -102,7 +102,7 @@ class ClassroomMovementUseCase(
             }
         }
 
-        checkIsStatusPicnic(statusTypes)
+        checkIsStatusPicnicOrAwait(statusTypes)
         checkIsWeekends()
 
         when (queryClassroomMovementSpi.existClassroomMovementByStudentId(student.id)) {
@@ -152,9 +152,9 @@ class ClassroomMovementUseCase(
         }
     }
 
-    private fun checkIsStatusPicnic(statusTypes: List<StatusType>) {
-        val isExistStatusPicnic = statusTypes.contains(StatusType.PICNIC)
-        if (isExistStatusPicnic) {
+    private fun checkIsStatusPicnicOrAwait(statusTypes: List<StatusType>) {
+        val isExistStatusPicnicOrAwait = statusTypes.contains(StatusType.PICNIC) || statusTypes.contains(StatusType.AWAIT)
+        if (isExistStatusPicnicOrAwait) {
             throw CannotMovementException
         }
     }
