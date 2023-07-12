@@ -119,9 +119,13 @@ class TeacherUseCase(
     override fun queryMyBuckGradeAndClassNum(): QueryMyBuckGradeAndClassNumResponse {
         val userInfo = userSpi.queryUserInfoByUserId(userSpi.getCurrentUserId())
 
-        val userGrade = if (userInfo.grade == 0) userInfo.grade else 1
-        val userClassNum = if (userInfo.classNum == 0) userInfo.classNum else 1
+        var userGrade = 1
+        var userClassNum = 1
 
+        if (!(userInfo.grade == 0 && userInfo.classNum == 0)) {
+            userGrade = userInfo.grade
+            userClassNum = userInfo.classNum
+        }
         return QueryMyBuckGradeAndClassNumResponse(userGrade, userClassNum)
     }
 
