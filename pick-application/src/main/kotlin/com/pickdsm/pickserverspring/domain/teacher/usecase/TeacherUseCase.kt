@@ -122,15 +122,10 @@ class TeacherUseCase(
         var userGrade = 1
         var userClassNum = 1
 
-        println(userInfo.grade == 0 && userInfo.classNum == 0)
         if (!(userInfo.grade == 0 && userInfo.classNum == 0)) {
             userGrade = userInfo.grade
             userClassNum = userInfo.classNum
         }
-
-        println(userGrade)
-        println(userInfo)
-
         return QueryMyBuckGradeAndClassNumResponse(userGrade, userClassNum)
     }
 
