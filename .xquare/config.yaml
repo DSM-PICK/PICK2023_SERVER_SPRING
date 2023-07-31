@@ -1,0 +1,4 @@
+config:
+  name: pick
+  prefix: /pick
+  service_type: be
