@@ -2,3 +2,4 @@ config:
   name: pick
   prefix: /pick
   service_type: be
+  port: 8080
