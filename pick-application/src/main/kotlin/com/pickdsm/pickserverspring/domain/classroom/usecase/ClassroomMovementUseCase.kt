@@ -66,7 +66,7 @@ class ClassroomMovementUseCase(
         val time = timeList.timeList.find { time -> time.period == request.period }
             ?: throw TimeNotFoundException
 
-        val statusTypes = queryStatusSpi.queryStatusTypesByStudentIdAndEndPeriod(
+        val statusTypes = queryStatusSpi.queryStatusTypesByStudentIdAndEndPeriodAndToday(
             studentId = student.id,
             period = request.period,
         )
