@@ -166,7 +166,7 @@ class ClassroomUseCase(
                     if (checkIsClass) {
                         classroomUserList = userSpi.queryUserInfoByGradeAndClassNum(
                             grade = classroom.grade,
-                            classNum = classroom.classNum
+                            classNum = classroom.classNum,
                         )
                     }
 
