@@ -156,11 +156,11 @@ class ClassroomUseCase(
 
                 selfStudyClassroomList.map {
                     val classroom = queryClassroomSpi.queryClassroomById(it.id) ?: throw ClassroomNotFoundException
-                    val classroomMovementUsers = queryClassroomMovementSpi.queryClassroomMovementByClassroomId(classroom.id)
+                    val classroomMovementUsers = queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(classroom.id)
                     var classroomUserList = emptyList<UserInfo>()
                     val checkIsClass = !(classroom.grade == null && classroom.classNum == null)
 
-                    if (checkIsClass){
+                    if (checkIsClass) {
                         classroomUserList = userSpi.queryUserInfoByGradeAndClassNum(
                             grade = classroom.grade,
                             classNum = classroom.classNum,
