@@ -1,7 +1,7 @@
 package com.pickdsm.pickserverspring.domain.selfstudydirector.api.dto.request
 
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 data class DomainRegisterSelfStudyDirectorRequest(
     val teacherId: UUID,

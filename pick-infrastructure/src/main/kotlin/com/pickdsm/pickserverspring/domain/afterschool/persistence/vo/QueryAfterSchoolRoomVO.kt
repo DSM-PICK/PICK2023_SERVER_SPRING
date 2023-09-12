@@ -2,7 +2,7 @@ package com.pickdsm.pickserverspring.domain.afterschool.persistence.vo
 
 import com.pickdsm.pickserverspring.domain.afterschool.vo.AfterSchoolRoomVO
 import com.querydsl.core.annotations.QueryProjection
-import java.util.*
+import java.util.UUID
 
 class QueryAfterSchoolRoomVO @QueryProjection constructor(
     classroomId: UUID,

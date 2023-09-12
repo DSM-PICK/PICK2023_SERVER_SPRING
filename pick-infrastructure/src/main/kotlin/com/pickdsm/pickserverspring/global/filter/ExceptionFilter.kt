@@ -3,7 +3,6 @@ package com.pickdsm.pickserverspring.global.filter
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pickdsm.pickserverspring.common.error.ErrorProperty
 import com.pickdsm.pickserverspring.common.error.PickException
-import com.pickdsm.pickserverspring.global.error.ErrorResponse
 import com.pickdsm.pickserverspring.global.error.of
 import com.pickdsm.pickserverspring.global.exception.InternalServerErrorException
 import io.sentry.Sentry

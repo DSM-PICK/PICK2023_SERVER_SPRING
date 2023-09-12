@@ -4,7 +4,7 @@ import com.pickdsm.pickserverspring.domain.application.persistence.entity.Status
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.ClassroomMovementEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
-import java.util.*
+import java.util.UUID
 
 @Repository
 interface ClassroomMovementRepository : CrudRepository<ClassroomMovementEntity, UUID> {
