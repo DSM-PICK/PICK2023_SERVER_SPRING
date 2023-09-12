@@ -8,13 +8,16 @@ import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClass
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryClassroomList.ClassroomElement
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryResponsibleClassroomList
 import com.pickdsm.pickserverspring.domain.classroom.api.dto.response.QueryResponsibleClassroomList.ResponsibleClassroomElement
+import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.exception.FloorNotFoundException
+import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
 import com.pickdsm.pickserverspring.domain.club.spi.QueryClubSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.DirectorType
 import com.pickdsm.pickserverspring.domain.selfstudydirector.exception.TypeNotFoundException
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QuerySelfStudyDirectorSpi
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.QueryTypeSpi
+import com.pickdsm.pickserverspring.domain.user.dto.UserInfo
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -27,6 +30,7 @@ class ClassroomUseCase(
     private val queryClubSpi: QueryClubSpi,
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
     private val queryTypeSpi: QueryTypeSpi,
+    private val queryClassroomMovementSpi: QueryClassroomMovementSpi,
 ) : ClassroomApi {
 
     companion object {
@@ -51,12 +55,12 @@ class ClassroomUseCase(
                     else -> queryAfterSchoolSpi.queryAllAfterSchoolClassroom()
                 }
 
-                afterSchoolList.map { afterSchool ->
+                afterSchoolList.map {
                     val afterSchoolRoom = ClassroomElement(
-                        classroomId = afterSchool.classroomId,
-                        typeId = afterSchool.afterSchoolInfoId,
-                        name = afterSchool.name,
-                        description = afterSchool.description,
+                        classroomId = it.classroomId,
+                        typeId = it.afterSchoolInfoId,
+                        name = it.name,
+                        description = it.description,
                     )
                     classrooms.add(afterSchoolRoom)
                 }
@@ -64,10 +68,11 @@ class ClassroomUseCase(
 
             ClassroomType.TUE_CLUB.name, ClassroomType.FRI_CLUB.name -> {
                 val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
+
                 clubRoomList.map {
                     val clubRooms = ClassroomElement(
                         classroomId = it.classroomId,
-                        typeId = it.clubId,
+                        typeId = it.clubInfoId,
                         name = it.name,
                         description = it.description,
                     )
@@ -77,6 +82,7 @@ class ClassroomUseCase(
 
             ClassroomType.ALL.name, ClassroomType.SELF_STUDY.name -> {
                 val allClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, type.name)
+
                 allClassroomList.map {
                     val allRooms = ClassroomElement(
                         classroomId = it.id,
@@ -96,24 +102,30 @@ class ClassroomUseCase(
 
     override fun queryResponsibleClassroomList(): QueryResponsibleClassroomList {
         val teacherId = userSpi.getCurrentUserId()
-        val typeId = queryTypeSpi.queryTypeIdByDate(LocalDate.now())
-            ?: throw TypeNotFoundException
+        val typeId = queryTypeSpi.queryTypeIdByDate(LocalDate.now()) ?: throw TypeNotFoundException
         val floor = querySelfStudyDirectorSpi.queryResponsibleFloorByTeacherIdAndTypeId(
             teacherId = teacherId,
             typeId = typeId,
         ) ?: throw FloorNotFoundException
-        val todayType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now())
-            ?: DirectorType.SELF_STUDY
+        val todayType = queryTypeSpi.queryDirectorTypeByDate(LocalDate.now()) ?: DirectorType.SELF_STUDY
         val classrooms = mutableListOf<ResponsibleClassroomElement>()
+        var isUserExist: Boolean
 
         when (todayType.name) {
             ClassroomType.AFTER_SCHOOL.name -> {
                 val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
-                afterSchoolList.map {
+
+                afterSchoolList.map { afterSchool ->
+                    val afterSchoolUserList = queryAfterSchoolSpi.queryAfterSchoolListByClassroomId(afterSchool.afterSchoolInfoId)
+                    val afterSchoolMovementUserList = queryClassroomMovementSpi.queryClassroomMovementByClassroomId(afterSchool.classroomId)
+
+                    isUserExist = !(afterSchoolUserList.isEmpty() && afterSchoolMovementUserList.isEmpty())
+
                     val afterSchoolRooms = ResponsibleClassroomElement(
-                        id = it.classroomId,
-                        name = it.name,
-                        description = it.description,
+                        id = afterSchool.classroomId,
+                        name = afterSchool.name,
+                        description = afterSchool.description,
+                        isUserExist = isUserExist,
                     )
                     classrooms.add(afterSchoolRooms)
                 }
@@ -121,23 +133,47 @@ class ClassroomUseCase(
 
             ClassroomType.TUE_CLUB.name, ClassroomType.FRI_CLUB.name -> {
                 val clubRoomList = queryClubSpi.queryClubClassroomListByFloor(floor)
+
                 clubRoomList.map {
+                    val clubUserList = queryClubSpi.queryClubStudentIdListByClubInfoId(it.clubInfoId)
+                    val clubMovementUserList = queryClassroomMovementSpi.queryClassroomMovementByClassroomId(it.classroomId)
+
+                    isUserExist = !(clubUserList.isEmpty() && clubMovementUserList.isEmpty())
+
                     val clubRooms = ResponsibleClassroomElement(
                         id = it.classroomId,
                         name = it.name,
                         description = it.description,
+                        isUserExist = isUserExist,
                     )
+
                     classrooms.add(clubRooms)
                 }
             }
 
             ClassroomType.SELF_STUDY.name -> {
                 val selfStudyClassroomList = queryClassroomSpi.queryClassroomListByFloorAndByType(floor, todayType.name)
+
                 selfStudyClassroomList.map {
+                    val classroom = queryClassroomSpi.queryClassroomById(it.id) ?: throw ClassroomNotFoundException
+                    val classroomMovementUsers = queryClassroomMovementSpi.queryClassroomMovementByClassroomId(classroom.id)
+                    var classroomUserList = emptyList<UserInfo>()
+                    val checkIsClass = !(classroom.grade == null && classroom.classNum == null)
+
+                    if (checkIsClass) {
+                        classroomUserList = userSpi.queryUserInfoByGradeAndClassNum(
+                            grade = classroom.grade,
+                            classNum = classroom.classNum,
+                        )
+                    }
+
+                    isUserExist = !(classroomMovementUsers.isEmpty() && classroomUserList.isEmpty())
+
                     val selfStudyRooms = ResponsibleClassroomElement(
                         id = it.id,
                         name = it.name,
                         description = "",
+                        isUserExist = isUserExist,
                     )
                     classrooms.add(selfStudyRooms)
                 }
