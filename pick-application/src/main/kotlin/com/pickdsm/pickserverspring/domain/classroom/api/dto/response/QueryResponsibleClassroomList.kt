@@ -10,5 +10,6 @@ data class QueryResponsibleClassroomList(
         val id: UUID,
         val name: String,
         val description: String,
+        val isUserExist: Boolean,
     )
 }
