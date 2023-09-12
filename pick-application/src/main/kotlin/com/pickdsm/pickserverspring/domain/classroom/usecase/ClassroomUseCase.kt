@@ -117,7 +117,7 @@ class ClassroomUseCase(
 
                 afterSchoolList.map { afterSchool ->
                     val afterSchoolUserList = queryAfterSchoolSpi.queryAfterSchoolListByClassroomId(afterSchool.afterSchoolInfoId)
-                    val afterSchoolMovementUserList = queryClassroomMovementSpi.queryClassroomMovementByClassroomId(afterSchool.classroomId)
+                    val afterSchoolMovementUserList = queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(afterSchool.classroomId)
 
                     isUserExist = !(afterSchoolUserList.isEmpty() && afterSchoolMovementUserList.isEmpty())
 
@@ -136,7 +136,8 @@ class ClassroomUseCase(
 
                 clubRoomList.map {
                     val clubUserList = queryClubSpi.queryClubStudentIdListByClubInfoId(it.clubInfoId)
-                    val clubMovementUserList = queryClassroomMovementSpi.queryClassroomMovementByClassroomId(it.classroomId)
+                    val clubMovementUserList =
+                        queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(it.classroomId)
 
                     isUserExist = !(clubUserList.isEmpty() && clubMovementUserList.isEmpty())
 
@@ -146,7 +147,6 @@ class ClassroomUseCase(
                         description = it.description,
                         isUserExist = isUserExist,
                     )
-
                     classrooms.add(clubRooms)
                 }
             }
@@ -163,7 +163,7 @@ class ClassroomUseCase(
                     if (checkIsClass) {
                         classroomUserList = userSpi.queryUserInfoByGradeAndClassNum(
                             grade = classroom.grade,
-                            classNum = classroom.classNum,
+                            classNum = classroom.classNum
                         )
                     }
 
