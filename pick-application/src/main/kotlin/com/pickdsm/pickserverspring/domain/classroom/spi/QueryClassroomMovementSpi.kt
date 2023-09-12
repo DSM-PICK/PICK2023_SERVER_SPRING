@@ -13,5 +13,5 @@ interface QueryClassroomMovementSpi {
 
     fun queryClassroomMovementClassroomIdByStatusId(statusId: UUID): UUID?
 
-    fun queryClassroomMovementByClassroomId(classroomId: UUID): List<ClassroomMovement>
+    fun queryClassroomMovementListByClassroomId(classroomId: UUID): List<ClassroomMovement>
 }

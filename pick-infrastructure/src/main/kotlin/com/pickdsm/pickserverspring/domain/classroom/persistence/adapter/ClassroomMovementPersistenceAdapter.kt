@@ -73,7 +73,7 @@ class ClassroomMovementPersistenceAdapter(
             .where(classroomMovementEntity.statusEntity.id.eq(statusId))
             .fetchOne()
 
-    override fun queryClassroomMovementByClassroomId(classroomId: UUID): List<ClassroomMovement> =
+    override fun queryClassroomMovementListByClassroomId(classroomId: UUID): List<ClassroomMovement> =
         jpaQueryFactory
             .selectFrom(classroomMovementEntity)
             .join(classroomEntity)
