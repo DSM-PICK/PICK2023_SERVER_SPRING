@@ -83,7 +83,6 @@ class ClassroomMovementPersistenceAdapter(
             .where(
                 statusEntity.date.eq(LocalDate.now()),
                 statusEntity.type.eq(StatusType.MOVEMENT),
-
             )
             .fetch()
             .map(classroomMovementMapper::entityToDomain)

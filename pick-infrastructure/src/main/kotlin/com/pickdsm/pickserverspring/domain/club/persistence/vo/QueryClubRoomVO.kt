@@ -9,7 +9,6 @@ class QueryClubRoomVO @QueryProjection constructor(
     clubInfoId: UUID,
     name: String,
     description: String,
-
 ) : ClubRoomVO(
     classroomId = classroomId,
     clubInfoId = clubInfoId,
