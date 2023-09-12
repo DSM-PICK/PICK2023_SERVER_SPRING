@@ -116,8 +116,10 @@ class ClassroomUseCase(
                 val afterSchoolList = queryAfterSchoolSpi.queryAfterSchoolClassroomListByFloor(floor)
 
                 afterSchoolList.map { afterSchool ->
-                    val afterSchoolUserList = queryAfterSchoolSpi.queryAfterSchoolListByClassroomId(afterSchool.afterSchoolInfoId)
-                    val afterSchoolMovementUserList = queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(afterSchool.classroomId)
+                    val afterSchoolUserList =
+                        queryAfterSchoolSpi.queryAfterSchoolListByClassroomId(afterSchool.afterSchoolInfoId)
+                    val afterSchoolMovementUserList =
+                        queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(afterSchool.classroomId)
 
                     isUserExist = !(afterSchoolUserList.isEmpty() && afterSchoolMovementUserList.isEmpty())
 
@@ -156,7 +158,8 @@ class ClassroomUseCase(
 
                 selfStudyClassroomList.map {
                     val classroom = queryClassroomSpi.queryClassroomById(it.id) ?: throw ClassroomNotFoundException
-                    val classroomMovementUsers = queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(classroom.id)
+                    val classroomMovementUsers =
+                        queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(classroom.id)
                     var classroomUserList = emptyList<UserInfo>()
                     val checkIsClass = !(classroom.grade == null && classroom.classNum == null)
 
