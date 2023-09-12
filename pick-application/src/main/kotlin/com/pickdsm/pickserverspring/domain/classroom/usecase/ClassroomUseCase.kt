@@ -164,7 +164,8 @@ class ClassroomUseCase(
                     val checkIsClass = !(classroom.grade == null && classroom.classNum == null)
 
                     if (checkIsClass) {
-                        classroomUserList = userSpi.queryUserInfoByGradeAndClassNum(
+                        classroomUserList =
+                            userSpi.queryUserInfoByGradeAndClassNum(
                             grade = classroom.grade,
                             classNum = classroom.classNum,
                         )
