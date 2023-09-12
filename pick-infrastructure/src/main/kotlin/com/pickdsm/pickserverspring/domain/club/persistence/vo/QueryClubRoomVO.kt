@@ -6,12 +6,13 @@ import java.util.UUID
 
 class QueryClubRoomVO @QueryProjection constructor(
     classroomId: UUID,
-    clubId: UUID,
+    clubInfoId: UUID,
     name: String,
     description: String,
+
 ) : ClubRoomVO(
     classroomId = classroomId,
-    clubId = clubId,
+    clubInfoId = clubInfoId,
     name = name,
     description = description,
 )
