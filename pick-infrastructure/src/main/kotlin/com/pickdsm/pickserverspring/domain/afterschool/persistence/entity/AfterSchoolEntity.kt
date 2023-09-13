@@ -1,7 +1,7 @@
 package com.pickdsm.pickserverspring.domain.afterschool.persistence.entity
 
 import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
-import java.util.*
+import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType

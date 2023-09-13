@@ -1,7 +1,6 @@
 package com.pickdsm.pickserverspring.domain.classroom.usecase
 
 import com.pickdsm.pickserverspring.common.annotation.UseCase
-import com.pickdsm.pickserverspring.domain.admin.api.AdminApi
 import com.pickdsm.pickserverspring.domain.afterschool.exception.AfterSchoolNotFoundException
 import com.pickdsm.pickserverspring.domain.afterschool.spi.QueryAfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.application.Status
@@ -51,7 +50,6 @@ class ClassroomMovementUseCase(
     private val queryStatusSpi: QueryStatusSpi,
     private val userQueryApplicationSpi: UserQueryApplicationSpi,
     private val queryClassroomMovementSpi: QueryClassroomMovementSpi,
-    private val adminApi: AdminApi,
     private val queryClubSpi: QueryClubSpi,
     private val queryAfterSchoolSpi: QueryAfterSchoolSpi,
     private val queryTypeSpi: QueryTypeSpi,
