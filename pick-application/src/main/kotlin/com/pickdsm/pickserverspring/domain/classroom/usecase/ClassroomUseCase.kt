@@ -161,9 +161,9 @@ class ClassroomUseCase(
                     val classroomMovementUsers =
                         queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(classroom.id)
                     var classroomUserList = emptyList<UserInfo>()
-                    val checkIsClass = !(classroom.grade == null && classroom.classNum == null)
+                    val isClassroom = !(classroom.grade == null && classroom.classNum == null)
 
-                    if (checkIsClass) {
+                    if (isClassroom) {
                         classroomUserList = userSpi.queryUserInfoByGradeAndClassNum(
                             grade = classroom.grade,
                             classNum = classroom.classNum,
