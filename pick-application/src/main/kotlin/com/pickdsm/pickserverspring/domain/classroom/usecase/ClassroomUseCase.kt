@@ -118,7 +118,6 @@ class ClassroomUseCase(
                 afterSchoolList.map { afterSchool ->
                     val afterSchoolUserList =
                         queryAfterSchoolSpi.queryAfterSchoolListByClassroomId(afterSchool.classroomId)
-                    print(afterSchoolUserList)
                     val afterSchoolMovementUserList =
                         queryClassroomMovementSpi.queryClassroomMovementListByClassroomId(afterSchool.classroomId)
 
