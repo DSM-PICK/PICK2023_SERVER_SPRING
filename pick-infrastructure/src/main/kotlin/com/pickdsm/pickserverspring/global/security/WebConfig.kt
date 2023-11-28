@@ -19,6 +19,8 @@ class WebConfig : WebMvcConfigurer {
                 "https://admin.dsm-pick.com",
                 "https://teacher.dsm-pick.com",
                 "https://keeper.dsm-pick.com",
+                "chrome-extension://apjpfknndginnahobenblkdfbibckcom",
+                "chrome-extension://llbipbgiobbnjgkomnlpjidhebiokimc"
             )
     }
 }
