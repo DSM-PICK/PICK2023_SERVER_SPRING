@@ -3,12 +3,12 @@ package com.pickdsm.pickserverspring.domain.application.persistence.entity
 import com.pickdsm.pickserverspring.common.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.util.UUID
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.JoinColumn
 import javax.persistence.OneToOne
 import javax.persistence.Table
-import javax.persistence.Column
 
 @Table(name = "tbl_application")
 @Entity
@@ -28,4 +28,4 @@ class ApplicationEntity(
     @ColumnDefault("false")
     val isReturn: Boolean,
 
-) : BaseUUIDEntity(id)
+    ) : BaseUUIDEntity(id)
