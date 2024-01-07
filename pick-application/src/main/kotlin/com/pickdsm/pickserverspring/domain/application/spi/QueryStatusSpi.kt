@@ -23,7 +23,7 @@ interface QueryStatusSpi {
     fun queryStatusByStudentIdAndStartPeriodAndEndPeriodAndToday(
         studentId: UUID,
         startPeriod: Int,
-        endPeriod: Int
+        endPeriod: Int,
     ): Status?
 
     fun queryMovementStudentByStudentId(studentId: UUID): Status?

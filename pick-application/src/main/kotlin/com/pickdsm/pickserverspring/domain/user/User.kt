@@ -16,6 +16,7 @@ data class User(
 ) {
     companion object {
         fun User.processGcn() = "${this.grade}${this.classNum}${this.paddedUserNum()}"
+
         private fun User.paddedUserNum(): String = this.num.toString().padStart(2, '0')
     }
 }

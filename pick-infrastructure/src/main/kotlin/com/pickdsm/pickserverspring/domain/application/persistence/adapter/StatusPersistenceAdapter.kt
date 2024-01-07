@@ -241,15 +241,15 @@ class StatusPersistenceAdapter(
                     statusEntity.studentId,
                     statusEntity.startPeriod,
                     statusEntity.endPeriod,
-                    applicationEntity.reason
-                )
+                    applicationEntity.reason,
+                ),
             )
             .from(statusEntity)
             .innerJoin(applicationEntity)
             .on(statusEntity.id.eq(applicationEntity.statusEntity.id))
             .where(
                 statusEntity.date.eq(LocalDate.now()),
-                statusEntity.type.eq(StatusType.AWAIT)
+                statusEntity.type.eq(StatusType.AWAIT),
             )
             .fetch()
 }
