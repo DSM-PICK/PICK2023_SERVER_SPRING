@@ -1,7 +1,4 @@
 root = true
 
-[*]
-indent_size = 4
-
 [*.{kt,kts}]
 disabled_rules = import-ordering
