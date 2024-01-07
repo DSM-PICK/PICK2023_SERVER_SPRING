@@ -1,15 +1,17 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.adapter
 
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.mapper.StatusMapper
 import com.pickdsm.pickserverspring.domain.application.persistence.StatusRepository
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QApplicationEntity.applicationEntity
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
+import com.pickdsm.pickserverspring.domain.application.persistence.vo.QQueryPicnicApplicationVO
 import com.pickdsm.pickserverspring.domain.application.spi.StatusSpi
+import com.pickdsm.pickserverspring.domain.application.vo.PicnicApplicationVO
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity.classroomMovementEntity
-import com.pickdsm.pickserverspring.global.annotation.Adapter
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
@@ -229,6 +231,25 @@ class StatusPersistenceAdapter(
                     .or(statusEntity.type.eq(StatusType.AWAIT))
                     .or(statusEntity.type.eq(StatusType.MOVEMENT))
                     .and(statusEntity.date.eq(LocalDate.now())),
+            )
+            .fetch()
+
+    override fun queryPicnicApplicationListByToday(): List<PicnicApplicationVO> =
+        jpaQueryFactory
+            .select(
+                QQueryPicnicApplicationVO(
+                    statusEntity.studentId,
+                    statusEntity.startPeriod,
+                    statusEntity.endPeriod,
+                    applicationEntity.reason
+                )
+            )
+            .from(statusEntity)
+            .innerJoin(applicationEntity)
+            .on(statusEntity.id.eq(applicationEntity.statusEntity.id))
+            .where(
+                statusEntity.date.eq(LocalDate.now()),
+                statusEntity.type.eq(StatusType.AWAIT)
             )
             .fetch()
 }

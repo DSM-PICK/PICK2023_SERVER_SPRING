@@ -2,6 +2,7 @@ package com.pickdsm.pickserverspring.domain.application.spi
 
 import com.pickdsm.pickserverspring.domain.application.Status
 import com.pickdsm.pickserverspring.domain.application.StatusType
+import com.pickdsm.pickserverspring.domain.application.vo.PicnicApplicationVO
 import java.time.LocalDate
 import java.util.UUID
 
@@ -19,7 +20,11 @@ interface QueryStatusSpi {
 
     fun queryPicnicStudentByStudentIdAndToday(studentId: UUID): Status?
 
-    fun queryStatusByStudentIdAndStartPeriodAndEndPeriodAndToday(studentId: UUID, startPeriod: Int, endPeriod: Int): Status?
+    fun queryStatusByStudentIdAndStartPeriodAndEndPeriodAndToday(
+        studentId: UUID,
+        startPeriod: Int,
+        endPeriod: Int
+    ): Status?
 
     fun queryMovementStudentByStudentId(studentId: UUID): Status?
 
@@ -38,4 +43,6 @@ interface QueryStatusSpi {
     fun existAwaitOrPicnicStatusByStudentId(studentId: UUID): Boolean
 
     fun queryPicnicOrAwaitOrMovementStatusStudentIdListByToday(): List<UUID>
+
+    fun queryPicnicApplicationListByToday(): List<PicnicApplicationVO>
 }
