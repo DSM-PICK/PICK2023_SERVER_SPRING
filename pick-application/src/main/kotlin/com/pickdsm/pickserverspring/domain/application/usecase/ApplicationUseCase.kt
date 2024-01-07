@@ -26,6 +26,7 @@ import com.pickdsm.pickserverspring.domain.application.spi.CommandApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryApplicationSpi
 import com.pickdsm.pickserverspring.domain.application.spi.QueryStatusSpi
 import com.pickdsm.pickserverspring.domain.application.spi.UserQueryApplicationSpi
+import com.pickdsm.pickserverspring.domain.application.vo.PicnicApplicationVO
 import com.pickdsm.pickserverspring.domain.classroom.exception.ClassroomNotFoundException
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomMovementSpi
 import com.pickdsm.pickserverspring.domain.classroom.spi.QueryClassroomSpi
@@ -37,6 +38,7 @@ import com.pickdsm.pickserverspring.domain.teacher.spi.TimeQueryTeacherSpi
 import com.pickdsm.pickserverspring.domain.time.Time
 import com.pickdsm.pickserverspring.domain.time.exception.TimeNotFoundException
 import com.pickdsm.pickserverspring.domain.user.User
+import com.pickdsm.pickserverspring.domain.user.User.Companion.processGcn
 import com.pickdsm.pickserverspring.domain.user.dto.request.UserInfoRequest
 import com.pickdsm.pickserverspring.domain.user.exception.UserNotFoundException
 import com.pickdsm.pickserverspring.domain.user.spi.UserSpi
@@ -66,14 +68,14 @@ class ApplicationUseCase(
         checkIsExistAwaitOrPicnicStatus(studentId)
         checkIsWeekends()
 
-        val status = Status(
+        val saveStatusId = Status(
             studentId = studentId,
-            teacherId = UUID(0, 0), // TODO: 선생님 아이디 뭐로 넣을지 나중에 정하기
+            teacherId = UUID(0, 0),
             startPeriod = request.desiredStartPeriod,
             endPeriod = request.desiredEndPeriod,
             type = StatusType.AWAIT,
-        )
-        val saveStatusId = statusCommandTeacherSpi.saveStatusAndGetStatusId(status)
+        ).let { statusCommandTeacherSpi.saveStatusAndGetStatusId(it) }
+
         commandApplicationSpi.saveApplication(
             Application(
                 reason = request.reason,
@@ -101,214 +103,85 @@ class ApplicationUseCase(
         floor: Int?,
         type: DirectorType,
     ): QueryPicnicApplicationList {
-        val todayOutingList = queryApplicationSpi.queryPicnicApplicationListByToday()
-        val todayStatusList = queryStatusSpi.queryAwaitStudentListByToday()
-        val todayApplicationStudentIdList = todayStatusList.map { it.studentId }
-        val userIdRequest = UserInfoRequest(todayApplicationStudentIdList)
+        val todayPicnicApplicationList = queryStatusSpi.queryPicnicApplicationListByToday()
+        val userIdRequest = UserInfoRequest(todayPicnicApplicationList.map(PicnicApplicationVO::studentId))
         val userList = userQueryApplicationSpi.queryUserInfo(userIdRequest)
 
-        val outing = mutableListOf<QueryPicnicApplicationElement>()
-
-        val studentGrade = grade?.toIntOrNull() ?: 0
-        val studentClassNum = classNum?.toIntOrNull() ?: 0
-
-        when (type) {
-            DirectorType.SELF_STUDY -> {
-                when (floor) {
-                    null -> {
-                        todayStatusList.filteringByGradeAndClassNum(
-                            userList = userList,
-                            studentGrade = studentGrade,
-                            studentClassNum = studentClassNum,
-                        ).map { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: throw UserNotFoundException
-                            val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
-                                ?: throw TimeNotFoundException
-                            val endTime = getTodayTimeByPeriod(status.endPeriod)?.endTime
-                                ?: throw TimeNotFoundException
-                            val application = todayOutingList.find { application -> application.statusId == status.id }
-                                ?: throw ApplicationNotFoundException
-
-                            val picnicApplications = QueryPicnicApplicationElement(
-                                studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
-                                studentName = user.name,
-                                startTime = startTime,
-                                endTime = endTime,
-                                reason = application.reason,
-                            )
-
-                            outing.add(picnicApplications)
-                        }
-                    }
-
-                    else -> {
-                        todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId) ?: return@filter false
-                            val classroomGrade = queryClassroomSpi.queryClassroomGradeByFloor(floor)
-                            classroomGrade == user.grade
-                        }.map { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: throw UserNotFoundException
-                            val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
-                                ?: throw TimeNotFoundException
-                            val endTime = getTodayTimeByPeriod(status.endPeriod)?.endTime
-                                ?: throw TimeNotFoundException
-                            val application = todayOutingList.find { application -> application.statusId == status.id }
-                                ?: throw ApplicationNotFoundException
-
-                            val picnicApplication = QueryPicnicApplicationElement(
-                                studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
-                                studentName = user.name,
-                                startTime = startTime,
-                                endTime = endTime,
-                                reason = application.reason,
-                            )
-                            outing.add(picnicApplication)
-                        }
-                    }
-                }
+        val filteredPicnicApplicationList = when (floor) {
+            null -> {
+                todayPicnicApplicationList.filteringByGradeAndClassNum(
+                    userList = userList,
+                    studentGrade = grade?.toIntOrNull() ?: 0,
+                    studentClassNum = classNum?.toIntOrNull() ?: 0,
+                )
             }
 
-            DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
-                when (floor) {
-                    null -> {
-                        todayStatusList.filteringByGradeAndClassNum(
-                            userList = userList,
-                            studentGrade = studentGrade,
-                            studentClassNum = studentClassNum,
-                        ).map { status ->
+            else -> {
+                when (type) {
+                    DirectorType.SELF_STUDY -> {
+                        todayPicnicApplicationList.filter { status ->
                             val user = userList.findUserByStudentId(status.studentId)
-                                ?: throw UserNotFoundException
-                            val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
-                                ?: throw TimeNotFoundException
-                            val endTime = getTodayTimeByPeriod(status.endPeriod)?.endTime
-                                ?: throw TimeNotFoundException
-                            val application = todayOutingList.find { application -> application.statusId == status.id }
-                                ?: throw ApplicationNotFoundException
-
-                            val picnicApplications = QueryPicnicApplicationElement(
-                                studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
-                                studentName = user.name,
-                                startTime = startTime,
-                                endTime = endTime,
-                                reason = application.reason,
-                            )
-
-                            outing.add(picnicApplications)
+                                ?: return@filter false
+                            queryClassroomSpi.queryClassroomGradeByFloor(floor) == user.grade
                         }
                     }
 
-                    else -> {
-                        todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId) ?: return@filter false
-                            val clubStudentId = queryClubSpi.queryClubStudentIdListByFloor(floor).find { user.id == it }
-                            clubStudentId == user.id
-                        }.map { status ->
+                    DirectorType.TUE_CLUB, DirectorType.FRI_CLUB -> {
+                        todayPicnicApplicationList.filter { status ->
                             val user = userList.findUserByStudentId(status.studentId)
-                                ?: throw UserNotFoundException
-                            val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
-                                ?: throw TimeNotFoundException
-                            val endTime = getTodayTimeByPeriod(status.endPeriod)?.endTime
-                                ?: throw TimeNotFoundException
-                            val application = todayOutingList.find { application -> application.statusId == status.id }
-                                ?: throw ApplicationNotFoundException
-
-                            val picnicApplications = QueryPicnicApplicationElement(
-                                studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
-                                studentName = user.name,
-                                startTime = startTime,
-                                endTime = endTime,
-                                reason = application.reason,
-                            )
-
-                            outing.add(picnicApplications)
-                        }
-                    }
-                }
-            }
-
-            DirectorType.AFTER_SCHOOL -> {
-                when (floor) {
-                    null -> {
-                        todayStatusList.filteringByGradeAndClassNum(
-                            userList = userList,
-                            studentGrade = studentGrade,
-                            studentClassNum = studentClassNum,
-                        ).map { status ->
-                            val user = userList.findUserByStudentId(status.studentId)
-                                ?: throw UserNotFoundException
-                            val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
-                                ?: throw TimeNotFoundException
-                            val endTime = getTodayTimeByPeriod(status.endPeriod)?.endTime
-                                ?: throw TimeNotFoundException
-                            val application = todayOutingList.find { application -> application.statusId == status.id }
-                                ?: throw ApplicationNotFoundException
-
-                            val picnicApplications = QueryPicnicApplicationElement(
-                                studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
-                                studentName = user.name,
-                                startTime = startTime,
-                                endTime = endTime,
-                                reason = application.reason,
-                            )
-
-                            outing.add(picnicApplications)
+                                ?: return@filter false
+                            queryClubSpi.queryClubStudentIdListByFloor(floor)
+                                .find { user.id == it } == user.id
                         }
                     }
 
-                    else -> {
-                        todayStatusList.filter { status ->
-                            val user = userList.findUserByStudentId(status.studentId) ?: return@filter false
-                            val afterSchoolStudentId = queryAfterSchoolSpi.queryAfterSchoolStudentIdByFloor(floor).find { user.id == it }
-                            afterSchoolStudentId == user.id
-                        }.map { status ->
+                    DirectorType.AFTER_SCHOOL -> {
+                        todayPicnicApplicationList.filter { status ->
                             val user = userList.findUserByStudentId(status.studentId)
-                                ?: throw UserNotFoundException
-                            val startTime = getTodayTimeByPeriod(status.startPeriod)?.startTime
-                                ?: throw TimeNotFoundException
-                            val endTime = getTodayTimeByPeriod(status.endPeriod)?.endTime
-                                ?: throw TimeNotFoundException
-                            val application = todayOutingList.find { application -> application.statusId == status.id }
-                                ?: throw ApplicationNotFoundException
-
-                            val picnicApplications = QueryPicnicApplicationElement(
-                                studentId = user.id,
-                                studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
-                                studentName = user.name,
-                                startTime = startTime,
-                                endTime = endTime,
-                                reason = application.reason,
-                            )
-
-                            outing.add(picnicApplications)
+                                ?: return@filter false
+                            queryAfterSchoolSpi.queryAfterSchoolStudentIdByFloor(floor)
+                                .find { user.id == it } == user.id
                         }
                     }
                 }
             }
         }
 
-        outing.sortedWith(
+        val response = filteredPicnicApplicationList.map { picnicApplication ->
+            val user = userList.findUserByStudentId(picnicApplication.studentId)
+                ?: throw UserNotFoundException
+            val startTime = getTodayTimeByPeriod(picnicApplication.startPeriod)?.startTime
+                ?: throw TimeNotFoundException
+            val endTime = getTodayTimeByPeriod(picnicApplication.endPeriod)?.endTime
+                ?: throw TimeNotFoundException
+
+            QueryPicnicApplicationElement(
+                studentId = user.id,
+                studentNumber = user.processGcn(),
+                studentName = user.name,
+                startTime = startTime,
+                endTime = endTime,
+                reason = picnicApplication.reason,
+            )
+        }
+
+        response.sortedWith(
             compareBy(QueryPicnicApplicationElement::endTime)
                 .thenBy(QueryPicnicApplicationElement::startTime)
                 .thenBy(QueryPicnicApplicationElement::studentNumber),
         )
 
-        return QueryPicnicApplicationList(outing)
+        return QueryPicnicApplicationList(response)
     }
 
-    private fun List<Status>.filteringByGradeAndClassNum(
+    private fun List<PicnicApplicationVO>.filteringByGradeAndClassNum(
         userList: List<User>,
         studentGrade: Int,
         studentClassNum: Int,
-    ): List<Status> =
-        this.filter { status ->
-            val user = userList.findUserByStudentId(status.studentId) ?: return@filter false
+    ): List<PicnicApplicationVO> =
+        this.filter { picnicApplication ->
+            val user = userList.findUserByStudentId(picnicApplication.studentId)
+                ?: return@filter false
 
             when {
                 studentGrade != 0 && studentClassNum == 0 -> studentGrade == user.grade
@@ -332,7 +205,7 @@ class ApplicationUseCase(
 
                 QueryPicnicStudentElement(
                     studentId = user.id,
-                    studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
+                    studentNumber = user.processGcn(),
                     studentName = user.name,
                     endTime = endTime,
                 )
@@ -364,7 +237,7 @@ class ApplicationUseCase(
 
                     val studentStatus = QueryStudentStatusElement(
                         studentId = user.id,
-                        studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
+                        studentNumber = user.processGcn(),
                         studentName = user.name,
                         type = status?.type?.name ?: StatusType.ATTENDANCE.name,
                         classroomName = movementClassroomName,
@@ -385,7 +258,7 @@ class ApplicationUseCase(
 
                     val studentStatus = QueryStudentStatusElement(
                         studentId = user.id,
-                        studentNumber = "${user.grade}${user.classNum}${user.paddedUserNum()}",
+                        studentNumber = user.processGcn(),
                         studentName = user.name,
                         type = status?.type?.name ?: StatusType.ATTENDANCE.name,
                         classroomName = movementClassroomName,
@@ -542,7 +415,7 @@ class ApplicationUseCase(
 
         return QueryMyPicnicInfoResponse(
             profileFileName = userInfo.profileFileName,
-            studentNumber = "${userInfo.grade}${userInfo.classNum}${userInfo.paddedUserNum()}",
+            studentNumber = userInfo.processGcn(),
             studentName = userInfo.name,
             startTime = startTime,
             endTime = endTime,
@@ -557,9 +430,6 @@ class ApplicationUseCase(
             throw OverEndTimeException
         }
     }
-
-    private fun User.paddedUserNum(): String =
-        this.num.toString().padStart(2, '0')
 
     private fun getTodayTimeByPeriod(period: Int): Time.DomainTimeElement? =
         timeQueryTeacherSpi.queryTime(LocalDate.now()).timeList
