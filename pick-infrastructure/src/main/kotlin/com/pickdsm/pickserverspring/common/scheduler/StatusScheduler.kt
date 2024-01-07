@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.scheduler
+package com.pickdsm.pickserverspring.common.scheduler
 
 import com.pickdsm.pickserverspring.domain.application.StatusType
 import com.pickdsm.pickserverspring.domain.application.exception.StatusNotFoundException

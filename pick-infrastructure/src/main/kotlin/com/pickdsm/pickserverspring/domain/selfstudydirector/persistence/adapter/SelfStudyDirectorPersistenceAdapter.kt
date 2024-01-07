@@ -7,7 +7,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.SelfStu
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QSelfStudyDirectorEntity.selfStudyDirectorEntity
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QTypeEntity.typeEntity
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.SelfStudyDirectorSpi
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
 import java.util.UUID

@@ -1,10 +1,10 @@
-package com.pickdsm.pickserverspring.global.filter
+package com.pickdsm.pickserverspring.common.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pickdsm.pickserverspring.common.error.ErrorProperty
 import com.pickdsm.pickserverspring.common.error.PickException
-import com.pickdsm.pickserverspring.global.error.of
-import com.pickdsm.pickserverspring.global.exception.InternalServerErrorException
+import com.pickdsm.pickserverspring.common.error.of
+import com.pickdsm.pickserverspring.common.exception.InternalServerErrorException
 import io.sentry.Sentry
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter

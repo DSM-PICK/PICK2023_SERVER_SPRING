@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.annotation.config
+package com.pickdsm.pickserverspring.common.annotation.config
 
 import com.pickdsm.pickserverspring.common.annotation.ReadOnlyUseCase
 import com.pickdsm.pickserverspring.common.annotation.UseCase

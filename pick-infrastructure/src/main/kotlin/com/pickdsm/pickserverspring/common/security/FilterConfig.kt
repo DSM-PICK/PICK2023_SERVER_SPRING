@@ -1,7 +1,7 @@
-package com.pickdsm.pickserverspring.global.security
+package com.pickdsm.pickserverspring.common.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.pickdsm.pickserverspring.global.filter.ExceptionFilter
+import com.pickdsm.pickserverspring.common.filter.ExceptionFilter
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.DefaultSecurityFilterChain

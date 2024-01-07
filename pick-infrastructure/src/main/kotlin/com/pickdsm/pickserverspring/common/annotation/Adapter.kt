@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.annotation
+package com.pickdsm.pickserverspring.common.annotation
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
