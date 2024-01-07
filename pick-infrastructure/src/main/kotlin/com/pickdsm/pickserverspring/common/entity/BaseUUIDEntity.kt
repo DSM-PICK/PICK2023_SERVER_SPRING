@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.entity
+package com.pickdsm.pickserverspring.common.entity
 
 import org.hibernate.annotations.GenericGenerator
 import java.util.UUID

@@ -9,7 +9,7 @@ import com.pickdsm.pickserverspring.domain.classroom.persistence.ClassroomMoveme
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomMovementEntity.classroomMovementEntity
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomMovementSpi
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
 import java.util.UUID

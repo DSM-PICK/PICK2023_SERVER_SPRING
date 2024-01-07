@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.querydsl
+package com.pickdsm.pickserverspring.common.config
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.context.annotation.Bean

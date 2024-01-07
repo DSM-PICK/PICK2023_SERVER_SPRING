@@ -1,7 +1,7 @@
 package com.pickdsm.pickserverspring.domain.application.persistence.entity
 
 import com.pickdsm.pickserverspring.domain.application.StatusType
-import com.pickdsm.pickserverspring.global.entity.BaseUUIDEntity
+import com.pickdsm.pickserverspring.common.entity.BaseUUIDEntity
 import org.hibernate.annotations.ColumnDefault
 import java.time.LocalDate
 import java.util.UUID

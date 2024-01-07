@@ -4,7 +4,7 @@ import com.pickdsm.pickserverspring.common.feign.client.TimeClient
 import com.pickdsm.pickserverspring.domain.application.exception.CannotChangeStatusThisTimeException
 import com.pickdsm.pickserverspring.domain.time.Time.DomainTimeElement
 import com.pickdsm.pickserverspring.domain.time.spi.TimeSpi
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import java.time.LocalDate
 import java.time.LocalTime
 

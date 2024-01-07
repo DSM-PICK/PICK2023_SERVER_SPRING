@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.security
+package com.pickdsm.pickserverspring.common.security
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication

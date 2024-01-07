@@ -11,7 +11,7 @@ import com.pickdsm.pickserverspring.domain.afterschool.persistence.vo.QQueryAfte
 import com.pickdsm.pickserverspring.domain.afterschool.persistence.vo.QueryAfterSchoolRoomVO
 import com.pickdsm.pickserverspring.domain.afterschool.spi.AfterSchoolSpi
 import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassroomEntity.classroomEntity
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 import javax.persistence.LockModeType

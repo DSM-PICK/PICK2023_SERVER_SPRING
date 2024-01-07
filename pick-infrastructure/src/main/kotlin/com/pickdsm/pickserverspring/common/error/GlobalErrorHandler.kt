@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.error
+package com.pickdsm.pickserverspring.common.error
 
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus

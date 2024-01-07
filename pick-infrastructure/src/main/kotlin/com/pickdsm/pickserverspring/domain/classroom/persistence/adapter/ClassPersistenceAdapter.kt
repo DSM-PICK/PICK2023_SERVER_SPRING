@@ -6,7 +6,7 @@ import com.pickdsm.pickserverspring.domain.classroom.persistence.entity.QClassro
 import com.pickdsm.pickserverspring.domain.classroom.persistence.vo.QQueryClassroomVO
 import com.pickdsm.pickserverspring.domain.classroom.persistence.vo.QueryClassroomVO
 import com.pickdsm.pickserverspring.domain.classroom.spi.ClassroomSpi
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 

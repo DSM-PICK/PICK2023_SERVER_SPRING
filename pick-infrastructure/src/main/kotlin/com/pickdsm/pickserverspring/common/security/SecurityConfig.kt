@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.security
+package com.pickdsm.pickserverspring.common.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean

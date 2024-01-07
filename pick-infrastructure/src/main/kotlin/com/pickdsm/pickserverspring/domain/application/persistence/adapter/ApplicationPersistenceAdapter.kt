@@ -6,7 +6,7 @@ import com.pickdsm.pickserverspring.domain.application.persistence.ApplicationRe
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QApplicationEntity.applicationEntity
 import com.pickdsm.pickserverspring.domain.application.persistence.entity.QStatusEntity.statusEntity
 import com.pickdsm.pickserverspring.domain.application.spi.ApplicationSpi
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
 import java.util.UUID

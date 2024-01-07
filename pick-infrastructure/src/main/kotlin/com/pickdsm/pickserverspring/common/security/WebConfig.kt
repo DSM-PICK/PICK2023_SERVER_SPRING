@@ -1,4 +1,4 @@
-package com.pickdsm.pickserverspring.global.security
+package com.pickdsm.pickserverspring.common.security
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry

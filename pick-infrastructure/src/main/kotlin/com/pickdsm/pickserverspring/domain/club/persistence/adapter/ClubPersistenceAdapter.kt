@@ -12,7 +12,7 @@ import com.pickdsm.pickserverspring.domain.club.persistence.entity.QClubInfoEnti
 import com.pickdsm.pickserverspring.domain.club.persistence.vo.QQueryClubRoomVO
 import com.pickdsm.pickserverspring.domain.club.persistence.vo.QueryClubRoomVO
 import com.pickdsm.pickserverspring.domain.club.spi.ClubSpi
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 

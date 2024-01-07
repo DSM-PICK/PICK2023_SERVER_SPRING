@@ -7,7 +7,7 @@ import com.pickdsm.pickserverspring.domain.selfstudydirector.mapper.TypeMapper
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.TypeRepository
 import com.pickdsm.pickserverspring.domain.selfstudydirector.persistence.entity.QTypeEntity.typeEntity
 import com.pickdsm.pickserverspring.domain.selfstudydirector.spi.TypeSpi
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
 import java.util.UUID

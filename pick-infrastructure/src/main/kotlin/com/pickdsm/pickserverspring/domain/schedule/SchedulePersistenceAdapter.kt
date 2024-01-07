@@ -2,7 +2,7 @@ package com.pickdsm.pickserverspring.domain.schedule
 
 import com.pickdsm.pickserverspring.common.feign.client.ScheduleClient
 import com.pickdsm.pickserverspring.domain.schedule.spi.QueryScheduleSpi
-import com.pickdsm.pickserverspring.global.annotation.Adapter
+import com.pickdsm.pickserverspring.common.annotation.Adapter
 
 @Adapter
 class SchedulePersistenceAdapter(
