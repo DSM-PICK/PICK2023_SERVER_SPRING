@@ -256,7 +256,7 @@ class AdminWebAdapter(
         @RequestParam
         type: DirectorType,
     ) {
-        adminApi.saveType(date, type)
+        adminApi.saveOrUpdateType(date, type)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
