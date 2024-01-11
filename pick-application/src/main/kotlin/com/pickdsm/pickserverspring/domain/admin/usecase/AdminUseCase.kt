@@ -275,7 +275,7 @@ class AdminUseCase(
     override fun saveOrUpdateType(date: LocalDate, type: DirectorType) {
         val existType = queryTypeSpi.queryTypeByDate(date)
 
-        if(existType == null) {
+        if (existType == null) {
             commandTypeSpi.saveType(
                 Type(
                     date = date,
@@ -283,19 +283,11 @@ class AdminUseCase(
                 ),
             )
         } else {
-            existType.changeType(
-                date = existType.date,
-                type = type,
+            commandTypeSpi.saveType(
+                existType.changeType(
+                    type = type,
+                )
             )
         }
-
-    }
-
-    override fun updateType(date: LocalDate, type: DirectorType) {
-        val currentType = queryTypeSpi.queryTypeByDate(date)
-            ?: throw TypeNotFoundException
-        commandTypeSpi.saveType(
-            currentType.changeType(date, type),
-        )
     }
 }

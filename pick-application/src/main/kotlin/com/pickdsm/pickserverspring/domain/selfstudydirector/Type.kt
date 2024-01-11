@@ -13,9 +13,8 @@ data class Type(
 
     val type: DirectorType,
 ) {
-    fun changeType(date: LocalDate, type: DirectorType): Type {
+    fun changeType(type: DirectorType): Type {
         return copy(
-            date = date,
             type = type,
         )
     }

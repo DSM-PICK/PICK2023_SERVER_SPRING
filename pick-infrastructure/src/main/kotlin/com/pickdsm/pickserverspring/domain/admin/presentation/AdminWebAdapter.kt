@@ -259,18 +259,6 @@ class AdminWebAdapter(
         adminApi.saveOrUpdateType(date, type)
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/type")
-    fun updateType(
-        @RequestParam
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
-        date: LocalDate,
-        @RequestParam
-        type: DirectorType,
-    ) {
-        adminApi.updateType(date, type)
-    }
-
     @PostMapping("/director")
     fun registerSelfDirector(
         @RequestBody
