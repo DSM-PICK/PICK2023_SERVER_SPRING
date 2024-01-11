@@ -272,13 +272,23 @@ class AdminUseCase(
             status.studentId == userId && status.startPeriod <= statusPeriod && status.endPeriod >= statusPeriod
         }?.type ?: StatusType.ATTENDANCE
 
-    override fun saveType(date: LocalDate, type: DirectorType) {
-        commandTypeSpi.saveType(
-            Type(
-                date = date,
+    override fun saveOrUpdateType(date: LocalDate, type: DirectorType) {
+        val existType = queryTypeSpi.queryTypeByDate(date)
+
+        if(existType == null) {
+            commandTypeSpi.saveType(
+                Type(
+                    date = date,
+                    type = type,
+                ),
+            )
+        } else {
+            existType.changeType(
+                date = existType.date,
                 type = type,
-            ),
-        )
+            )
+        }
+
     }
 
     override fun updateType(date: LocalDate, type: DirectorType) {
