@@ -281,14 +281,14 @@ class AdminUseCase(
         existType?.let {
             commandTypeSpi.saveType(
                 it.changeType(
-                    type
-                )
-            )
-        } ?: commandTypeSpi.saveType(
-                Type(
-                    date = date,
-                    type = type,
+                    type,
                 ),
             )
+        } ?: commandTypeSpi.saveType(
+            Type(
+                date = date,
+                type = type,
+            ),
+        )
     }
 }
