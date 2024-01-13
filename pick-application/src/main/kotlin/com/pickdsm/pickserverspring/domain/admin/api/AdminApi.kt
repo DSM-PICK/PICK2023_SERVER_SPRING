@@ -18,5 +18,8 @@ interface AdminApi {
 
     fun getStudentStatusListByGradeAndClassNum(grade: Int?, classNum: Int?): QueryStudentListByGradeAndClassNum
 
-    fun saveOrUpdateType(date: LocalDate, type: DirectorType)
+    fun saveOrUpdateType(
+        date: LocalDate,
+        type: DirectorType,
+    )
 }
