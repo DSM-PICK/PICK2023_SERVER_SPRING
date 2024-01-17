@@ -28,4 +28,4 @@ class ApplicationEntity(
     @ColumnDefault("false")
     val isReturn: Boolean,
 
-    ) : BaseUUIDEntity(id)
+) : BaseUUIDEntity(id)

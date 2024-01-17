@@ -1,6 +1,5 @@
 package com.pickdsm.pickserverspring.common.error
 
-import com.pickdsm.pickserverspring.common.error.ErrorProperty
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError

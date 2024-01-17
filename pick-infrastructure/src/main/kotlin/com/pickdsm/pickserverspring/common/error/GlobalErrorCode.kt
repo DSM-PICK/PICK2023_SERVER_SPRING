@@ -1,7 +1,5 @@
 package com.pickdsm.pickserverspring.common.error
 
-import com.pickdsm.pickserverspring.common.error.ErrorProperty
-
 enum class GlobalErrorCode(
     private val status: Int,
     private val message: String
